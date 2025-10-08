@@ -10,5 +10,4 @@ public interface IController<DTO, ID> {
     void delete(Context ctx);
     boolean validatePrimaryKey(ID id);
     DTO validateEntity(Context ctx);
-
 }
