@@ -14,13 +14,15 @@ import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.lang.String.valueOf;
+
 public class ApplicationConfig {
 
-    private static Routes routes = new Routes();
-    private static ObjectMapper jsonMapper = new Utils().getObjectMapper();
-    private static SecurityController securityController = SecurityController.getInstance();
-    private static AccessController accessController = new AccessController();
-    private static Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
+    private static final Routes routes = new Routes();
+    private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
+    private static final SecurityController securityController = SecurityController.getInstance();
+    private static final AccessController accessController = new AccessController();
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
     private static int count = 1;
 
     public static void configuration(JavalinConfig config) {
@@ -54,7 +56,7 @@ public class ApplicationConfig {
     }
 
     private static void generalExceptionHandler(Exception e, Context ctx) {
-        logger.error("An unhandled exception occurred", e.getMessage());
+        logger.error("An unhandled exception occurred\n", e.getMessage());
         ctx.json(Utils.convertToJsonMessage(ctx, "error", e.getMessage()));
     }
 
