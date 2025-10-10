@@ -102,6 +102,8 @@ public abstract class AbstractController<   DTO extends AbstractDTO,
             DTO dto = ctx.bodyAsClass(getDTOClass());
 
             service.delete(service.dtoToEntity(dto));
+        } catch (Exception e){
+
         }
     }
 

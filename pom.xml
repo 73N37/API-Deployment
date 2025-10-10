@@ -18,7 +18,7 @@
         <junit.version>5.9.1</junit.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <token.security.version>1.0.1</token.security.version>
-
+        <jpa.version>3.1.0</jpa.version>
         <!--  Javalin    -->
         <javalin.port>7070</javalin.port>
     </properties>
@@ -87,6 +87,11 @@
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
             <version>${hibernate-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jpa.version}</version>
         </dependency>
 
         <!--  Logging   -->

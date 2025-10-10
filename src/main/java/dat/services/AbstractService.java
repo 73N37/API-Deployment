@@ -53,7 +53,7 @@ public abstract class AbstractService<  DTO extends AbstractDTO,
                                                                                                                         Field is a part of Java's reflection API. A Field object is metadata + access handle for a single member field (instance or static) of a class.
                                                                                                                         Field Introspect:
                                                                                                                         - getName(): get the name of the variable as a String.
-                                                                                                                        - getAnnotation(): get a single annotation for a given Field (unsure if it is the first or last annotation, if a field has multiple annotations).
+                                                                                                                        - getAnnotation(Class<T> annotationClass): get a single annotation for a given Field.
                                                                                                                         - getAnnotations(): get the annotations for a given Field (datatype is Annotation[]).
                                                                                                                         - getType(): get a datatype
                                                                                                                         - getSimpleName():
@@ -81,12 +81,10 @@ public abstract class AbstractService<  DTO extends AbstractDTO,
                                                                                                                         // Check if field has @MapTo annotation
                 String targetFieldName = dtoField.getName();
                 if (dtoField.isAnnotationPresent(MapTo.class)){
-                    // TODO ask chat what it does and how it works
                     targetFieldName = dtoField.getAnnotation(MapTo.class).value();
                 }
                 try {
                     Field entityField = entityClass.getDeclaredField(targetFieldName);
-                    //TODO ask chat about what this means and does
                     entityField.setAccessible(true);
                     entityField.set(entity, value);
                 } catch (IllegalAccessException e) {
@@ -120,7 +118,7 @@ public abstract class AbstractService<  DTO extends AbstractDTO,
                                                                                                                         NOTE:
                                                                                                                         “Declared” means any visibility (public, protected, package, private) but only constructors declared in that class (constructors aren’t inherited anyway)
             */
-            //TODO ask chat about what this means and does
+                                                                                                                        // - class.getDeclaredFields(): Iterates through EVERY (public, protected, private, package) Field in a class and adds them to an Array (datatype is Field[]). Order is unspecified: don’t rely on array order being source order; sort if you care
             DTO dto = getDtoClass().getDeclaredConstructor().newInstance();
             Field[] entityFields = entity.getClass().getDeclaredFields();
             for (Field entityField : entityFields ){
@@ -132,7 +130,6 @@ public abstract class AbstractService<  DTO extends AbstractDTO,
                 Object value = entityField.get(entity);
                 try{
                     Field dtoField = dto.getClass().getDeclaredField(entityField.getName());
-                    //TODO ask chat about what this means and does
                     dtoField.setAccessible(true);
                     dtoField.set(dto, value);
                 } catch (IllegalAccessException e) {
