@@ -1,16 +1,14 @@
 package dat.dtos;
-import jakarta.persistence.EntityManagerFactory;
 import lombok.Getter;
-import dat.Unit;
-import lombok.NoArgsConstructor;
+import dat.Atom;
 import lombok.AllArgsConstructor;
 
 
 @AllArgsConstructor
 @Getter
-public abstract class AbstractDTO<DTO extends AbstractDTO> implements Unit {
+public abstract class AbstractDTO<DTO extends AbstractDTO> implements Atom {
     //protected DTO dto;
-    protected final  Class<? extends Unit> unitClass;
+    protected final  Class<? extends Atom> unitClass;
     protected Long id;
 
     public AbstractDTO(){

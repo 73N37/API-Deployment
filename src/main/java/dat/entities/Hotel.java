@@ -1,12 +1,11 @@
 package dat.entities;
 
-import dat.Unit;
 import dat.dtos.HotelDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import dat.Unit;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

@@ -1,6 +1,6 @@
 package dat;
 
-public interface Unit {
+public interface Atom {
 
     Object getId();
     Class<?> getUnitClass();

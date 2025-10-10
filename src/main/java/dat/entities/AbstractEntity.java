@@ -1,20 +1,17 @@
 package dat.entities;
-import dat.Unit;
-import dat.dtos.AbstractDTO;
+import dat.Atom;
 import jakarta.persistence.*;
 import lombok.Getter;
-import jakarta.persistence.Entity;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 
 @MappedSuperclass // Hibernate retrieve the table name automatically from the class-name
-public abstract class AbstractEntity<Entity extends AbstractEntity> implements Unit {
+public abstract class AbstractEntity<Entity extends AbstractEntity> implements Atom {
 
     protected String test = "Every decendent can access this string";
-    protected Class<? extends Unit> unitClass;
+    protected Class<? extends Atom> unitClass;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

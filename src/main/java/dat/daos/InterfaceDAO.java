@@ -1,6 +1,5 @@
 package dat.daos;
 
-import dat.Unit;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 
