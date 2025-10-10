@@ -15,13 +15,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "hotel")
-@AttributeOverride(name= "id", column = @Column(name="hotel_id", nullable = false, unique = true))
-public class Hotel extends AbstractEntity<Hotel> {
+//@AttributeOverride(name= "id", column = @Column(name="hotel_id", nullable = false, unique = true))
+public class Hotel extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hotel_id", nullable = false, unique = true)
-    private Object hotelId;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "hotel_id", nullable = false, unique = true)
+//    private Object hotelId;
 
     @Setter
     @Column(name = "hotel_name", nullable = false, unique = true)

@@ -13,12 +13,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "room")
-public class Room extends AbstractEntity<Room> {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "room_id", nullable = false, unique = true)
-    private Integer roomId;
+public class Room extends AbstractEntity {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "room_id", nullable = false, unique = true)
+//    private Integer roomId;
 
     @Setter
     @Column(name = "room_number", nullable = false)
@@ -35,7 +35,7 @@ public class Room extends AbstractEntity<Room> {
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id", referencedColumnName = "id", nullable = false)
     private Hotel hotel;
 
     public Room(Integer roomNumber, BigDecimal roomPrice, RoomType roomType) {
@@ -45,7 +45,7 @@ public class Room extends AbstractEntity<Room> {
     }
 
     public Room(RoomDTO roomDTO){
-        this.roomId = roomDTO.getId();
+        this.id = roomDTO.getId();
         this.roomNumber = roomDTO.getRoomNumber();
         this.roomPrice = BigDecimal.valueOf(roomDTO.getRoomPrice());
         this.roomType = roomDTO.getRoomType();

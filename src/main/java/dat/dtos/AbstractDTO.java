@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 public abstract class AbstractDTO<DTO extends AbstractDTO> implements Unit {
     //protected DTO dto;
     protected final  Class<? extends Unit> unitClass;
-    protected Object id;
+    protected Long id;
 
     public AbstractDTO(){
         this.unitClass = this.getUnitClass();

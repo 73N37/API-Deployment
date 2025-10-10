@@ -18,7 +18,7 @@ public abstract class AbstractEntity<Entity extends AbstractEntity> implements U
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Object id;
+    protected Long id;
 
     public AbstractEntity(Class<? extends Entity> entityClass) {
         this.unitClass = entityClass;

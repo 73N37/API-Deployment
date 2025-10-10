@@ -9,15 +9,14 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class RoomDTO {
-    private Integer Id;
+public class RoomDTO extends AbstractDTO {
     private Integer roomNumber;
     private Integer roomPrice;
     @IgnoreMapping
     private Room.RoomType roomType; // TODO Will be ignored by "dtoToEntity" method due to @IgnoreMapping
 
     public RoomDTO(Room room) {
-        this.Id = room.getRoomId();
+        this.id = room.getId();
         this.roomNumber = room.getRoomNumber();
         this.roomPrice = room.getRoomPrice().intValue();
         this.roomType = room.getRoomType();
