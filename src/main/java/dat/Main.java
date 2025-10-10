@@ -7,6 +7,7 @@ import dat.exceptions.Message;
 import dat.routes.Routes;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

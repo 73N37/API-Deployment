@@ -1,8 +1,12 @@
 package dat.controllers;
 
+import dat.dtos.AbstractDTO;
+import dat.entities.AbstractEntity;
 import io.javalin.http.Context;
 
-public interface IController<DTO, ID> {
+public interface InterfaceController<   DTO extends AbstractDTO,
+                                        Entity extends AbstractEntity,
+                                        ID extends Object> {
     void read(Context ctx);
     void readAll(Context ctx);
     void create(Context ctx);
