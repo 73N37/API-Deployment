@@ -4,14 +4,16 @@ import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import io.javalin.http.Context;
 
-public interface InterfaceController<   DTO extends AbstractDTO,
-                                        Entity extends AbstractEntity,
-                                        ID extends Object> {
+import java.io.Serializable;
+
+public interface InterfaceController<   Entity extends AbstractEntity,
+                                        DTO extends AbstractDTO,
+                                        ID extends Serializable> {
     void read(Context ctx);
     void readAll(Context ctx);
     void create(Context ctx);
     void update(Context ctx);
     void delete(Context ctx);
-    boolean validatePrimaryKey(ID id);
+    boolean validatePrimaryKey(Context ctx);
     DTO validateEntity(Context ctx);
 }

@@ -2,33 +2,38 @@ package dat.controllers.impl;
 import dat.controllers.InterfaceController;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
+import dat.factories.AbstractClass;
 import dat.services.InterfaceService;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Set;
 
-public abstract class AbstractController<   DTO extends AbstractDTO,
-                                            Entity extends AbstractEntity,
-                                            ID extends Object>
-                                            implements InterfaceController<DTO, Entity,ID> {
+public abstract class AbstractController<   Entity  extends AbstractEntity,
+                                            DTO     extends AbstractDTO,
+                                            ID      extends Serializable>
+                                                    extends AbstractClass<Entity, DTO, ID>
+                                            implements InterfaceController< Entity, DTO, ID> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractController.class);
-    protected final InterfaceService<DTO, Entity, ID> service;
+    protected final InterfaceService<Entity, DTO, ID> service;
     protected abstract Class<DTO> getDTOClass();
-    //protected abstract <ReturnType> ReturnType convertId(String idString, Class<ReturnType> target);
 
-    protected AbstractController(InterfaceService<DTO, Entity, ID> service) {
+    protected AbstractController(InterfaceService< Entity, DTO, ID>  service,
+                                 Class<Entity>                      entityClass,
+                                 Class<DTO>                         dtoClass,
+                                 Class<ID>                          idClass) {
+        super(entityClass, dtoClass, idClass);
         this.service = service;
+
     }
 
     @Override
     public void read(Context ctx) {
-        ID id = (ID) ctx.pathParam("id"); // Had to typecast from String to ID to make pathParam generic
+        ID id =  parseId(ctx.pathParam("id"));
         logger.info("GET request for {} with Object: {} from IP: {}", getDTOClass().getSimpleName(), id, ctx.ip());
         try {
             DTO dto = service.read(id);
@@ -75,7 +80,7 @@ public abstract class AbstractController<   DTO extends AbstractDTO,
 
     @Override
     public void update(Context ctx) {
-        ID id = (ID) ctx.pathParam("id"); // Had to typecast from String to ID to make pathParam generic
+        ID id = parseId(ctx.pathParam("id"));
         logger.info("PUT request to update {} with Object: {} from IP: {}", getDTOClass().getSimpleName(), id, ctx.ip());
         try{
             DTO dto = ctx.bodyAsClass(getDTOClass());
@@ -96,24 +101,26 @@ public abstract class AbstractController<   DTO extends AbstractDTO,
 
     @Override
     public void delete(Context ctx) {
-        ID id = (ID) ctx.pathParam("id"); // Had to typecast from String to ID to make pathParam generic
+        ID id = parseId(ctx.pathParam("id"));
         logger.info("DELETE request for {} with Object: {} from IP: {}", getDTOClass().getSimpleName(), id, ctx.ip());
         try{
             DTO dto = ctx.bodyAsClass(getDTOClass());
 
             service.delete(service.dtoToEntity(dto));
-        } catch (Exception e){
-
         }
+
+
     }
 
     @Override
-    public boolean validatePrimaryKey(Object o) {
-        return false;
+    public boolean validatePrimaryKey(Context ctx) {
+        ID id = parseId(ctx.pathParam("id"));
+        logger.info("GET request for {} from IP: {}", getDTOClass().getSimpleName(), id);
+
     }
 
     @Override
     public DTO validateEntity(Context ctx) {
-        return null;
+
     }
 }

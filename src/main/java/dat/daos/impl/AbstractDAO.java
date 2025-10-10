@@ -1,8 +1,8 @@
 package dat.daos.impl;
 
 import dat.Enums.ErrorTypes;
-import dat.Unit;
 import dat.daos.InterfaceDAO;
+import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -10,18 +10,22 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractDAO<  Entity extends AbstractEntity<Entity>,
-                                    ID extends Object>
-                                    implements InterfaceDAO<Entity, ID>
+public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entity>,
+                                    DTO     extends         AbstractDTO<DTO>,
+                                    ID      extends         Serializable>
+                                            implements      InterfaceDAO<Entity, DTO, ID>
 {
     private static final Logger logger = LoggerFactory.getLogger(AbstractDAO.class);
     protected EntityManagerFactory emf;
     protected final Class<Entity> entityClass;
 
-    public AbstractDAO(EntityManagerFactory emf, Class<Entity> entityClass){
+    public AbstractDAO(EntityManagerFactory emf,
+){
         this.emf = emf;
         this.entityClass = entityClass;
     }

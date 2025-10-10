@@ -3,11 +3,12 @@ package dat.services;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public interface InterfaceService<  DTO extends AbstractDTO,
-                                    Entity extends AbstractEntity,
-                                    ID extends Object>
+public interface InterfaceService<  Entity extends AbstractEntity,
+                                    DTO extends AbstractDTO,
+                                    ID extends Serializable>
 {
     DTO create(DTO dto);
 

@@ -9,21 +9,22 @@ import dat.exceptions.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-public abstract class AbstractService<  DTO extends AbstractDTO,
-                                        Entity extends AbstractEntity,
-                                        ID extends Object>
-                                        implements InterfaceService<DTO, Entity, ID>
+public abstract class AbstractService<  Entity extends AbstractEntity,
+                                        DTO extends AbstractDTO,
+                                        ID extends Serializable>
+                                        implements InterfaceService< Entity, DTO, ID>
 {
-    protected final InterfaceDAO<Entity, ID> dao;
+    protected final InterfaceDAO<Entity, DTO, ID> dao;
     private static final Logger logger = LoggerFactory.getLogger(AbstractService.class);
     protected Class<Entity> entityClass;
     protected final Class<DTO> dtoClass;
 
-    public AbstractService(InterfaceDAO<Entity,ID> dao, Class<DTO> dtoClass)
+    public AbstractService(InterfaceDAO<Entity, DTO, ID> dao, Class<DTO> dtoClass)
     {
         this.dao = dao;
         this.entityClass = dao.getEntityClass();
