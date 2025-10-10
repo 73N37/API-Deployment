@@ -120,7 +120,7 @@ public abstract class AbstractService<  Entity extends AbstractEntity,
                                                                                                                         “Declared” means any visibility (public, protected, package, private) but only constructors declared in that class (constructors aren’t inherited anyway)
             */
                                                                                                                         // - class.getDeclaredFields(): Iterates through EVERY (public, protected, private, package) Field in a class and adds them to an Array (datatype is Field[]). Order is unspecified: don’t rely on array order being source order; sort if you care
-            DTO dto = getDtoClass().getDeclaredConstructor().newInstance();
+            DTO dto = dtoClass.getDeclaredConstructor().newInstance();
             Field[] entityFields = entity.getClass().getDeclaredFields();
             for (Field entityField : entityFields ){
                                                                                                                         // Skips a field in the annotation @IgnoreMapping is present above a given field

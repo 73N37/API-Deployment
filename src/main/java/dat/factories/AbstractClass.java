@@ -20,18 +20,15 @@ public class AbstractClass< Entity  extends     AbstractEntity,
                             Class<DTO>      dto,
                             Class<ID>       id)
     {
-        this.entityClass =  entity;
-        this.dtoClass =     dto;
-        this.idClass =      id;
+        this.entityClass = entity;
+        this.dtoClass = dto;
+        this.idClass = id;
     }
 
-    protected ID parseId(String idString) {
+    protected ID parseId(String idString)
+    {
         try {
-            return idClass.cast(
-                    idClass
-                            .getMethod("valueOf", String.class)
-                            .invoke(null, idString)
-            );
+            return idClass.cast(idClass.getMethod("valueOf", String.class).invoke(null, idString));
         } catch (Exception e) {
             throw new IllegalArgumentException("Cannot parse ID: " + idString, e);
         }

@@ -1,12 +1,9 @@
 package dat.dtos;
 import jakarta.persistence.Id;
 import lombok.Getter;
-import dat.factories.Atom;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
-
 
 @NoArgsConstructor
 @Getter

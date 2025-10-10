@@ -26,9 +26,12 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
     private static final Logger logger = LoggerFactory.getLogger(AbstractDAO.class);
     protected EntityManagerFactory emf;
 
-    public AbstractDAO(EntityManagerFactory emf, Class<Entity> entityClass, Class<DTO> dtoClass, Class<ID> idClass){
+    public AbstractDAO(EntityManagerFactory emf,
+                       Class<Entity> entityClass,
+                       Class<DTO> dtoClass,
+                       Class<ID> idClass){
         super(entityClass,dtoClass, idClass);
-        this.emf = emf;
+        //this.emf = emf;
     }
 
     @Override

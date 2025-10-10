@@ -6,8 +6,11 @@ import dat.daos.InterfaceDAO;
 import dat.daos.impl.AbstractDAO;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
+import dat.routes.AbstractRoutes;
+import dat.routes.InterfaceRoutes;
 import dat.services.AbstractService;
 import dat.services.InterfaceService;
+import io.javalin.Javalin;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.Getter;
@@ -38,7 +41,8 @@ public class Singularity<   Entity  extends AbstractEntity<Entity, ID>,
         this.emf = emf;
     }
 
-    public void create(){
+    public void create()
+    {
         createDAO();
         createService();
         createController();
@@ -63,9 +67,14 @@ public class Singularity<   Entity  extends AbstractEntity<Entity, ID>,
         return controller;
     }
 
-    public InterfaceRoute<Entity, DTO, ID> createRoutes()
+    public InterfaceRoutes<Entity, DTO, ID> createRoutes()
     {
-        this.route = new AbstractRoutes<Entity, DTO, ID>(controller, entityClass, dtoClass, idClass);
+        this.routes = new AbstractRoutes<Entity, DTO, ID>(controller, entityClass, dtoClass, idClass) {
+            @Override
+            public void addRoutes(Javalin app, String basePath) {
+
+            }
+        };
         return routes;
     }
 }
