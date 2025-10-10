@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class HotelDTO extends AbstractDTO<HotelDTO> {
 
-    private Long id;
+    private Integer id;
     @MapTo("hotelName")
     private String hotelName;   // Maps to entity's "hotelName" Field
     private String hotelAddress;

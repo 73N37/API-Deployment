@@ -10,11 +10,12 @@ import dat.services.AbstractService;
 import dat.services.InterfaceService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
+import lombok.Getter;
 import java.io.Serializable;
 
-public class Singularity<   Entity  extends AbstractEntity,
-                            DTO     extends AbstractDTO,
+@Getter
+public class Singularity<   Entity  extends AbstractEntity<Entity, ID>,
+                            DTO     extends AbstractDTO<DTO,ID>,
                             ID      extends Serializable>
 {
     private final Class<Entity>     entityClass;
@@ -24,7 +25,7 @@ public class Singularity<   Entity  extends AbstractEntity,
     private InterfaceController     controller;
     private InterfaceDAO            dao;
     private InterfaceService        service;
-    private InterfaceRoute          route;
+    private InterfaceRoutes         routes;
 
     public Singularity(Class<Entity>        entityClass,
                        Class<DTO>           dtoClass,
@@ -41,12 +42,12 @@ public class Singularity<   Entity  extends AbstractEntity,
         createDAO();
         createService();
         createController();
-        createRoute();
+        createRoutes();
     }
 
     public InterfaceDAO<Entity, DTO, ID> createDAO()
     {
-        this.dao = new AbstractDAO<Entity, DTO, ID>(emf, entityClass, idClass) {};
+        this.dao = new AbstractDAO<Entity, DTO, ID>(emf, entityClass, dtoClass, idClass) {};
         return dao;
     }
 
@@ -64,7 +65,7 @@ public class Singularity<   Entity  extends AbstractEntity,
 
     public InterfaceRoute<Entity, DTO, ID> createRoutes()
     {
-        this.route = new AbstractRoute<Entity, DTO, ID>(controller, entityClass, dtoClass, idClass);
-        return route;
+        this.route = new AbstractRoutes<Entity, DTO, ID>(controller, entityClass, dtoClass, idClass);
+        return routes;
     }
 }

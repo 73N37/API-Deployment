@@ -5,29 +5,30 @@ import dat.daos.InterfaceDAO;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.exceptions.ApiException;
+import dat.factories.AbstractClass;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entity>,
-                                    DTO     extends         AbstractDTO<DTO>,
-                                    ID      extends         Serializable>
+public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entity, ID>,
+                                    DTO     extends         AbstractDTO<DTO, ID>,
+                                    ID      extends         Serializable> extends AbstractClass<Entity, DTO, ID>
                                             implements      InterfaceDAO<Entity, DTO, ID>
 {
     private static final Logger logger = LoggerFactory.getLogger(AbstractDAO.class);
     protected EntityManagerFactory emf;
-    protected final Class<Entity> entityClass;
 
-    public AbstractDAO(EntityManagerFactory emf,
-){
+    public AbstractDAO(EntityManagerFactory emf, Class<Entity> entityClass, Class<DTO> dtoClass, Class<ID> idClass){
+        super(entityClass,dtoClass, idClass);
         this.emf = emf;
-        this.entityClass = entityClass;
     }
 
     @Override
@@ -129,6 +130,15 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
         try (EntityManager em = emf.createEntityManager()) {
             Entity entity = em.find(entityClass, id);
             return entity != null;
+        }
+    }
+
+    @Override
+    public Optional<Entity> executeJPQL(String jpql, Map<String, Object> params){
+        logger.debug("Executing a custom JPQL query");
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            TypedQuery query = ;
         }
     }
 }

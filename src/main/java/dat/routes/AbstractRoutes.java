@@ -11,7 +11,7 @@ public abstract class AbstractRoutes<   Entity extends AbstractEntity,
                                         DTO extends AbstractDTO,
                                         ID extends Serializable> extends AbstractClass<Entity ,DTO , ID>
 {
-    public AbstractRoutes(InterfaceService<DTO, Entity, ID> service)
+    public AbstractRoutes(InterfaceService< Entity, DTO, ID> service)
     {
         super();
 

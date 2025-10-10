@@ -1,22 +1,19 @@
 package dat.dtos;
+import jakarta.persistence.Id;
 import lombok.Getter;
-import dat.Atom;
+import dat.factories.Atom;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public abstract class AbstractDTO<DTO extends AbstractDTO> implements Atom {
-    //protected DTO dto;
-    protected final  Class<? extends Atom> unitClass;
-    protected Long id;
+public abstract class AbstractDTO<  DTO extends AbstractDTO,
+                                    ID  extends Serializable> {
+    protected DTO parentDTO;
+    protected DTO childDTO;
+    protected ID id;
 
-    public AbstractDTO(){
-        this.unitClass = this.getUnitClass();
-    }
-
-    @Override
-    public Class<? extends AbstractDTO> getUnitClass(){
-        return this.getClass();
-    }
 }

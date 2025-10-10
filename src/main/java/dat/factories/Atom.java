@@ -1,7 +1,11 @@
-package dat;
+package dat.factories;
+import java.io.Serializable;
 
-public interface Atom {
+public abstract class Atom<ID extends Serializable> {
 
-    Object getId();
-    Class<?> getUnitClass();
+    protected ID id;
+
+    public ID getId(){
+        return id;
+    }
 }
