@@ -49,8 +49,8 @@ Field[]:
 public abstract class AbstractService<  Entity  extends AbstractEntity,
                                         DTO     extends AbstractDTO,
                                         ID      extends Serializable>
-                                                extends AbstractClass<   Entity, DTO, ID>
-                                        implements      InterfaceService<Entity, DTO, ID>
+                                                extends AbstractClass<      Entity, DTO, ID>
+                                                implements InterfaceService<Entity, DTO, ID>
 {
     private static final Logger log = LoggerFactory.getLogger(AbstractService.class);
     protected final InterfaceDAO<Entity, DTO,ID> dao;
@@ -92,22 +92,24 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
             return null;
         }
         try {
-
             Entity entity = entityClass.getDeclaredConstructor().newInstance();
-            /*
-
-            */
             Field[] dtoFields = dto.getClass().getDeclaredFields();
-
             for (Field dtoField : dtoFields) {
-                                                                                                                        // Skips a field in the annotation @IgnoreMapping is present above a given field
+
+                // Skips a field in the annotation @IgnoreMapping is present above a given field
                 if(dtoField.isAnnotationPresent(IgnoreMapping.class)){
-                    continue;                                                                                           // continues the for-each loop without doing anything
+
+                    // continues the for-each loop without doing anything
+                    continue;
                 }
+
+                // Makes field accessable for the next command
                 dtoField.setAccessible(true);
                 Object value = dtoField.get(dto);
-                                                                                                                        // Check if field has @MapTo annotation
+
                 String targetFieldName = dtoField.getName();
+
+                // Check if field has @MapTo annotation
                 if (dtoField.isAnnotationPresent(MapTo.class)){
                     targetFieldName = dtoField.getAnnotation(MapTo.class).value();
                 }
@@ -140,19 +142,22 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
         }
         try{
             /*
-                                                                                                                        getDeclaredConstructor is part of Java's reflection API. You call in with this syntax "class.getDeclaredConstructor()" and it returns a java.lang.reflect.Constructor<T>.
-                                                                                                                        newInstance is a part of Java's reflection API. You call with this syntax "Constructor.newInstance()" and it returns an Object (instance of a class).
+            getDeclaredConstructor is part of Java's reflection API. You call in with this syntax "class.getDeclaredConstructor()" and it returns a java.lang.reflect.Constructor<T>.
+            newInstance is a part of Java's reflection API. You call with this syntax "Constructor.newInstance()" and it returns an Object (instance of a class).
 
-                                                                                                                        NOTE:
-                                                                                                                        “Declared” means any visibility (public, protected, package, private) but only constructors declared in that class (constructors aren’t inherited anyway)
+            NOTE:
+            “Declared” means any visibility (public, protected, package, private) but only constructors declared in that class (constructors aren’t inherited anyway)
             */
-                                                                                                                        // - class.getDeclaredFields(): Iterates through EVERY (public, protected, private, package) Field in a class and adds them to an Array (datatype is Field[]). Order is unspecified: don’t rely on array order being source order; sort if you care
+
+            // - class.getDeclaredFields(): Iterates through EVERY (public, protected, private, package) Field in a class and adds them to an Array (datatype is Field[]). Order is unspecified: don’t rely on array order being source order; sort if you care
             DTO dto = dtoClass.getDeclaredConstructor().newInstance();
             Field[] entityFields = entity.getClass().getDeclaredFields();
             for (Field entityField : entityFields ){
-                                                                                                                        // Skips a field in the annotation @IgnoreMapping is present above a given field
+
+                // Skips a field in the annotation @IgnoreMapping is present above a given field
                 if(entityField.isAnnotationPresent(IgnoreMapping.class)){
-                    continue;                                                                                           // continues the for-each loop without doing anything
+                    // continues the for-each loop without doing anything
+                    continue;
                 }
                 entityField.setAccessible(true);
                 Object value = entityField.get(entity);
@@ -226,7 +231,35 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
 
     @Override
     public void delete(ID id){
-        log.debug("Deleting database entry with id {}", id);
+        log.debug("Deleting database entry (DTO) with id {}", id);
         dao.delete(id);
+    }
+
+    @Override
+    public void delete(Entity entity){
+        log.debug("Deleting database entry (Entity) with id {}", entity.getId());
+        ID id = null;
+        try{
+            id = (ID) entity.getId();
+        } catch (ClassCastException e){
+            log.error("Error happen when typecasting {} to ID while deleting with entity as parameter. ", Serializable.class);
+        }
+        dao.delete(id);
+    }
+
+    @Override
+    public DTO read(Entity entity){
+        ID id = null;
+        try {
+            id = (ID) entity.getId();
+        } catch(ClassCastException e){
+            log.error("Error happen when typecasting {} to ID while reading entity as parameter", Serializable.class);
+        }
+        log.debug("Fetching database entry (entity) with id {}", id);
+        Optional<Entity> readEntry = dao.read(id);
+        if (readEntry.isPresent()) {
+            return entityToDTO(readEntry.get());
+        }
+        return null;
     }
 }
