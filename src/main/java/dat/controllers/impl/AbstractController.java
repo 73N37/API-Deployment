@@ -1,10 +1,12 @@
 package dat.controllers.impl;
+import dat.annotations.RouteHandler;
 import dat.controllers.InterfaceController;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.factories.AbstractClass;
 import dat.services.InterfaceService;
 import io.javalin.http.Context;
+import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,6 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
 
     private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
     protected final InterfaceService<Entity, DTO, ID> service;
-    //protected abstract Class<DTO> getDTOClass();
 
     protected AbstractController(InterfaceService< Entity, DTO, ID> service,
                                  Class<Entity>                      entityClass,
@@ -32,11 +33,19 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
     }
 
     @Override
+    @RouteHandler(HandlerType.GET)
     public void read(Context ctx) {
+        if (!validatePrimaryKey(ctx)) {
+            return;
+        }
+        DTO dto = validateEntity(ctx);
+        if (dto == null) {
+            return;
+        }
         ID id =  parseId(ctx.pathParam("id"));
         log.info("GET request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
         try {
-            DTO dto = service.read(id);
+            dto = service.read(id);
             if (dto != null) {
                 log.debug("Received DTO= {} from service",dto.getClass());
                 ctx.json(dto);
@@ -51,6 +60,7 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
     }
 
     @Override
+    @RouteHandler(HandlerType.GET)
     public void readAll(Context ctx) {
         log.info("GET request for {} from IP: {}", dtoClass.getSimpleName(), ctx.ip());
         try {
@@ -64,10 +74,15 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
     }
 
     @Override
+    @RouteHandler(HandlerType.POST)
     public void create(Context ctx) {
+        DTO dto = validateEntity(ctx);
+        if (dto == null) {
+            return;
+        }
         log.info("POST request to create {} from IP: {}",  dtoClass.getSimpleName(), ctx.ip());
         try {
-            DTO dto = ctx.bodyAsClass(dtoClass);
+            dto = ctx.bodyAsClass(dtoClass);
             log.debug("Parsed request body for {} creation", dtoClass.getSimpleName());
             DTO createdDTO = service.create(dto);
             log.info("Successfully created {} with service", dtoClass.getSimpleName());
@@ -79,11 +94,19 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
     }
 
     @Override
+    @RouteHandler(HandlerType.PUT)
     public void update(Context ctx) {
+        if (!validatePrimaryKey(ctx)) {
+            return;
+        }
+        DTO dto = validateEntity(ctx);
+        if (dto == null) {
+            return;
+        }
         ID id = parseId(ctx.pathParam("id"));
         log.info("PUT request to update {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
         try{
-            DTO dto = ctx.bodyAsClass(dtoClass);
+            dto = ctx.bodyAsClass(dtoClass);
             log.debug("Parsed request body for {} update with ID: {}", dtoClass.getSimpleName(), id);
             DTO dataEntry = service.update(id, dto);
             if (dataEntry != null) {
@@ -100,8 +123,14 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
     }
 
     @Override
+    @RouteHandler(HandlerType.DELETE)
     public void delete(Context ctx) {
-        ID id = parseId(ctx.pathParam("id"));
+        ID id = null;
+        try{
+            id = parseId(ctx.pathParam("id"));
+        } catch (ClassCastException e){
+            log.error("Was unable to parse id to either String, Integer or LONG");
+        }
         log.info("DELETE request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
         try{
             service.delete(id);
@@ -111,14 +140,16 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
             log.error("Error deleting {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Unable too delete an entry in the database, based ond the Context-Object provided");
         }
-
-
     }
 
-    @Override
-    public boolean validatePrimaryKey(Context ctx) {
+    private boolean validatePrimaryKey(Context ctx) {
         try {
-            ID id = parseId(ctx.pathParam("id"));
+            ID id = null;
+            try {
+                id = parseId(ctx.pathParam("id"));
+            } catch (ClassCastException e){
+                log.error("Was unable to parse id to either String, Integer or LONG");
+            }
             log.info("Validating primary key {} from IP: {}", id, ctx.ip());
             DTO dto = service.read(id);                                                                                 // Only equal to NULL if there doesn't exist an entry in the database with the given ID
             if (dto != null) {
@@ -136,14 +167,13 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
         }
     }
 
-    @Override
-    public DTO validateEntity(Context ctx) {
+    private DTO validateEntity(Context ctx) {
         try {
             DTO dto = ctx.bodyAsClass(dtoClass);
             log.debug("Validating entity {} from DTO: {}", dtoClass.getSimpleName(), dto);
             return dto;
         } catch (Exception e){
-            log.error("");
+            log.error("Error parsing request body as {}: {}", dtoClass.getSimpleName(), e.getMessage(), e);
             ctx.status(HttpStatus.BAD_REQUEST).json("Error validating entity");
             return null;
         }
