@@ -23,7 +23,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
                                     ID      extends         Serializable> extends AbstractClass<Entity, DTO, ID>
                                             implements      InterfaceDAO<Entity, DTO, ID>
 {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractDAO.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractDAO.class);
     protected EntityManagerFactory emf;
 
     public AbstractDAO(EntityManagerFactory emf,
@@ -41,56 +41,56 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
 
     @Override
     public Optional<Entity> read(ID id){
-        logger.debug("Reading/finding entity with id {}", id);
+        log.debug("Reading/finding entity with id {}", id);
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT a FROM " + entityClass.getName() + " a WHERE a.id = :id";
             Entity entity = em.createQuery(jpql, entityClass)
                             .setParameter("id", id)
                             .getSingleResult();
-            logger.debug("Found entity with id {}", id);
+            log.debug("Found entity with id {}", id);
             return Optional.of(entity);
         } catch (NoResultException e) {
-            logger.debug("No entity found of type: {} with Object: {}", entityClass.getSimpleName(), id);
+            log.debug("No entity found of type: {} with Object: {}", entityClass.getSimpleName(), id);
             throw new ApiException(ErrorTypes.NOT_FOUND, "Database error: " + e.getMessage());
         } catch (Exception e){
-            logger.error("Error finding entity of type: {} with Object: {}", entityClass.getSimpleName(), id, e);
+            log.error("Error finding entity of type: {} with Object: {}", entityClass.getSimpleName(), id, e);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Database error: " + e.getMessage());
         }
     }
 
     @Override
     public List<Entity> readAll(){
-        logger.debug("Retrieving all entities of type: {}", entityClass.getSimpleName());
+        log.debug("Retrieving all entities of type: {}", entityClass.getSimpleName());
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT  a FROM " + entityClass.getSimpleName() + " a";
             List<Entity> result = em.createQuery(jpql, entityClass).getResultList();
-            logger.info("Retrieved {} entities of type: {} in {} ms",
+            log.info("Retrieved {} entities of type: {} in {} ms",
                     result.size(), entityClass.getSimpleName());
             return result;
         } catch (Exception e) {
-            logger.error("Error retrieving all entities of type: {}", entityClass.getSimpleName(), e);
+            log.error("Error retrieving all entities of type: {}", entityClass.getSimpleName(), e);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Database error: " + e.getMessage());
         }
     }
 
     @Override
     public Entity create(Entity entity){
-        logger.debug("Creating a new entity of type {}",  entityClass.getSimpleName());
+        log.debug("Creating a new entity of type {}",  entityClass.getSimpleName());
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
             em.persist(entity);
             em.getTransaction().commit();
-            logger.info("Successfully created a entity of type {}",  entityClass.getSimpleName());
+            log.info("Successfully created a entity of type {}",  entityClass.getSimpleName());
             return entity;
         } catch (Exception e){
-            logger.error("Failed to create entity of type: {}", entityClass.getSimpleName(), e);
+            log.error("Failed to create entity of type: {}", entityClass.getSimpleName(), e);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Failed to create entity: " + e.getMessage());
         }
     }
 
     @Override
     public Optional<Entity> update(ID id, Entity entity){
-        logger.debug("Updating entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+        log.debug("Updating entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
         if (id == null || entity == null){
             return null;
         }
@@ -98,20 +98,20 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
             em.getTransaction().begin();
             Entity existing = em.find(entityClass, id);
             if (existing == null){
-                logger.warn("Entity not found for update of type: {} with Object: {}", entityClass.getSimpleName(), id);
+                log.warn("Entity not found for update of type: {} with Object: {}", entityClass.getSimpleName(), id);
                 em.getTransaction().rollback();
                 return null;
             }
             Entity result = em.merge(entity);
             em.getTransaction().commit();
-            logger.info("Successfully updated entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+            log.info("Successfully updated entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
             return Optional.of(result);
         }
     }
 
     @Override
     public void delete(ID id){
-        logger.debug("Deleting entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+        log.debug("Deleting entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
             String jpql =  "DELETE FROM " + entityClass.getName() + " a WHERE a.id = :id";
@@ -119,12 +119,12 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
                     .setParameter("id", id)
                     .executeUpdate();
             if (deletedCount > 0) {
-                logger.info("Successfully deleted entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+                log.info("Successfully deleted entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
             } else {
-                logger.warn("No entity found to delete of type: {} with Object: {}", entityClass.getSimpleName(), id);
+                log.warn("No entity found to delete of type: {} with Object: {}", entityClass.getSimpleName(), id);
             }
         } catch (Exception e) {
-            logger.error("Error deleting entity of type: {} with Object: {}", entityClass.getSimpleName(), id, e);
+            log.error("Error deleting entity of type: {} with Object: {}", entityClass.getSimpleName(), id, e);
         }
     }
 
@@ -137,11 +137,30 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
     }
 
     @Override
-    public Optional<Entity> executeJPQL(String jpql, Map<String, Object> params){
-        logger.debug("Executing a custom JPQL query");
-        try (EntityManager em = emf.createEntityManager()){
-            em.getTransaction().begin();
-            TypedQuery query = ;
+    public Optional<Entity> executeJPQL(String jpql, Map<String, Object> params)
+    {
+        log.debug("Executing a custom JPQL query");
+        try (EntityManager em = emf.createEntityManager())
+        {
+            TypedQuery query = em.createQuery(jpql, entityClass);
+            // set all parameter from the Map
+            if (params != null)
+            {
+                for (Map.Entry<String, Object> entry : params.entrySet())
+                {
+                    query.setParameter(entry.getKey(), entry.getValue());
+                    log.debug("Set parameter {} = {}", entry.getKey(), entry.getValue());
+                }
+            }
+            Entity result = (Entity) query.getSingleResult();
+            log.debug("Successfully executes JPQL query");
+            return Optional.of(result);
+        } catch (NoResultException e){
+            log.debug("No result found for JPQL query = {}", jpql);
+            return Optional.empty();
+        } catch (Exception e){
+            log.error("Error happened while executing JPQL query: {}", jpql);
+            throw new ApiException(ErrorTypes.SERVER_ERROR, "Database error has happen: " + e.getMessage());
         }
     }
 }

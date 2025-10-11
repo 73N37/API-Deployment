@@ -23,7 +23,7 @@ public class AbstractClass< Entity  extends     AbstractEntity,
     protected  InterfaceService     service;
     protected  InterfaceRoutes      routes;
 
-    protected AbstractClass(Class<Entity>     entityClass,
+    protected AbstractClass(Class<Entity>   entityClass,
                             Class<DTO>      dtoClass,
                             Class<ID>       idClass)
     {

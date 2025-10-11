@@ -1,7 +1,7 @@
 package dat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.routes.Routes;
+import dat.routes.AbstractRoutes;
 import dat.security.controllers.AccessController;
 import dat.security.controllers.SecurityController;
 import dat.security.enums.Role;
@@ -18,7 +18,7 @@ import static java.lang.String.valueOf;
 
 public class ApplicationConfig {
 
-    private static final Routes routes = new Routes();
+    private static final AbstractRoutes routes = new AbstractRoutes();
     private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static final SecurityController securityController = SecurityController.getInstance();
     private static final AccessController accessController = new AccessController();
