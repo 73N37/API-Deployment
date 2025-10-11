@@ -21,12 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ApplicationConfig {
+public class ApplicationConfig< Entity  extends AbstractEntity,
+                                DTO     extends AbstractDTO,
+                                ID      extends Serializable> {
 
-    private static final List<AbstractRoutes<   ? extends AbstractEntity, 
-                                                ? extends AbstractDTO, 
-                                                ? extends Serializable>> 
-                                                routesList = new ArrayList<>();
+    private final List<AbstractRoutes<Entity, DTO, ID>> routesList = new ArrayList<>();
     private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static final SecurityController securityController = SecurityController.getInstance();
     private static final AccessController accessController = new AccessController();
@@ -37,18 +36,16 @@ public class ApplicationConfig {
         config.showJavalinBanner = false;
         config.bundledPlugins.enableRouteOverview("/routes", Role.ANYONE);
         config.router.contextPath = "/api"; // base path for all endpoints
-        //config.router.apiBuilder(routes.getRoutes());
         config.router.apiBuilder(SecurityRoutes.getSecuredRoutes());
         config.router.apiBuilder(SecurityRoutes.getSecurityRoutes());
     }
 
-    public static Javalin startServer(int port) {
+    public Javalin startServer(int port) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
 
         // Register all routes
-        for (AbstractRoutes<?, ?, ?> routes : routesList) {
-            String basePath = "/" + routes.getEntityClass().getSimpleName().toLowerCase();
-            routes.autoGenerateRoutes(app, basePath);
+        for (AbstractRoutes<Entity, DTO, ID> routes : this.routesList) {
+            routes.generateRoutes(app);
         }
         
         app.beforeMatched(accessController::accessHandler);
@@ -59,15 +56,14 @@ public class ApplicationConfig {
         app.start(port);
         return app;
     }
-
-    public static void registerRoutes(AbstractRoutes<? extends AbstractEntity, ? extends AbstractDTO, ? extends Serializable> routes)
     
     public static void afterRequest(Context ctx) {
         String requestInfo = ctx.req().getMethod() + " " + ctx.req().getRequestURI();
         log.info(" Request {} - {} was handled with status code {}", count++, requestInfo, ctx.status());
     }
 
-    public static void stopServer(Javalin app) {
+    public void stopServer(Javalin app) {
+        // TODO give MODERATOR access ONLY
         app.stop();
     }
 
