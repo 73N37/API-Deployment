@@ -1,8 +1,11 @@
 package dat.factories;
 
+import dat.controllers.InterfaceController;
+import dat.daos.InterfaceDAO;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.routes.InterfaceRoutes;
+import dat.services.InterfaceService;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -15,15 +18,21 @@ public class AbstractClass< Entity  extends     AbstractEntity,
     protected final Class<Entity>   entityClass;
     protected final Class<DTO>      dtoClass;
     protected final Class<ID>       idClass;
+    protected  InterfaceController  controller;
+    protected  InterfaceDAO         dao;
+    protected  InterfaceService     service;
+    protected  InterfaceRoutes      routes;
 
-    protected AbstractClass(Class<Entity>   entity,
-                            Class<DTO>      dto,
-                            Class<ID>       id)
+    protected AbstractClass(Class<Entity>     entityClass,
+                            Class<DTO>      dtoClass,
+                            Class<ID>       idClass)
     {
-        this.entityClass = entity;
-        this.dtoClass = dto;
-        this.idClass = id;
+        this.entityClass =  entityClass;
+        this.dtoClass =     dtoClass;
+        this.idClass =      idClass;
     }
+
+
 
     protected ID parseId(String idString)
     {

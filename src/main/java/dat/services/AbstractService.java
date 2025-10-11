@@ -6,6 +6,7 @@ import dat.daos.InterfaceDAO;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.exceptions.ApiException;
+import dat.factories.AbstractClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,27 +15,25 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-public abstract class AbstractService<  Entity extends AbstractEntity,
-                                        DTO extends AbstractDTO,
-                                        ID extends Serializable>
-                                        implements InterfaceService< Entity, DTO, ID>
+public abstract class AbstractService<  Entity  extends AbstractEntity,
+                                        DTO     extends AbstractDTO,
+                                        ID      extends Serializable>
+                                                extends AbstractClass<   Entity, DTO, ID>
+                                        implements      InterfaceService<Entity, DTO, ID>
 {
-    protected final InterfaceDAO<Entity, DTO, ID> dao;
+    //protected InterfaceDAO<Entity, DTO, ID> dao = AbstractClass.dao;
     private static final Logger logger = LoggerFactory.getLogger(AbstractService.class);
-    protected Class<Entity> entityClass;
-    protected final Class<DTO> dtoClass;
+    protected final InterfaceDAO<Entity, DTO,ID> dao;
 
-    public AbstractService(InterfaceDAO<Entity, DTO, ID> dao, Class<DTO> dtoClass)
+    public AbstractService(InterfaceDAO<Entity, DTO, ID>dao,
+                           Class<Entity>                entityClass,
+                           Class<DTO>                   dtoClass,
+                           Class<ID>                    idClass)
     {
+        super(entityClass, dtoClass, idClass);
         this.dao = dao;
-        this.entityClass = dao.getEntityClass();
-        this.dtoClass = dtoClass;
     }
 
-    @Override
-    public Class<DTO> getDtoClass(){
-        return this.dtoClass;
-    }
 
     @Override
     public Entity dtoToEntity(DTO dto){
@@ -57,7 +56,7 @@ public abstract class AbstractService<  Entity extends AbstractEntity,
                                                                                                                         - getAnnotation(Class<T> annotationClass): get a single annotation for a given Field.
                                                                                                                         - getAnnotations(): get the annotations for a given Field (datatype is Annotation[]).
                                                                                                                         - getType(): get a datatype
-                                                                                                                        - getSimpleName():
+                                                                                                                        - getSimpleName(): returns the package path of a class
 
                                                                                                                         If a Field is not public you must execute command "field.setAccessible(true)" before assigning a Field to avoid access errors (IllegalArgumentException).
                                                                                                                         If a Field is final (especially static final)assume the Field is immutable.
@@ -155,7 +154,7 @@ public abstract class AbstractService<  Entity extends AbstractEntity,
     @Override
     public DTO create(DTO dto)
     {
-        logger.debug("Creating a new entry in database from a DTO = {}", dto.getUnitClass().getSimpleName());
+        logger.debug("Creating a new entry in database from a DTO = {}", dtoClass.getSimpleName());
         if (dto == null){
             logger.error("DTO is null");
             throw new ApiException(ErrorTypes.BAD_REQUEST, "DTO is null");

@@ -15,7 +15,7 @@ import java.util.Set;
 public abstract class AbstractController<   Entity  extends AbstractEntity,
                                             DTO     extends AbstractDTO,
                                             ID      extends Serializable>
-                                                    extends AbstractClass<Entity, DTO, ID>
+                                                    extends AbstractClass<  Entity, DTO, ID>
                                             implements InterfaceController< Entity, DTO, ID> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractController.class);

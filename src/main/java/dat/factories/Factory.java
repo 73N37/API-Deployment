@@ -21,14 +21,14 @@ public class Singularity<   Entity  extends AbstractEntity<Entity, ID>,
                             DTO     extends AbstractDTO<DTO,ID>,
                             ID      extends Serializable>
 {
-    private final Class<Entity>     entityClass;
-    private final Class<DTO>        dtoClass;
-    private final Class<ID>         idClass;
-    private EntityManagerFactory    emf;
-    private InterfaceController     controller;
-    private InterfaceDAO            dao;
-    private InterfaceService        service;
-    private InterfaceRoutes         routes;
+    protected final Class<Entity>   entityClass;
+    protected final Class<DTO>      dtoClass;
+    protected final Class<ID>       idClass;
+    protected EntityManagerFactory  emf;
+    public InterfaceController      controller;
+    public InterfaceDAO             dao;
+    public InterfaceService         service;
+    public InterfaceRoutes          routes;
 
     public Singularity(Class<Entity>        entityClass,
                        Class<DTO>           dtoClass,
@@ -38,7 +38,7 @@ public class Singularity<   Entity  extends AbstractEntity<Entity, ID>,
         this.entityClass =  entityClass;
         this.dtoClass =     dtoClass;
         this.idClass =      idClass;
-        this.emf = emf;
+        this.emf =          emf;
     }
 
     public void create()
@@ -51,25 +51,25 @@ public class Singularity<   Entity  extends AbstractEntity<Entity, ID>,
 
     public InterfaceDAO<Entity, DTO, ID> createDAO()
     {
-        this.dao = new AbstractDAO<Entity, DTO, ID>(emf, entityClass, dtoClass, idClass) {};
+        this.dao = new AbstractDAO<>(emf, entityClass, dtoClass, idClass) {};
         return dao;
     }
 
     public InterfaceService<Entity, DTO, ID> createService()
     {
-        this.service = new AbstractService<Entity, DTO, ID>(dao, entityClass, dtoClass, idClass) {};
+        this.service = new AbstractService<>(dao, entityClass, dtoClass, idClass) {};
         return service;
     }
 
     public InterfaceController<Entity, DTO, ID> createController()
     {
-        this.controller = new AbstractController<Entity, DTO, ID>(service, entityClass, dtoClass, idClass) {};
+        this.controller = new AbstractController<>(service, entityClass, dtoClass, idClass) {};
         return controller;
     }
 
     public InterfaceRoutes<Entity, DTO, ID> createRoutes()
     {
-        this.routes = new AbstractRoutes<Entity, DTO, ID>(controller, entityClass, dtoClass, idClass) {
+        this.routes = new AbstractRoutes<>(controller, entityClass, dtoClass, idClass) {
             @Override
             public void addRoutes(Javalin app, String basePath) {
 

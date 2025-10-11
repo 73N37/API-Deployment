@@ -9,11 +9,11 @@ import io.javalin.Javalin;
 
 import java.io.Serializable;
 
-public abstract class AbstractRoutes<   Entity  extends AbstractEntity,
-                                        DTO     extends AbstractDTO,
-                                        ID      extends Serializable>
-                                                extends AbstractClass<Entity, DTO, ID>
-                                                implements InterfaceRoutes<Entity, DTO, ID>
+public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
+                                        DTO     extends     AbstractDTO,
+                                        ID      extends     Serializable>
+                                                extends     AbstractClass<  Entity, DTO, ID>
+                                                implements  InterfaceRoutes<Entity, DTO, ID>
 {
     protected final InterfaceController<Entity, DTO, ID> controller;
 
