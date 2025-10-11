@@ -20,34 +20,37 @@ public class Factory<       Entity  extends AbstractEntity<Entity, ID>,
                             DTO     extends AbstractDTO<DTO,ID>,
                             ID      extends Serializable>
 {
-    protected final Class<Entity>   entityClass;
-    protected final Class<DTO>      dtoClass;
-    protected final Class<ID>       idClass;
-    public InterfaceController      controller;
-    public InterfaceDAO             dao;
-    public InterfaceService         service;
-    public InterfaceRoutes          routes;
+    protected final Class<Entity>           entityClass;
+    protected final Class<DTO>              dtoClass;
+    protected final Class<ID>               idClass;
+    protected final EntityManagerFactory    emf;
+    public InterfaceController              controller;
+    public InterfaceDAO                     dao;
+    public InterfaceService                 service;
+    public InterfaceRoutes                  routes;
 
-    public Factory(Class<Entity>    entityClass,
-                   Class<DTO>       dtoClass,
-                   Class<ID>        idClass)
+    public Factory(Class<Entity>        entityClass,
+                   Class<DTO>           dtoClass,
+                   Class<ID>            idClass,
+                   EntityManagerFactory emf)
     {
         this.entityClass =  entityClass;
         this.dtoClass =     dtoClass;
         this.idClass =      idClass;
+        this.emf =          emf;
     }
 
     public void create()
     {
-        createDAO();
+        createDAO(emf);
         createService();
         createController();
         createRoutes();
     }
 
-    public InterfaceDAO<Entity, DTO, ID> createDAO()
+    public InterfaceDAO<Entity, DTO, ID> createDAO(EntityManagerFactory emf)
     {
-        this.dao = new AbstractDAO<>(Entity.getEMF(), entityClass, dtoClass, idClass) {};
+        this.dao = new AbstractDAO<>(emf, entityClass, dtoClass, idClass) {};
         return dao;
     }
 
