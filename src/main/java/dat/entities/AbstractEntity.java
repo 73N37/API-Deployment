@@ -17,8 +17,7 @@ public abstract class AbstractEntity<   Entity  extends AbstractEntity,
     protected Entity parentEntity;
     protected Entity childEntity;
     protected String test = "Every decendent can access this string";
-
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected ID id;

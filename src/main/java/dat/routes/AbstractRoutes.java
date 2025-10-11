@@ -41,8 +41,7 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
 
         for (Method method : methods) {
             // Only process methods that take a single Context parameter
-            if (method.getParameterCount() != 1 ||
-                    !method.getParameterTypes()[0].equals(io.javalin.http.Context.class)) {
+            if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].equals(io.javalin.http.Context.class)) {
                 continue;
             }
 

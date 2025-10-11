@@ -42,6 +42,10 @@ public class HibernateConfig {
     }
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
+    /* TODO:    MORE IMPORTANT!!!!!!!! Create a method that can add add entities to this class in RUNTIME
+                Maybe this list needs to be a class field where Admin + Moderator can add, but ONLY Moderator can remove classes from this list
+     */
+
     private static void getAnnotationConfiguration(Configuration configuration) {
         configuration.addAnnotatedClass(Hotel.class);
         configuration.addAnnotatedClass(Room.class);

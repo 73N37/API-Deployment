@@ -37,7 +37,7 @@ public class SecurityController implements ISecurityController {
     ITokenSecurity tokenSecurity = new TokenSecurity();
     private static ISecurityDAO securityDAO;
     private static SecurityController instance;
-    private static Logger logger = LoggerFactory.getLogger(SecurityController.class);
+    private static Logger log = LoggerFactory.getLogger(SecurityController.class);
 
     private SecurityController() { }
 
@@ -115,7 +115,7 @@ public class SecurityController implements ISecurityController {
             if (verifiedTokenUser == null) {
                 throw new UnauthorizedResponse("Invalid User or Token");
             }
-            logger.info("User verified: " + verifiedTokenUser);
+            log.info("User verified: " + verifiedTokenUser);
             ctx.attribute("user", verifiedTokenUser);
         };
     }

@@ -31,7 +31,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
                        Class<DTO> dtoClass,
                        Class<ID> idClass){
         super(entityClass,dtoClass, idClass);
-        //this.emf = emf;
+        this.emf = emf;
     }
 
     @Override
