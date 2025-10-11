@@ -50,12 +50,12 @@ public class ApplicationConfig< Entity  extends AbstractEntity,
         
         app.beforeMatched(accessController::accessHandler);
         app.after(ApplicationConfig::afterRequest);
-
         app.exception(Exception.class, ApplicationConfig::generalExceptionHandler);
         app.exception(ApiException.class, ApplicationConfig::apiExceptionHandler);
         app.start(port);
         return app;
     }
+
     
     public static void afterRequest(Context ctx) {
         String requestInfo = ctx.req().getMethod() + " " + ctx.req().getRequestURI();

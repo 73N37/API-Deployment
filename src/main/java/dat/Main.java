@@ -12,6 +12,6 @@ import org.slf4j.LoggerFactory;
 public class Main {
 
     public static void main(String[] args) {
-        ApplicationConfig.startServer(7070);
+        new ApplicationConfig().startServer(7070);
     }
 }
