@@ -5,7 +5,6 @@ import dat.controllers.InterfaceController;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.factories.AbstractClass;
-import dat.services.InterfaceService;
 import io.javalin.Javalin;
 import lombok.Getter;
 import io.javalin.http.Handler;
@@ -21,7 +20,7 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
 {
     protected final InterfaceController<Entity, DTO, ID> controller;
     @Getter
-    protected Set<Method> routes;
+    protected Set<Method> methodSet;
 
     public AbstractRoutes(InterfaceController<Entity, DTO, ID>  controller,
                           Class<Entity>                         entityClass,
@@ -30,38 +29,8 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
     {
         super(entityClass, dtoClass, idClass);
         this.controller = controller;
-        this.routes = new HashSet<>();
+        this.methodSet = new HashSet<>();
     }
-
-    public abstract void addRoutes(Javalin app, String basePath);
-
-//    public void autoGenerateRoutes(Javalin app, String basePath) {
-//        Method[] methods = controller.getClass().getMethods();
-//        for (Method method : methods) {
-//            // Only process methods that take a single Context parameter
-//            if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].equals(io.javalin.http.Context.class)) {
-//                continue;
-//            }
-//            String methodName = method.getName();
-//            String fullPath = determineFullPath(basePath, methodName);
-//            io.javalin.http.HandlerType httpMethod = determineHttpMethod(methodName);
-//            if (httpMethod != null && fullPath != null) {
-//                try {
-//                    Handler handler = ctx -> method.invoke(controller, ctx);
-//                    // Register route based on HTTP method type
-//                    switch (httpMethod) {
-//                        case GET -> app.get(fullPath, handler);
-//                        case POST -> app.post(fullPath, handler);
-//                        case PUT -> app.put(fullPath, handler);
-//                        case DELETE -> app.delete(fullPath, handler);
-//                    }
-//                    this.routes.put(fullPath, method);
-//                } catch (Exception e) {
-//                    throw new RuntimeException("Failed to register route: " + fullPath, e);
-//                }
-//            }
-//        }
-//    }
 
     public void generateRoutes(Javalin app) {
         // Create an Array that contains the methods from my controller class.
@@ -100,7 +69,7 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
                         }
 
                         // Since a method satisfies the criteria (only 1 parameter & it must be the datatype javalin.Context)
-                        routes.add(method);
+                        methodSet.add(method);
                     } catch (Exception e) {
                         throw new RuntimeException("Failed to register route: " + getFullPath(method), e);
                     }
@@ -147,11 +116,11 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
     }
 
     protected Set<Method> getAbstractRoutes() {
-        return this.routes;
+        return this.methodSet;
     }
 
     protected boolean removeRoute(Method method) {
         //TODO give this MODERATOR rights ONLY
-        return routes.remove(method);
+        return methodSet.remove(method);
     }
 }

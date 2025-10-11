@@ -17,8 +17,6 @@ public interface InterfaceService<  Entity  extends     AbstractEntity,
 
     void delete(ID id);
 
-    DTO update(Entity entity, DTO dto);
-
     void delete(Entity entity);
 
     DTO read(Entity entity);

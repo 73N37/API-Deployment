@@ -8,6 +8,4 @@ import java.io.Serializable;
 public interface InterfaceRoutes<   Entity  extends AbstractEntity,
                                     DTO     extends AbstractDTO,
                                     ID      extends Serializable>
-{
-
-}
+{}

@@ -138,7 +138,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
 
     @Override
     public Optional<Entity> executeJPQL(String jpql, Map<String, Object> params)
-    {
+    { // TODO Set MODERATOR access ONLY
         log.debug("Executing a custom JPQL query");
         try (EntityManager em = emf.createEntityManager())
         {

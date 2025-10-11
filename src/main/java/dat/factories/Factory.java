@@ -65,15 +65,7 @@ public class Factory<       Entity  extends AbstractEntity<Entity, ID>,
 
     public InterfaceRoutes<Entity, DTO, ID> createRoutes()
     {
-        this.routes = new AbstractRoutes<>(controller, entityClass, dtoClass, idClass) {
-
-
-            @Override
-            public void addRoutes(Javalin app, String basePath) {
-
-            }
-
-        };
+        this.routes = new AbstractRoutes<>(controller, entityClass, dtoClass, idClass) {};
         return routes;
     }
 }
