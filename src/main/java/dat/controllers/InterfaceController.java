@@ -15,6 +15,4 @@ public interface InterfaceController<   Entity  extends AbstractEntity,
     void create(Context ctx);
     void update(Context ctx);
     void delete(Context ctx);
-    boolean validatePrimaryKey(Context ctx);
-    DTO validateEntity(Context ctx);
 }
