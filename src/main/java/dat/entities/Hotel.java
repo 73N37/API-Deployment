@@ -14,8 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "hotel")
-//@AttributeOverride(name= "id", column = @Column(name="hotel_id", nullable = false, unique = true))
-public class Hotel extends AbstractEntity {
+public class Hotel extends AbstractEntity<Hotel, Integer> {
 
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
