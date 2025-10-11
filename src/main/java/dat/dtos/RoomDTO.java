@@ -9,7 +9,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class RoomDTO extends AbstractDTO {
+public class RoomDTO extends AbstractDTO<RoomDTO, Integer> {
     private Integer roomNumber;
     private Integer roomPrice;
     @IgnoreMapping
