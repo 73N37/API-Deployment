@@ -1,5 +1,6 @@
 package dat.routes;
 
+import dat.annotations.RouteHandler;
 import dat.controllers.InterfaceController;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
@@ -10,10 +11,7 @@ import lombok.Getter;
 import io.javalin.http.Handler;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
                                         DTO     extends     AbstractDTO,
@@ -23,7 +21,7 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
 {
     protected final InterfaceController<Entity, DTO, ID> controller;
     @Getter
-    protected ArrayList<Method> routes;
+    protected Set<Method> routes;
 
     public AbstractRoutes(InterfaceController<Entity, DTO, ID>  controller,
                           Class<Entity>                         entityClass,
@@ -32,7 +30,7 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
     {
         super(entityClass, dtoClass, idClass);
         this.controller = controller;
-        this.routes = new ArrayList<>();
+        this.routes = new HashSet<>();
     }
 
     public abstract void addRoutes(Javalin app, String basePath);
@@ -80,45 +78,35 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
                 continue;
             }
 
-                // Since a method satisfies the criteria (only 1 parameter & it must be the datatype javalin.Context)
-                routes.add(method);
-
-                //
+                // Determines what Enum (HandlerType) a given method must be
                 io.javalin.http.HandlerType httpMethod = determineHttpMethod(method);
 
+                // Makes sure that httpMethod isn't invalid
                 if (httpMethod != null && getFullPath(method) != null) {
                     try {
+
+                        /*
+                         You don't know at compile-time which specific controller method will be called. (Java reflection API)
+                         The method is determined dynamically at runtime. The method is determined by how far in the methods array (line 68) you have come
+                         */
                         Handler handler = ctx -> method.invoke(controller, ctx);
+
                         // Register route based on HTTP method type
                         switch (httpMethod) {
-                            case GET -> app.get(getFullPath(method), handler);
-                            case POST -> app.post(getFullPath(method), handler);
-                            case PUT -> app.put(getFullPath(method), handler);
-                            case DELETE -> app.delete(getFullPath(method), handler);
+                            case GET    -> app.get(     getFullPath(method), handler);
+                            case POST   -> app.post(    getFullPath(method), handler);
+                            case PUT    -> app.put(     getFullPath(method), handler);
+                            case DELETE -> app.delete(  getFullPath(method), handler);
                         }
-                        this.routes.add(method);
+
+                        // Since a method satisfies the criteria (only 1 parameter & it must be the datatype javalin.Context)
+                        routes.add(method);
                     } catch (Exception e) {
                         throw new RuntimeException("Failed to register route: " + getFullPath(method), e);
                     }
                 }
         }
     }
-
-//    private String determineFullPath(String basePath, String methodName) {
-//        /*
-//        Returns a unique String based on methods name.
-//        This String is used to create a path
-//         */
-//
-//        Method test = null;
-//        test.getClass().getSimpleName();
-//        Class tezt = test.getClass();
-//        return switch (methodName) {
-//            case "read", "update", "delete" -> basePath + "/{id}";
-//            case "readAll", "create" -> basePath;
-//            default -> methodName;
-//        };
-//    }
 
     private String getFullPath(Method method){
         /*
@@ -127,8 +115,8 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
          */
 
         // returns the methods name as a String (Java Reflection API)
-        return switch(method.getName()){
-
+        return switch(method.getName())
+        {
             // If the method is called 'delete()',
             // the method will return: delete/{Class}/{id}
             case "read", "update", "delete" -> method.getClass().getSimpleName() + "/{id}";
@@ -143,20 +131,26 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
     }
 
     private io.javalin.http.HandlerType determineHttpMethod(Method method) {
+        RouteHandler annotation = method.getAnnotation(RouteHandler.class);
+        if (annotation != null) {
+            return annotation.value();
+        }
+        // The switch case is a fail-safe in case I forgot to use the RouteHandler annotation in my controller
         return switch (method.getName()) {
             case "read", "readAll"  -> io.javalin.http.HandlerType.GET;
             case "create"           -> io.javalin.http.HandlerType.POST;
             case "update"           -> io.javalin.http.HandlerType.PUT;
             case "delete"           -> io.javalin.http.HandlerType.DELETE;
+            // Will only return null if I mistyped the method name
             default -> null;
         };
     }
 
-    protected ArrayList<Method> getAbstractRoutes(){
+    protected Set<Method> getAbstractRoutes() {
         return this.routes;
     }
 
-    protected boolean removeRoute(Method method){
+    protected boolean removeRoute(Method method) {
         //TODO give this MODERATOR rights ONLY
         return routes.remove(method);
     }
