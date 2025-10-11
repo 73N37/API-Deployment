@@ -6,6 +6,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface IgnoreMapping {
+public @interface IgnoreMapping {}
 
-}
+
+/*
+The purpose of this annotation is to show my EntityToDTO() and dtoToEntity(),
+methods what fields must be excluded from the conversion.
+ */
