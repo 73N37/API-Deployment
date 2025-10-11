@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -13,12 +14,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "room")
-public class Room extends AbstractEntity {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "room_id", nullable = false, unique = true)
-//    private Integer roomId;
+public class Room extends AbstractEntity<Room, Integer> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id", nullable = false, unique = true)
+    private Integer roomId;
 
     @Setter
     @Column(name = "room_number", nullable = false)
