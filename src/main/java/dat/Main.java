@@ -1,18 +1,33 @@
 package dat;
-
-import dat.config.ApplicationConfig;
-import dat.controllers.impl.ExceptionController;
-import dat.exceptions.ApiException;
-import dat.exceptions.Message;
-import dat.routes.Routes;
+import dat.Config.ApplicationConfig;
+import dat.Config.HibernateConfig;
+import dat.Instance.DTO.HotelDTO;
+import dat.Instance.DTO.RoomDTO;
+import dat.Instance.Entity.Hotel;
+import dat.Instance.Entity.Room;
+import dat.Instance.Factory.Factory;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
-public class Main {
-
+public class Main
+{ // TODO Please read the book!!! We had a deal...
     public static void main(String[] args) {
-        ApplicationConfig.startServer(7070);
+        Javalin app = Javalin.create(ApplicationConfig::configuration);
+        EntityManagerFactory emf = HibernateConfig.createEMF(false);
+
+        Factory<Hotel, HotelDTO, Integer> hotelFactory = new Factory( Hotel.class, HotelDTO.class, Integer.class, emf);
+        Factory<Room, RoomDTO, Integer> roomFactory = new Factory( Room.class, RoomDTO.class, Integer.class, emf);
+
+        hotelFactory.create();
+        roomFactory.create();
+        ApplicationConfig.registerRoutes(app, hotelFactory);
+        ApplicationConfig.registerRoutes(app, roomFactory);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            app.stop();
+            emf.close();
+        }));
+        app.start(7070);
+
+        System.out.println("=== MAIN IS COMPLETE ===");
     }
 }

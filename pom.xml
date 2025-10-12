@@ -10,15 +10,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <hibernate-version>6.2.4.Final</hibernate-version>
         <restassured.version>5.5.0</restassured.version>
         <testcontainers.version>1.18.0</testcontainers.version>
         <junit.version>5.9.1</junit.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <token.security.version>1.0.1</token.security.version>
-
+        <jpa.version>3.1.0</jpa.version>
         <!--  Javalin    -->
         <javalin.port>7070</javalin.port>
     </properties>
@@ -87,6 +87,11 @@
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
             <version>${hibernate-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jpa.version}</version>
         </dependency>
 
         <!--  Logging   -->
@@ -207,6 +212,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
