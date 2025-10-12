@@ -3,6 +3,7 @@ package dat.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
+import dat.factories.Factory;
 import dat.routes.AbstractRoutes;
 import dat.routes.InterfaceRoutes;
 import dat.security.controllers.AccessController;
@@ -22,9 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ApplicationConfig< Entity  extends AbstractEntity,
-                                DTO     extends AbstractDTO,
-                                ID      extends Serializable> {
+public class ApplicationConfig {
 
     private static final List<InterfaceRoutes<?, ?, ?>> routesList = new ArrayList<>();
     private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
@@ -41,8 +40,8 @@ public class ApplicationConfig< Entity  extends AbstractEntity,
         config.router.apiBuilder(SecurityRoutes.getSecurityRoutes());
     }
 
-    public static void registerRoutes(InterfaceRoutes<?,?,?> routes){
-        routesList.add(routes);
+    public static void registerRoutes(Javalin app, Factory<?,?,?> factory){
+        factory.getRoutes().generateRoutes(app);
     }
 
     public Javalin startServer(int port) {
