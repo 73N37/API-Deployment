@@ -1,5 +1,4 @@
 package dat.Factory;
-
 import dat.Controller.InterfaceController;
 import dat.DAO.InterfaceDAO;
 import dat.DTO.AbstractDTO;
@@ -7,6 +6,8 @@ import dat.Entity.AbstractEntity;
 import dat.Route.InterfaceRoute;
 import dat.Service.InterfaceService;
 import dat.Unit.AbstractUnit;
+import io.javalin.http.Context;
+import io.javalin.http.Handler;
 import lombok.Getter;
 import java.io.Serializable;
 
@@ -48,5 +49,25 @@ public  class AbstractFactory<  Entity  extends     AbstractEntity,
         return parseId(entityClass.getSimpleName() + "Factory");
     }
 
+    public Handler getAll()
+    {
 
+        return controller.getAll();
+    }
+
+    public Handler get(){
+        return controller.get();
+    }
+
+    public Handler put(){
+        return controller.put();
+    }
+
+    public Handler post(){
+        return controller.post();
+    }
+
+    public Handler delete(){
+        return controller.delete();
+    }
 }

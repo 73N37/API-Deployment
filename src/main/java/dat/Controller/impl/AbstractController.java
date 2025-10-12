@@ -10,7 +10,7 @@ import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import io.javalin.http.Handler;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -34,112 +34,126 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
 
     @Override
     @RouteHandler(HandlerType.GET)
-    public void read(Context ctx) {
-        if (!validatePrimaryKey(ctx)) {
-            return;
-        }
-        DTO dto = validateEntity(ctx);
-        if (dto == null) {
-            return;
-        }
-        ID id =  parseId(ctx.pathParam("id"));
-        log.info("GET request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
-        try {
-            dto = service.read(id);
-            if (dto != null) {
-                log.debug("Received DTO= {} from service",dto.getClass());
-                ctx.json(dto);
-            } else {
-                log.warn("{} not found with ID: {}", dtoClass.getSimpleName(), id);
-                ctx.status(HttpStatus.NOT_FOUND).json("Resource not found");
+    public Handler get() {
+        return (ctx -> {
+            if (!validatePrimaryKey(ctx)) {
+                return;
             }
-        } catch (Exception e){
-            log.error("Error retrieving {} with ID: {}: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
-            ctx.status(HttpStatus.BAD_REQUEST).json("Error retrieving resource: " + e.getMessage());
-        }
+            DTO dto = validateEntity(ctx);
+            if (dto == null) {
+                return;
+            }
+            ID id =  parseId(ctx.pathParam("id"));
+            log.info("GET request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
+            try {
+                dto = service.read(id);
+                if (dto != null) {
+                    log.debug("Received DTO= {} from service",dto.getClass());
+                    ctx.json(dto);
+                } else {
+                    log.warn("{} not found with ID: {}", dtoClass.getSimpleName(), id);
+                    ctx.status(HttpStatus.NOT_FOUND).json("Resource not found");
+                }
+            } catch (Exception e){
+                log.error("Error retrieving {} with ID: {}: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
+                ctx.status(HttpStatus.BAD_REQUEST).json("Error retrieving resource: " + e.getMessage());
+            }
+        });
     }
 
     @Override
     @RouteHandler(HandlerType.GET)
-    public void readAll(Context ctx) {
-        log.info("GET request for {} from IP: {}", dtoClass.getSimpleName(), ctx.ip());
-        try {
-            Set<DTO> data = service.readAllDTO();
-            log.debug("Retrieved {} data from service", data.size());
-            ctx.json(data);
-        } catch (Exception e) {
-            log.error("Error retrieving {} from IP: {}", dtoClass.getSimpleName(), ctx.ip(), e);
-            ctx.status(HttpStatus.BAD_REQUEST).json("Error retrieving resource: " + e.getMessage());
-        }
+    public Handler getAll() {
+        return ( ctx -> {
+            log.info("GET request for {} from IP: {}", dtoClass.getSimpleName(), ctx.ip());
+            try {
+                Set<DTO> data = service.readAllDTO();
+                log.debug("Retrieved {} data from service", data.size());
+                ctx.json(data);
+            } catch (Exception e) {
+                log.error("Error retrieving {} from IP: {}", dtoClass.getSimpleName(), ctx.ip(), e);
+                ctx.status(HttpStatus.BAD_REQUEST).json("Error retrieving resource: " + e.getMessage());
+            }
+        });
     }
 
     @Override
     @RouteHandler(HandlerType.POST)
-    public void create(Context ctx) {
-        DTO dto = validateEntity(ctx);
-        if (dto == null) {
-            return;
-        }
-        log.info("POST request to create {} from IP: {}",  dtoClass.getSimpleName(), ctx.ip());
-        try {
-            dto = ctx.bodyAsClass(dtoClass);
-            log.debug("Parsed request body for {} creation", dtoClass.getSimpleName());
-            DTO createdDTO = service.create(dto);
-            log.info("Successfully created {} with service", dtoClass.getSimpleName());
-            ctx.status(HttpStatus.CREATED).json(createdDTO);
-        } catch (Exception e) {
-            log.error("Failed to create {}: in service {}", dtoClass.getSimpleName(), e.getMessage(), e);
-            ctx.status(HttpStatus.BAD_REQUEST).json("Error creating resource: " + e.getMessage());
-        }
+    public Handler post() {
+        return (ctx -> {
+
+            DTO dto = validateEntity(ctx);
+            if (dto == null) {
+                return;
+            }
+            log.info("POST request to create {} from IP: {}",  dtoClass.getSimpleName(), ctx.ip());
+            try {
+                dto = ctx.bodyAsClass(dtoClass);
+                log.debug("Parsed request body for {} creation", dtoClass.getSimpleName());
+                DTO createdDTO = service.create(dto);
+                log.info("Successfully created {} with service", dtoClass.getSimpleName());
+                ctx.status(HttpStatus.CREATED).json(createdDTO);
+            } catch (Exception e) {
+                log.error("Failed to create {}: in service {}", dtoClass.getSimpleName(), e.getMessage(), e);
+                ctx.status(HttpStatus.BAD_REQUEST).json("Error creating resource: " + e.getMessage());
+            }
+        });
+
     }
 
     @Override
     @RouteHandler(HandlerType.PUT)
-    public void update(Context ctx) {
-        if (!validatePrimaryKey(ctx)) {
-            return;
-        }
-        DTO dto = validateEntity(ctx);
-        if (dto == null) {
-            return;
-        }
-        ID id = parseId(ctx.pathParam("id"));
-        log.info("PUT request to update {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
-        try{
-            dto = ctx.bodyAsClass(dtoClass);
-            log.debug("Parsed request body for {} update with ID: {}", dtoClass.getSimpleName(), id);
-            DTO dataEntry = service.update(id, dto);
-            if (dataEntry != null) {
-                log.info("Successfully updated {} with ID: {}", dtoClass.getSimpleName(), id);
-                ctx.json(dataEntry);
-            } else {
-                log.warn("{} not found for update with ID: {}", dtoClass.getSimpleName(), id);
-                ctx.status(HttpStatus.NOT_FOUND).json("Resource not found");
+    public Handler put() {
+        return (ctx -> {
+            if (!validatePrimaryKey(ctx)) {
+                return;
             }
-        } catch (Exception e){
-            log.error("Error updating {} with ID: {}: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
-            ctx.status(HttpStatus.BAD_REQUEST).json("Error updating resource: " + e.getMessage());
-        }
+            DTO dto = validateEntity(ctx);
+            if (dto == null) {
+                return;
+            }
+            ID id = parseId(ctx.pathParam("id"));
+            log.info("PUT request to update {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
+            try {
+                dto = ctx.bodyAsClass(dtoClass);
+                log.debug("Parsed request body for {} update with ID: {}", dtoClass.getSimpleName(), id);
+                DTO dataEntry = service.update(id, dto);
+                if (dataEntry != null)
+                {
+                    log.info("Successfully updated {} with ID: {}", dtoClass.getSimpleName(), id);
+                    ctx.json(dataEntry);
+                } else
+                {
+                    log.warn("{} not found for update with ID: {}", dtoClass.getSimpleName(), id);
+                    ctx.status(HttpStatus.NOT_FOUND).json("Resource not found");
+                }
+            } catch (Exception e){
+                log.error("Error updating {} with ID: {}: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
+                ctx.status(HttpStatus.BAD_REQUEST).json("Error updating resource: " + e.getMessage());
+            }
+        });
     }
 
     @Override
     @RouteHandler(HandlerType.DELETE)
-    public void delete(Context ctx) {
-        ID id = null;
-        try{
-            id = parseId(ctx.pathParam("id"));
-        } catch (ClassCastException e){
-            log.error("Was unable to parse id to either String, Integer or LONG");
-        }
-        log.info("DELETE request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
-        try{
-            service.delete(id);
-            log.info("Successfully deleted {} with ID: {}", dtoClass.getSimpleName(), id);
-            ctx.status(HttpStatus.NO_CONTENT).json("Successfully deleted resource");
-        } catch (Exception e){                                                                                          // Since 'service.delete(ID id)' returns void this method can only throw an exception if the ID (parameter) isn't part of the DB.
-            log.error("Error deleting {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
-            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Unable too delete an entry in the database, based ond the Context-Object provided");
-        }
+    public Handler delete() {
+        return (ctx -> {
+            ID id = null;
+            try{
+                id = parseId(ctx.pathParam("id"));
+            } catch (ClassCastException e){
+                log.error("Was unable to parse id to either String, Integer or LONG");
+            }
+            log.info("DELETE request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
+            try{
+                service.delete(id);
+                log.info("Successfully deleted {} with ID: {}", dtoClass.getSimpleName(), id);
+                ctx.status(HttpStatus.NO_CONTENT).json("Successfully deleted resource");
+            } catch (Exception e){                                                                                          // Since 'service.delete(ID id)' returns void this method can only throw an exception if the ID (parameter) isn't part of the DB.
+                log.error("Error deleting {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
+                ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Unable too delete an entry in the database, based ond the Context-Object provided");
+            }
+        });
     }
 
     private boolean validatePrimaryKey(Context ctx) {

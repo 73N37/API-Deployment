@@ -8,11 +8,17 @@ import dat.DTO.AbstractDTO;
 import dat.Entity.AbstractEntity;
 import dat.Route.AbstractRoute;
 import dat.Route.InterfaceRoute;
+import dat.Security.enums.Role;
 import dat.Service.AbstractService;
 import dat.Service.InterfaceService;
+import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.Getter;
 import java.io.Serializable;
+import java.util.Set;
+
+import io.javalin.http.Handler;
+
 
 @Getter
 public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
