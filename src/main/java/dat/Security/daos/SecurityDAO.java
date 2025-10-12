@@ -67,7 +67,7 @@ public class SecurityDAO implements ISecurityDAO {
     }
 
     @Override
-    public User addRole(UserDTO userDTO, String newRole) {
+    public User postRole(UserDTO userDTO, String newRole) {
         try (EntityManager em = getEntityManager()) {
             User user = em.find(User.class, userDTO.getUsername());
             if (user == null)

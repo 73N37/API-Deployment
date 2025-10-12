@@ -56,7 +56,7 @@ public class SecurityController implements ISecurityController {
             try {
                 UserDTO user = ctx.bodyAsClass(UserDTO.class);
                 UserDTO verifiedUser = securityDAO.getVerifiedUser(user.getUsername(), user.getPassword());
-                String token = createToken(verifiedUser);
+                String token = postToken(verifiedUser);
 
                 ctx.status(200).json(returnObject
                         .put("token", token)
@@ -78,7 +78,7 @@ public class SecurityController implements ISecurityController {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
                 User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
 
-                String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
+                String token = postToken(new UserDTO(created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)
                         .put("username", created.getUsername()));
@@ -134,8 +134,7 @@ public class SecurityController implements ISecurityController {
                    .anyMatch(roleNames::contains);
         }
 
-    @Override
-    public String createToken(UserDTO user) {
+    public String postToken(UserDTO user) {
         try {
             String ISSUER;
             String TOKEN_EXPIRE_TIME;
@@ -174,7 +173,7 @@ public class SecurityController implements ISecurityController {
         }
     }
 
-    public @NotNull Handler addRole() {
+    public @NotNull Handler postRole() {
         return (ctx) -> {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
@@ -182,7 +181,7 @@ public class SecurityController implements ISecurityController {
                 // We need to get the role from the body and the username from the token
                 String newRole = ctx.bodyAsClass(ObjectNode.class).get("role").asText();
                 UserDTO user = ctx.attribute("user");
-                User updatedUser = securityDAO.addRole(user, newRole);
+                User updatedUser = securityDAO.postRole(user, newRole);
                 ctx.status(200).json(returnObject.put("msg", "Role " + newRole + " added to user"));
             } catch (EntityNotFoundException e) {
                 ctx.status(404).json("{\"msg\": \"User not found\"}");
