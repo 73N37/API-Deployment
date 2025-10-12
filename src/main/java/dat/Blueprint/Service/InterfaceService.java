@@ -18,7 +18,7 @@ public interface InterfaceService<  Entity  extends     dat.Instance.Entity.Enti
 
     void delete(Entity entity);
 
-    DTO read(Entity entity);
+    //DTO read(Entity entity);
 
     Set<DTO> getAllDTOs();
 
