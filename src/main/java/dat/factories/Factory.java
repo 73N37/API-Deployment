@@ -19,10 +19,8 @@ import java.io.Serializable;
 public class Factory<       Entity  extends AbstractEntity<Entity, ID>,
                             DTO     extends AbstractDTO<DTO,ID>,
                             ID      extends Serializable>
+                                    extends AbstractClass<Entity, DTO, ID>
 {
-    protected final Class<Entity>           entityClass;
-    protected final Class<DTO>              dtoClass;
-    protected final Class<ID>               idClass;
     protected final EntityManagerFactory    emf;
     public InterfaceController              controller;
     public InterfaceDAO                     dao;
@@ -34,9 +32,7 @@ public class Factory<       Entity  extends AbstractEntity<Entity, ID>,
                    Class<ID>            idClass,
                    EntityManagerFactory emf)
     {
-        this.entityClass =  entityClass;
-        this.dtoClass =     dtoClass;
-        this.idClass =      idClass;
+        super(entityClass, dtoClass, idClass);
         this.emf =          emf;
     }
 
