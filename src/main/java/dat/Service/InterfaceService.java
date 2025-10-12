@@ -1,7 +1,7 @@
-package dat.Services;
+package dat.Service;
 
-import dat.DTOs.AbstractDTO;
-import dat.Entities.AbstractEntity;
+import dat.DTO.AbstractDTO;
+import dat.Entity.AbstractEntity;
 import java.io.Serializable;
 import java.util.Set;
 
