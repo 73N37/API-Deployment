@@ -22,7 +22,7 @@ public class Hotel extends dat.Instance.Entity.Entity {
 //    @Column(name = "hotel_id", nullable = false, unique = true)
 //    private Object hotelId;
 
-    //private Integer id;
+    private Integer id;
 
     @Setter
     @Column(name = "hotel_name", nullable = false, unique = true)
