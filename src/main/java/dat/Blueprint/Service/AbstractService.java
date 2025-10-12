@@ -199,7 +199,7 @@ public abstract class AbstractService<  Entity  extends dat.Instance.Entity.Enti
                 log.error("Entity is null");
                 throw new ApiException(ErrorTypes.BAD_REQUEST, "Failed to convert DTO to Entity");
             }
-            Entity databaseEntry =  dao.get( entity.getId());
+            Entity databaseEntry = (Entity) dao.get( entity.getId());
             log.info("Successfully add this {} as a new entry in the database ", databaseEntry.getClass().getSimpleName());;
             return entityToDTO(databaseEntry);
         } catch (ApiException e) {
@@ -213,9 +213,9 @@ public abstract class AbstractService<  Entity  extends dat.Instance.Entity.Enti
     @Override
     public DTO read(ID id){
         log.debug("Fetching database entry with id {}", id);
-        Entity readEntry = dao.get(id);
+        Entity readEntry = (Entity) dao.get(id);
         if (readEntry != null) {
-            return entityToDTO(readEntry.get());
+            return entityToDTO(readEntry);
         }
         return null;
     }
@@ -223,9 +223,9 @@ public abstract class AbstractService<  Entity  extends dat.Instance.Entity.Enti
     @Override
     public DTO update(ID id, DTO dto){
         log.debug("Updating database entry with id {}", id);
-        Entity updateEntry = dao.put(id, dtoToEntity(dto));
+        Entity updateEntry = (Entity) dao.put(id, dtoToEntity(dto));
         if(updateEntry != null){
-            return entityToDTO(updateEntry.get());
+            return entityToDTO(updateEntry);
         }
         return null;
     }
@@ -256,9 +256,9 @@ public abstract class AbstractService<  Entity  extends dat.Instance.Entity.Enti
             log.error("Error happen when typecasting {} to ID while reading entity as parameter", Serializable.class);
         }
         log.debug("Fetching database entry (entity) with id {}", id);
-        Entity readEntry = dao.get(id);
+        Entity readEntry = (Entity) dao.get(id);
         if (readEntry != null) {
-            return entityToDTO(readEntry.get());
+            return entityToDTO(readEntry);
         }
         return null;
     }
