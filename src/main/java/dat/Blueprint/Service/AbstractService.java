@@ -57,7 +57,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
     private final Field[] cachedEntityFields;
     private final Field[] cachedDtoFields;
 
-    public AbstractService(InterfaceDAO<Entity, ID>dao,
+    public AbstractService(InterfaceDAO<Entity, ID>     dao,
                            Class<Entity>                entityClass,
                            Class<DTO>                   dtoClass,
                            Class<ID>                    idClass)
@@ -68,21 +68,20 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
         this.cachedDtoFields = dtoClass.getDeclaredFields();
     }
 
-    @Override
-    public Set<Entity> readAllEntity(){
+    public Set<Entity> getAllEntities(){
         // Uses Set<> on the readAll() method from DAO to remove all duplicate entries
         log.debug("Retrieving all {} entities in database and removing duplicates", entityClass);
-        List<Entity> databaseEntries = dao.getAll();
+        List<Entity> databaseEntries = dao.getAllEntities();
         return databaseEntries.
                 stream().
                 collect(Collectors.toSet());
     }
 
     @Override
-    public Set<DTO> readAllDTO(){
+    public Set<DTO> getAllDTOs(){
         // Making my Set<Entity> into a Set<DTO>
         log.debug("Transforming my Set<Entity> to a Set<DTO>", dtoClass);
-        Set<Entity> entitySet = readAllEntity();
+        Set<Entity> entitySet = getAllEntities();
         return entitySet
                 .stream()
                 .map(this::entityToDTO)
@@ -201,7 +200,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
                 log.error("Entity is null");
                 throw new ApiException(ErrorTypes.BAD_REQUEST, "Failed to convert DTO to Entity");
             }
-            Entity databaseEntry =  dao.post(entity);
+            Entity databaseEntry =  dao.get(entity.getId());
             log.info("Successfully add this {} as a new entry in the database ", databaseEntry.getClass().getSimpleName());;
             return entityToDTO(databaseEntry);
         } catch (ApiException e) {
@@ -250,8 +249,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
         dao.delete(id);
     }
 
-    @Override
-    public DTO read(Entity entity){
+    public DTO get(Entity entity){
         ID id = null;
         try {
             id = (ID) entity.getId();

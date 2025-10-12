@@ -65,7 +65,7 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
         return ( ctx -> {
             log.info("GET request for {} from IP: {}", dtoClass.getSimpleName(), ctx.ip());
             try {
-                Set<DTO> data = service.readAllDTO();
+                Set<DTO> data = service.getAllDTOs();
                 log.debug("Retrieved {} data from service", data.size());
                 ctx.json(data);
             } catch (Exception e) {

@@ -21,9 +21,9 @@ public interface InterfaceService<  Entity  extends     AbstractEntity,
 
     DTO read(Entity entity);
 
-    Set<DTO> readAllDTO();
+    Set<DTO> getAllDTOs();
 
-    Set<Entity> readAllEntity();
+    Set<Entity> getAllEntities();
 
     Entity dtoToEntity(DTO dto);
 

@@ -53,44 +53,43 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
             log.debug("No entity found of type: {} with Object: {}", entityClass.getSimpleName(), id);
             throw new ApiException(ErrorTypes.NOT_FOUND, "Database error: " + e.getMessage());
         } catch (Exception e){
-            log.error("Error finding entity of type: {} with Object: {}", entityClass.getSimpleName(), id, e);
+            log.error("Error finding entity with ID: {}",  id, e);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Database error: " + e.getMessage());
         }
     }
 
     @Override
-    public List<Entity> getAll(){
-        log.debug("Retrieving all entities of type: {}", entityClass.getSimpleName());
+    public List<Entity> getAllEntities(){
+        log.debug("Retrieving all entities");
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT  a FROM " + entityClass.getSimpleName() + " a";
-            List<Entity> result = () em.createQuery(jpql, entityClass).getResultList();
-            log.info("Retrieved {} entities of type: {} in {} ms",
-                    result.size(), entityClass.getSimpleName());
+            List<Entity> result =  em.createQuery(jpql, entityClass).getResultList();
+            log.info("Retrieved {} entities ", result.size());
             return result;
         } catch (Exception e) {
-            log.error("Error retrieving all entities of type: {}", entityClass.getSimpleName(), e);
+            log.error("Error retrieving all", e);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Database error: " + e.getMessage());
         }
     }
 
     @Override
     public Entity post(Entity entity){
-        log.debug("Creating a new entity of type {}",  entityClass.getSimpleName());
+        log.debug("Creating a new entity");
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
             em.persist(entity);
             em.getTransaction().commit();
-            log.info("Successfully created a entity of type {}",  entityClass.getSimpleName());
+            log.info("Successfully created a entity");
             return entity;
         } catch (Exception e){
-            log.error("Failed to create entity of type: {}", entityClass.getSimpleName(), e);
+            log.error("Failed to create entity",  e);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Failed to create entity: " + e.getMessage());
         }
     }
 
     @Override
     public Optional<Entity> put(ID id, Entity entity){
-        log.debug("Updating entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+        log.debug("Updating entity  with Id: {}", id);
         if (id == null || entity == null){
             return null;
         }
@@ -98,20 +97,20 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
             em.getTransaction().begin();
             Entity existing = em.find(entityClass, id);
             if (existing == null){
-                log.warn("Entity not found for update of type: {} with Object: {}", entityClass.getSimpleName(), id);
+                log.warn("Entity not found for update with Id: {}", id);
                 em.getTransaction().rollback();
                 return null;
             }
             Entity result = em.merge(entity);
             em.getTransaction().commit();
-            log.info("Successfully updated entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+            log.info("Successfully updated entity with Id: {}", id);
             return Optional.of(result);
         }
     }
 
     @Override
     public void delete(ID id){
-        log.debug("Deleting entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+        log.debug("Deleting entity  with Id: {}", id);
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
             String jpql =  "DELETE FROM " + entityClass.getName() + " a WHERE a.id = :id";
@@ -119,12 +118,12 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
                     .setParameter("id", id)
                     .executeUpdate();
             if (deletedCount > 0) {
-                log.info("Successfully deleted entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
+                log.info("Successfully deleted entity with Id: {}", id);
             } else {
-                log.warn("No entity found to delete of type: {} with Object: {}", entityClass.getSimpleName(), id);
+                log.warn("No entity found to delete with Id: {}", id);
             }
         } catch (Exception e) {
-            log.error("Error deleting entity of type: {} with Object: {}", entityClass.getSimpleName(), id, e);
+            log.error("Error deleting entity with Id: {}",  id, e);
         }
     }
 

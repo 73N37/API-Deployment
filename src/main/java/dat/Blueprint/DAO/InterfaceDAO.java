@@ -13,7 +13,7 @@ public interface InterfaceDAO<  Entity  extends AbstractEntity,
 {
     //Class<Entity> getEntityClass();
     Optional<Entity> get(ID id);
-    List<Entity> getAll();
+    List<Entity> getAllEntities();
     Entity post(Entity entity);
     Optional<Entity> put(ID id, Entity entity);
     void delete(ID id);
