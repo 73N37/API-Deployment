@@ -1,16 +1,14 @@
 package dat.dtos;
-import jakarta.persistence.Id;
+import dat.relations.Unit;
 import lombok.Getter;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @NoArgsConstructor
 @Getter
 public abstract class AbstractDTO<  DTO extends AbstractDTO,
-                                    ID  extends Serializable> {
-    protected DTO parentDTO;
-    protected DTO childDTO;
+                                    ID  extends Serializable>
+                                        extends Unit {
     protected ID id;
 
 }
