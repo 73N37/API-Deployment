@@ -22,11 +22,7 @@ public class RoomDTO extends dat.Instance.DTO.DTO {
         this.roomPrice = room.getRoomPrice().intValue();
         this.roomType = room.getRoomType();
     }
-
-//    public Integer getId(){
-//        return id;
-//    }
-
+    
     public static List<RoomDTO> toRoomDTOList(List<Room> rooms) {
         return List.of(rooms.stream().map(RoomDTO::new).toArray(RoomDTO[]::new));
     }
