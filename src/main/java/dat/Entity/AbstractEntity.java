@@ -1,5 +1,5 @@
-package dat.Entities;
-import dat.Unities.Unit;
+package dat.Entity;
+import dat.Unit.AbstractUnit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,14 @@ import java.io.Serializable;
 @MappedSuperclass // Hibernate retrieve the table name automatically from the class-name
 public abstract class AbstractEntity<   Entity  extends AbstractEntity,
                                         ID      extends Serializable>
-                                                extends Unit {
+                                                extends AbstractUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected ID id;
+
+    @Override
+    public ID getIdentifier() {
+        return id;
+    }
+
 }

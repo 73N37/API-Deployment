@@ -1,6 +1,6 @@
-package dat.Entities;
+package dat.Entity;
 
-import dat.DTOs.HotelDTO;
+import dat.DTO.HotelDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
