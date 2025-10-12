@@ -1,4 +1,4 @@
-package dat.Enums;
+package dat.Enum;
 
 public enum ErrorTypes {
     BAD_REQUEST(400, "Bad request"),
