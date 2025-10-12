@@ -32,6 +32,7 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
         this.methodSet = new HashSet<>();
     }
 
+    @Override
     public void generateRoutes(Javalin app) {
         // Create an Array that contains the methods from my controller class.
         // The controller class that is tied to this Routes class via my (superclass) AbstractClass
@@ -83,19 +84,20 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
         This String is used to create a path to the Controller.
          */
 
-        // returns the methods name as a String (Java Reflection API)
+        // returns the Class's name as a String (Java Reflection API)
+        String path = "/api/" + entityClass.getSimpleName().toLowerCase() + "s";
         return switch(method.getName())
         {
             // If the method is called 'delete()',
             // the method will return: delete/{Class}/{id}
-            case "read", "update", "delete" -> method.getClass().getSimpleName().toLowerCase() + "/{id}";
+            case "read", "update", "delete" -> path + "/{id}";
 
             // If the method is called 'readAll()',
             // the method will return: readAll/{Class}
-            case "readAll", "create" -> method.getClass().getSimpleName().toLowerCase();
+            case "readAll", "create" -> path;
 
             // returns the class's name as a String (Java Class type token)
-            default -> method.getClass().getSimpleName().toLowerCase()+"s";
+            default -> path;
         };
     }
 
@@ -113,10 +115,6 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
             // Will only return null if I mistyped the method name
             default -> null;
         };
-    }
-
-    protected Set<Method> getAbstractRoutes() {
-        return this.methodSet;
     }
 
     protected boolean removeRoute(Method method) {

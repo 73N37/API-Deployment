@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dat.dtos.AbstractDTO;
 import dat.entities.AbstractEntity;
 import dat.routes.AbstractRoutes;
+import dat.routes.InterfaceRoutes;
 import dat.security.controllers.AccessController;
 import dat.security.controllers.SecurityController;
 import dat.security.enums.Role;
@@ -25,7 +26,7 @@ public class ApplicationConfig< Entity  extends AbstractEntity,
                                 DTO     extends AbstractDTO,
                                 ID      extends Serializable> {
 
-    private final List<AbstractRoutes<Entity, DTO, ID>> routesList = new ArrayList<>();
+    private static final List<InterfaceRoutes<?, ?, ?>> routesList = new ArrayList<>();
     private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static final SecurityController securityController = SecurityController.getInstance();
     private static final AccessController accessController = new AccessController();
@@ -40,14 +41,25 @@ public class ApplicationConfig< Entity  extends AbstractEntity,
         config.router.apiBuilder(SecurityRoutes.getSecurityRoutes());
     }
 
+    public static void registerRoutes(InterfaceRoutes<?,?,?> routes){
+        routesList.add(routes);
+    }
+
     public Javalin startServer(int port) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
 
+            // Register all routes - FIXED
+//        for (InterfaceRoutes<? extends Entity, ? extends DTO, ? extends ID> route : routesList) {
+//            if (route instanceof AbstractRoutes<? extends Entity, ? extends DTO, ? extends ID> abstractRoute) {
+//                abstractRoute.generateRoutes(app);
+//            }
+//        }
+
         // Register all routes
-        for (AbstractRoutes<Entity, DTO, ID> routes : this.routesList) {
-            routes.generateRoutes(app);
+        for (InterfaceRoutes<?, ?, ?> route : routesList) {
+            route.generateRoutes(app);
         }
-        
+
         app.beforeMatched(accessController::accessHandler);
         app.after(ApplicationConfig::afterRequest);
         app.exception(Exception.class, ApplicationConfig::generalExceptionHandler);
