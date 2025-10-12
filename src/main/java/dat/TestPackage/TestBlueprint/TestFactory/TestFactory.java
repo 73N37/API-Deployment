@@ -17,8 +17,8 @@ import java.io.Serializable;
 
 
 @Getter
-public class TestFactory<   Entity  extends dat.Instance.Entity.Entity,
-                            DTO     extends dat.Instance.DTO.DTO,
+public class TestFactory<   Entity  extends dat.Blueprint.Entity.AbstractEntity,
+                            DTO     extends dat.Blueprint.DTO.AbstractDTO,
                             ID      extends Serializable>
         //extends AbstractFactory<Entity, DTO, ID>
 {
