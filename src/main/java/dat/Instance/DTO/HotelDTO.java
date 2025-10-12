@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class HotelDTO extends AbstractDTO< Integer> {
+public class HotelDTO extends dat.Instance.DTO.DTO {
 
     private Integer id;
     @MapTo("hotelName")
