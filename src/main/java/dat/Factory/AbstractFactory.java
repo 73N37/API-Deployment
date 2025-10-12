@@ -24,9 +24,9 @@ public  class AbstractFactory<  Entity  extends     AbstractEntity,
     public InterfaceService      service;
     public InterfaceRoute        routes;
     
-    public AbstractFactory(Class<Entity>   entityClass,
-                              Class<DTO>      dtoClass,
-                              Class<ID>       idClass)
+    public AbstractFactory( Class<Entity>   entityClass,
+                            Class<DTO>      dtoClass,
+                            Class<ID>       idClass)
     {
         this.entityClass =  entityClass;
         this.dtoClass =     dtoClass;
@@ -47,5 +47,6 @@ public  class AbstractFactory<  Entity  extends     AbstractEntity,
     {
         return parseId(entityClass.getSimpleName() + "Factory");
     }
+
 
 }

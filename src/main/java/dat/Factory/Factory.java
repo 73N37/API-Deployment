@@ -20,11 +20,11 @@ public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
                         ID      extends Serializable>
                                 extends AbstractFactory<Entity, DTO, ID>
 {
-    public final EntityManagerFactory    emf;
+    public final EntityManagerFactory       emf;
     public InterfaceController              controller;
     public InterfaceDAO                     dao;
     public InterfaceService                 service;
-    public InterfaceRoute routes;
+    public InterfaceRoute                   routes;
 
     public Factory(Class<Entity>        entityClass,
                    Class<DTO>           dtoClass,
