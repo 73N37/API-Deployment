@@ -16,10 +16,10 @@ import lombok.Getter;
 import java.io.Serializable;
 
 @Getter
-public class Factory<       Entity  extends AbstractEntity<Entity, ID>,
-                            DTO     extends AbstractDTO<DTO,ID>,
-                            ID      extends Serializable>
-                                    extends AbstractClass<Entity, DTO, ID>
+public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
+                        DTO     extends AbstractDTO<DTO,ID>,
+                        ID      extends Serializable>
+                                extends AbstractClass<Entity, DTO, ID>
 {
     protected final EntityManagerFactory    emf;
     public InterfaceController              controller;
