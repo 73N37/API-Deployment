@@ -40,7 +40,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
     }
 
     @Override
-    public Optional<Entity> read(ID id){
+    public Optional<Entity> get(ID id){
         log.debug("Reading/finding entity with id {}", id);
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT a FROM " + entityClass.getName() + " a WHERE a.id = :id";
@@ -59,7 +59,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
     }
 
     @Override
-    public List<Entity> readAll(){
+    public List<Entity> getAll(){
         log.debug("Retrieving all entities of type: {}", entityClass.getSimpleName());
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT  a FROM " + entityClass.getSimpleName() + " a";

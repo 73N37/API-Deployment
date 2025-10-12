@@ -12,9 +12,9 @@ public interface InterfaceDAO<  Entity  extends AbstractEntity,
                                 DTO     extends AbstractDTO,
                                 ID      extends Serializable>
 {
-    Class<Entity> getEntityClass();
-    Optional<Entity> read(ID id);
-    List<Entity> readAll();
+    //Class<Entity> getEntityClass();
+    Optional<Entity> get(ID id);
+    List<Entity> getAll();
     Entity create(Entity entity);
     Optional<Entity> update(ID id, Entity entity);
     void delete(ID id);

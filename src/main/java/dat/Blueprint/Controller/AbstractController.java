@@ -29,7 +29,6 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
                                  Class<ID>                          idClass) {
         super(entityClass, dtoClass, idClass);
         this.service = service;
-
     }
 
     @Override
@@ -142,7 +141,7 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
             try{
                 id = parseId(ctx.pathParam("id"));
             } catch (ClassCastException e){
-                log.error("Was unable to parse id to either String, Integer or LONG");
+                log.error("Was unable to parse id to either String, Integer or LONG.", e.getMessage(), e);
             }
             log.info("DELETE request for {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, ctx.ip());
             try{
@@ -150,7 +149,7 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
                 log.info("Successfully deleted {} with ID: {}", dtoClass.getSimpleName(), id);
                 ctx.status(HttpStatus.NO_CONTENT).json("Successfully deleted resource");
             } catch (Exception e){                                                                                          // Since 'service.delete(ID id)' returns void this method can only throw an exception if the ID (parameter) isn't part of the DB.
-                log.error("Error deleting {} with ID: {} from IP: {}", dtoClass.getSimpleName(), id, e.getMessage(), e);
+                log.error("Error deleting an object with ID: {} from IP: {}", id, ctx.ip(), e.getMessage(), e);
                 ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Unable too delete an entry in the database, based ond the Context-Object provided");
             }
         });

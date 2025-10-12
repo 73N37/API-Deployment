@@ -67,7 +67,7 @@ public abstract class AbstractUnit<ID extends Serializable>
             if (this instanceof AbstractUnit)       result = UnitType.UNIT;
         } catch (Exception e)
         {
-            log.error("An error happen while trying determining a UnitType based on inheritance. It happen here in Class<{}>", getUnitClass(), e.getMessage(), e);
+            log.error("An error happen while trying determining a UnitType based on inheritance. ", e.getMessage(), e);
         }
         return result;
     }
@@ -78,7 +78,7 @@ public abstract class AbstractUnit<ID extends Serializable>
             result = this.getClass().isAnnotationPresent(annotationClass);
         } catch (Exception e)
         {
-            log.error("An error happen while determining if an Annotation was present or not. It happen in here in Class<{}>", getUnitClass(), e.getMessage(), e);
+            log.error("An error happen while determining if an Annotation was present or not.", e.getMessage(), e);
         }
         return result;
     }
@@ -89,7 +89,7 @@ public abstract class AbstractUnit<ID extends Serializable>
             result = Collections.unmodifiableSet(REGISTRY);
         } catch (Exception e)
         {
-            log.error("An error happen while trying to assign a Set<{}>. Error happen before th result was returned", getUnitClass(), e.getMessage(), e);
+            log.error("An error happen while trying to assign a Set<>. Error happen before th result was returned", e.getMessage(), e);
         }
         return result;
     }

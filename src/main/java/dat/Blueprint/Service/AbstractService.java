@@ -53,7 +53,9 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
                                                 implements InterfaceService<Entity, DTO, ID>
 {
     private static final Logger log = LoggerFactory.getLogger(AbstractService.class);
-    public final InterfaceDAO<Entity, DTO,ID> dao;
+
+    private final Field[] cachedEntityFields;
+    private final Field[] cachedDtoFields;
 
     public AbstractService(InterfaceDAO<Entity, DTO, ID>dao,
                            Class<Entity>                entityClass,
@@ -62,13 +64,15 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
     {
         super(entityClass, dtoClass, idClass);
         this.dao = dao;
+        this.cachedEntityFields = entityClass.getDeclaredFields();
+        this.cachedDtoFields = dtoClass.getDeclaredFields();
     }
 
     @Override
     public Set<Entity> readAllEntity(){
         // Uses Set<> on the readAll() method from DAO to remove all duplicate entries
         log.debug("Retrieving all {} entities in database and removing duplicates", entityClass);
-        List<Entity> databaseEntries = dao.readAll();
+        List<Entity> databaseEntries = dao.getAll();
         return databaseEntries.
                 stream().
                 collect(Collectors.toSet());
@@ -212,7 +216,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
     @Override
     public DTO read(ID id){
         log.debug("Fetching database entry with id {}", id);
-        Optional<Entity> readEntry = dao.read(id);
+        Optional<Entity> readEntry = dao.get(id);
         if (readEntry.isPresent()) {
             return entityToDTO(readEntry.get());
         }
@@ -256,7 +260,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
             log.error("Error happen when typecasting {} to ID while reading entity as parameter", Serializable.class);
         }
         log.debug("Fetching database entry (entity) with id {}", id);
-        Optional<Entity> readEntry = dao.read(id);
+        Optional<Entity> readEntry = dao.get(id);
         if (readEntry.isPresent()) {
             return entityToDTO(readEntry.get());
         }
