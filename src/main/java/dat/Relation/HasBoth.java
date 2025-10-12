@@ -1,4 +1,4 @@
-package dat.Relations;
+package dat.Relation;
 
 public interface HasBoth<Parent, Child>
         extends IsParent<Child>,

@@ -1,4 +1,4 @@
-package dat.Relations;
+package dat.Relation;
 import java.util.Set;
 
 public interface IsParent<Child>
