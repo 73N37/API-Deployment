@@ -17,22 +17,25 @@ import jakarta.persistence.EntityManagerFactory;
 
 public class Main {
     public static void main(String[] args) {
-        Factory<Hotel, HotelDTO, Integer> hotelFactory = new Factory(   Hotel.class,
-                                                                        HotelDTO.class,
-                                                                        Integer.class,
-                                                                        HibernateConfig.createEMF(false));
+        Javalin app = Javalin.create(ApplicationConfig::configuration);
+        EntityManagerFactory emf = HibernateConfig.createEMF(false);
+
+        Factory<Hotel, HotelDTO, Integer> hotelFactory = new Factory( Hotel.class, HotelDTO.class, Integer.class, emf);
+        Factory<Room, RoomDTO, Integer> roomFactory = new Factory( Room.class, RoomDTO.class, Integer.class, emf);
+
         hotelFactory.create();
-        ApplicationConfig.registerRoutes(hotelFactory.getRoutes());
-
-
-        Factory<Room, RoomDTO, Integer> roomFactory = new Factory(      Room.class,
-                                                                        RoomDTO.class,
-                                                                        Integer.class,
-                                                                        HibernateConfig.createEMF(false));
         roomFactory.create();
-        ApplicationConfig.registerRoutes(roomFactory.getRoutes());
+        ApplicationConfig.registerRoutes(app, hotelFactory);
+        ApplicationConfig.registerRoutes(app, roomFactory);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            app.stop();
+            emf.close();
+        }));
+        app.start(7070);
 
-        new ApplicationConfig().startServer(7070);
 
+
+
+        System.out.println("=== MAIN IS COMPLETE ===");
     }
 }
