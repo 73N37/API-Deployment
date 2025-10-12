@@ -12,20 +12,20 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
+public abstract class AbstractRoute<   Entity  extends     AbstractEntity,
                                         DTO     extends     AbstractDTO,
                                         ID      extends     Serializable>
                                                 extends AbstractFactory<  Entity, DTO, ID>
-                                                implements  InterfaceRoutes<Entity, DTO, ID>
+                                                implements InterfaceRoute<Entity, DTO, ID>
 {
     protected final InterfaceController<Entity, DTO, ID> controller;
     @Getter
     protected Set<Method> methodSet;
 
-    public AbstractRoutes(InterfaceController<Entity, DTO, ID>  controller,
-                          Class<Entity>                         entityClass,
-                          Class<DTO>                            dtoClass,
-                          Class<ID>                             idClass)
+    public AbstractRoute(InterfaceController<Entity, DTO, ID>  controller,
+                         Class<Entity>                         entityClass,
+                         Class<DTO>                            dtoClass,
+                         Class<ID>                             idClass)
     {
         super(entityClass, dtoClass, idClass);
         this.controller = controller;

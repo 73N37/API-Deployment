@@ -6,7 +6,7 @@ import io.javalin.Javalin;
 
 import java.io.Serializable;
 
-public interface InterfaceRoutes<   Entity  extends AbstractEntity,
+public interface InterfaceRoute<   Entity  extends AbstractEntity,
                                     DTO     extends AbstractDTO,
                                     ID      extends Serializable>
 {
