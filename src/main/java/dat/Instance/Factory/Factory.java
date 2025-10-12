@@ -17,8 +17,8 @@ import java.io.Serializable;
 
 
 @Getter
-public class Factory<   Entity  extends AbstractEntity<ID>,
-                        DTO     extends AbstractDTO<ID>,
+public class Factory<   Entity  extends dat.Instance.Entity.Entity,
+                        DTO     extends dat.Instance.DTO.DTO,
                         ID      extends Serializable>
                                 extends AbstractFactory<Entity, DTO, ID>
 {
@@ -63,7 +63,7 @@ public class Factory<   Entity  extends AbstractEntity<ID>,
         return controller;
     }
 
-    public InterfaceRoute<Entity, DTO, ID> createRoutes()
+    public InterfaceRoute createRoutes()
     {
         this.routes = new AbstractRoute<>(controller, entityClass, dtoClass, idClass) {};
         return routes;

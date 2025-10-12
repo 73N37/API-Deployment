@@ -11,10 +11,10 @@ import lombok.Getter;
 import java.io.Serializable;
 
 @Getter
-public abstract  class AbstractFactory<  Entity  extends     AbstractEntity,
-                                DTO     extends     AbstractDTO,
-                                ID      extends     Serializable>
-                                        extends     AbstractUnit
+public abstract  class AbstractFactory<     Entity  extends     dat.Instance.Entity.Entity,
+                                            DTO     extends     dat.Instance.DTO.DTO,
+                                            ID      extends     Serializable>
+                                                    extends     AbstractUnit
 {
     public Class<Entity>         entityClass;
     public Class<DTO>            dtoClass;

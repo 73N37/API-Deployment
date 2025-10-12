@@ -1,12 +1,11 @@
 package dat.Blueprint.Service;
-
+import dat.Instance.Entity.Entity;
 import dat.Blueprint.DTO.AbstractDTO;
-import dat.Blueprint.Entity.AbstractEntity;
 import java.io.Serializable;
 import java.util.Set;
 
-public interface InterfaceService<  Entity  extends     AbstractEntity,
-                                    DTO     extends     AbstractDTO,
+public interface InterfaceService<  Entity  extends     dat.Instance.Entity.Entity,
+                                    DTO     extends     dat.Instance.DTO.DTO,
                                     ID      extends     Serializable>
 {
     DTO create(DTO dto);

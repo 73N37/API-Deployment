@@ -12,11 +12,11 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class AbstractRoute<   Entity  extends     AbstractEntity,
-                                        DTO     extends     AbstractDTO,
+public abstract class AbstractRoute<   Entity  extends     dat.Instance.Entity.Entity,
+                                        DTO     extends     dat.Instance.DTO.DTO,
                                         ID      extends     Serializable>
                                                 extends AbstractFactory<  Entity, DTO, ID>
-                                                implements InterfaceRoute<Entity, DTO, ID>
+                                                implements InterfaceRoute
 {
     public final InterfaceController<Entity, DTO, ID> controller;
     @Getter

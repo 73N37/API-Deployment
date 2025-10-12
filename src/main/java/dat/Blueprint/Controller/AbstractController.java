@@ -13,8 +13,8 @@ import io.javalin.http.Handler;
 import java.io.Serializable;
 import java.util.Set;
 
-public abstract class AbstractController<   Entity  extends AbstractEntity,
-                                            DTO     extends AbstractDTO,
+public abstract class AbstractController<   Entity  extends dat.Instance.Entity.Entity,
+                                            DTO     extends dat.Instance.DTO.DTO,
                                             ID      extends Serializable>
                                                     extends AbstractFactory<  Entity, DTO, ID>
                                             implements InterfaceController< Entity, DTO, ID> {

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ApplicationConfig {
 
-    private static final List<InterfaceRoute<?, ?, ?>> routesList = new ArrayList<>();
+    private static final List<InterfaceRoute> routesList = new ArrayList<>();
     private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static final SecurityController securityController = SecurityController.getInstance();
     private static final AccessController accessController = new AccessController();
@@ -51,7 +51,7 @@ public class ApplicationConfig {
 //        }
 
         // Register all routes
-        for (InterfaceRoute<?, ?, ?> route : routesList) {
+        for (InterfaceRoute route : routesList) {
             route.generateRoutes(app);
         }
 

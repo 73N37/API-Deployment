@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,8 +45,8 @@ Field[]:
 - class.getFields(): Iterates through ONLY public Fields in a class and adds them to an Array (datatype Field[]): Order is unspecified: don’t rely on array order being source order; sort if you care
             */
 
-public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
-                                        DTO     extends AbstractDTO<Integer>,
+public abstract class AbstractService<  Entity  extends dat.Instance.Entity.Entity,
+                                        DTO     extends dat.Instance.DTO.DTO,
                                         ID      extends Serializable>
                                                 extends AbstractFactory<      Entity, DTO, ID>
                                                 implements InterfaceService<Entity, DTO, ID>
@@ -200,7 +199,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
                 log.error("Entity is null");
                 throw new ApiException(ErrorTypes.BAD_REQUEST, "Failed to convert DTO to Entity");
             }
-            Entity databaseEntry =  dao.get(entity.getId());
+            Entity databaseEntry =  dao.get( entity.getId());
             log.info("Successfully add this {} as a new entry in the database ", databaseEntry.getClass().getSimpleName());;
             return entityToDTO(databaseEntry);
         } catch (ApiException e) {
@@ -214,8 +213,8 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
     @Override
     public DTO read(ID id){
         log.debug("Fetching database entry with id {}", id);
-        Optional<Entity> readEntry = dao.get(id);
-        if (readEntry.isPresent()) {
+        Entity readEntry = dao.get(id);
+        if (readEntry != null) {
             return entityToDTO(readEntry.get());
         }
         return null;
@@ -224,8 +223,8 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
     @Override
     public DTO update(ID id, DTO dto){
         log.debug("Updating database entry with id {}", id);
-        Optional<Entity> updateEntry = dao.put(id, dtoToEntity(dto));
-        if(updateEntry.isPresent()){
+        Entity updateEntry = dao.put(id, dtoToEntity(dto));
+        if(updateEntry != null){
             return entityToDTO(updateEntry.get());
         }
         return null;
@@ -257,8 +256,8 @@ public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
             log.error("Error happen when typecasting {} to ID while reading entity as parameter", Serializable.class);
         }
         log.debug("Fetching database entry (entity) with id {}", id);
-        Optional<Entity> readEntry = dao.get(id);
-        if (readEntry.isPresent()) {
+        Entity readEntry = dao.get(id);
+        if (readEntry != null) {
             return entityToDTO(readEntry.get());
         }
         return null;

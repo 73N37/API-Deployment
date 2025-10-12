@@ -6,9 +6,7 @@ import io.javalin.Javalin;
 
 import java.io.Serializable;
 
-public interface InterfaceRoute<   Entity  extends AbstractEntity,
-                                    DTO     extends AbstractDTO,
-                                    ID      extends Serializable>
+public interface InterfaceRoute
 {
 
     void generateRoutes(Javalin app);

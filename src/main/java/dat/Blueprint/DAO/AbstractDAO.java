@@ -15,11 +15,10 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
-public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
-                                    DTO     extends         AbstractDTO<ID>,
+public abstract class AbstractDAO<  Entity  extends         dat.Instance.Entity.Entity,
+                                    DTO     extends         dat.Instance.DTO.DTO,
                                     ID      extends         Serializable> extends AbstractFactory<Entity, DTO, ID>
                                             implements      InterfaceDAO<Entity, ID>
 {
@@ -34,13 +33,13 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
         this.emf = emf;
     }
 
-    @Override
-    public Class<Entity> getEntityClass(){
-        return this.entityClass;
-    }
+//    @Override
+//    public Class<Entity> getEntityClass(){
+//        return this.entityClass;
+//    }
 
     @Override
-    public Optional<Entity> get(ID id){
+    public Entity get(ID id){
         log.debug("Reading/finding entity with id {}", id);
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT a FROM " + entityClass.getName() + " a WHERE a.id = :id";
@@ -48,9 +47,9 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
                             .setParameter("id", id)
                             .getSingleResult();
             log.debug("Found entity with id {}", id);
-            return Optional.of(entity);
+            return entity;
         } catch (NoResultException e) {
-            log.debug("No entity found of type: {} with Object: {}", entityClass.getSimpleName(), id);
+            log.debug("No entity found  with ID: {}", id);
             throw new ApiException(ErrorTypes.NOT_FOUND, "Database error: " + e.getMessage());
         } catch (Exception e){
             log.error("Error finding entity with ID: {}",  id, e);
@@ -88,7 +87,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
     }
 
     @Override
-    public Optional<Entity> put(ID id, Entity entity){
+    public Entity put(ID id, Entity entity){
         log.debug("Updating entity  with Id: {}", id);
         if (id == null || entity == null){
             return null;
@@ -104,7 +103,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
             Entity result = em.merge(entity);
             em.getTransaction().commit();
             log.info("Successfully updated entity with Id: {}", id);
-            return Optional.of(result);
+            return result;
         }
     }
 
@@ -136,7 +135,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
     }
 
     @Override
-    public Optional<Entity> executeJPQL(String jpql, Map<String, Object> params)
+    public Entity executeJPQL(String jpql, Map<String, Object> params)
     { // TODO Set MODERATOR access ONLY
         log.debug("Executing a custom JPQL query");
         try (EntityManager em = emf.createEntityManager())
@@ -153,10 +152,10 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
             }
             Entity result = (Entity) query.getSingleResult();
             log.debug("Successfully executes JPQL query");
-            return Optional.of(result);
+            return result;
         } catch (NoResultException e){
             log.debug("No result found for JPQL query = {}", jpql);
-            return Optional.empty();
+            return null;
         } catch (Exception e){
             log.error("Error happened while executing JPQL query: {}", jpql);
             throw new ApiException(ErrorTypes.SERVER_ERROR, "Database error has happen: " + e.getMessage());
