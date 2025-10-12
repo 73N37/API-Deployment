@@ -1,4 +1,4 @@
-# Start with Amazon Corretto 17 Alpine base image
+# Start with Eclipse Temurin 25 Alpine base image
 FROM eclipse-temurin:25-jdk-alpine
 
 # Install curl on Alpine
