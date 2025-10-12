@@ -6,6 +6,7 @@ import dat.Instance.DTO.RoomDTO;
 import dat.Instance.Entity.Hotel;
 import dat.Instance.Entity.Room;
 import dat.Instance.Factory.Factory;
+impo
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -14,6 +15,7 @@ public class Main
     public static void main(String[] args) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
         EntityManagerFactory emf = HibernateConfig.createEMF(false);
+
 
         Factory<Hotel, HotelDTO, Integer> hotelFactory = new Factory( Hotel.class, HotelDTO.class, Integer.class, emf);
         Factory<Room, RoomDTO, Integer> roomFactory = new Factory( Room.class, RoomDTO.class, Integer.class, emf);
