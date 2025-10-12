@@ -7,7 +7,6 @@ package dat.Unit;
     in case their comes a day when i need it.
  */
 
-
 import dat.DTO.AbstractDTO;
 import dat.Data.AbstractData;
 import dat.Entity.AbstractEntity;
@@ -29,7 +28,7 @@ public abstract class AbstractUnit<ID extends Serializable>
     // Since every class inherits from this one, 'log.error(""), log.debug(""), log.info(""), can be called fron any class.
     public Logger log = LoggerFactory.getLogger(getUnitClass());
 
-    //
+    // Global Set<> that every instance and blueprint will be a part of
     public static final Set<AbstractUnit> REGISTRY = ConcurrentHashMap.newKeySet();
 
     // Defined in AbstractDTO, AbstractEntity & AbstractFactory
@@ -37,12 +36,14 @@ public abstract class AbstractUnit<ID extends Serializable>
 
     public AbstractUnit()
     {
+        // Adds instance or blueprint to the global Set<>
         REGISTRY.add(this);
     }
 
     public  Class<?> getUnitClass()
     {
-        // Used in Logger log to assign a class
+        // Purpose: Used in every error message to show class accountability.
+        // Reason:  Making debugging easier in the long run.
         return this.getClass();
     }
 
@@ -66,7 +67,7 @@ public abstract class AbstractUnit<ID extends Serializable>
             if (this instanceof AbstractUnit)       result = UnitType.UNIT;
         } catch (Exception e)
         {
-            log.error("An error happen while trying determining a UnitType based on inheritance", e.getMessage(), e);
+            log.error("An error happen while trying determining a UnitType based on inheritance. It happen here in Class<{}>", getUnitClass(), e.getMessage(), e);
         }
         return result;
     }
@@ -77,7 +78,7 @@ public abstract class AbstractUnit<ID extends Serializable>
             result = this.getClass().isAnnotationPresent(annotationClass);
         } catch (Exception e)
         {
-            log.error("An error happen while determining if an Annotation was present or not", e.getMessage(), e);
+            log.error("An error happen while determining if an Annotation was present or not. It happen in here in Class<{}>", getUnitClass(), e.getMessage(), e);
         }
         return result;
     }
