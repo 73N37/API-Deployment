@@ -1,6 +1,6 @@
-package dat.Exceptions;
+package dat.Exception;
 
-import dat.Enums.ErrorTypes;
+import dat.Enum.ErrorTypes;
 
 public class ApiException extends RuntimeException {
     private final int code;
