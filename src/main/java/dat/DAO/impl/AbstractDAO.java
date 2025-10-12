@@ -1,11 +1,11 @@
-package dat.DAOs.impl;
+package dat.DAO.impl;
 
-import dat.Enums.ErrorTypes;
-import dat.DAOs.InterfaceDAO;
-import dat.DTOs.AbstractDTO;
-import dat.Entities.AbstractEntity;
-import dat.Exceptions.ApiException;
-import dat.Factories.AbstractFactory;
+import dat.Enum.ErrorTypes;
+import dat.DAO.InterfaceDAO;
+import dat.DTO.AbstractDTO;
+import dat.Entity.AbstractEntity;
+import dat.Exception.ApiException;
+import dat.Factory.AbstractFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
@@ -24,7 +24,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
                                             implements      InterfaceDAO<Entity, DTO, ID>
 {
     private static final Logger log = LoggerFactory.getLogger(AbstractDAO.class);
-    protected EntityManagerFactory emf;
+    public EntityManagerFactory emf;
 
     public AbstractDAO(EntityManagerFactory emf,
                        Class<Entity> entityClass,

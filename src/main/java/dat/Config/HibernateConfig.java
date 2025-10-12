@@ -1,10 +1,10 @@
-package dat.config;
+package dat.Config;
 
-import dat.entities.Hotel;
-import dat.entities.Room;
-import dat.security.entities.Role;
-import dat.security.entities.User;
-import dat.utils.Utils;
+import dat.Entity.Hotel;
+import dat.Entity.Room;
+import dat.Security.entities.Role;
+import dat.Security.entities.User;
+import dat.Utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

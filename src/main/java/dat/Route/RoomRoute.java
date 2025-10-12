@@ -11,7 +11,7 @@
 //
 //    private final RoomController roomController = new RoomController();
 //
-//    protected EndpointGroup getRoutes() {
+//    public EndpointGroup getRoutes() {
 //        return () -> {
 //            post("/hotel/{id}", roomController::create);
 //            get("/", roomController::readAll);

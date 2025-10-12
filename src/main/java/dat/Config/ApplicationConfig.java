@@ -1,31 +1,27 @@
-package dat.config;
+package dat.Config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.dtos.AbstractDTO;
-import dat.entities.AbstractEntity;
-import dat.factories.Factory;
-import dat.routes.AbstractRoutes;
-import dat.routes.InterfaceRoutes;
-import dat.security.controllers.AccessController;
-import dat.security.controllers.SecurityController;
-import dat.security.enums.Role;
-import dat.security.exceptions.ApiException;
-import dat.security.routes.SecurityRoutes;
-import dat.utils.Utils;
+import dat.Factory.Factory;
+import dat.Route.InterfaceRoute;
+import dat.Security.controllers.AccessController;
+import dat.Security.controllers.SecurityController;
+import dat.Security.enums.Role;
+import dat.Security.exceptions.ApiException;
+import dat.Security.routes.SecurityRoutes;
+import dat.Utils.Utils;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ApplicationConfig {
 
-    private static final List<InterfaceRoutes<?, ?, ?>> routesList = new ArrayList<>();
+    private static final List<InterfaceRoute<?, ?, ?>> routesList = new ArrayList<>();
     private static final ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static final SecurityController securityController = SecurityController.getInstance();
     private static final AccessController accessController = new AccessController();
@@ -55,7 +51,7 @@ public class ApplicationConfig {
 //        }
 
         // Register all routes
-        for (InterfaceRoutes<?, ?, ?> route : routesList) {
+        for (InterfaceRoute<?, ?, ?> route : routesList) {
             route.generateRoutes(app);
         }
 

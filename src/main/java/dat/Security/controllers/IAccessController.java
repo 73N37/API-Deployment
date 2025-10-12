@@ -1,4 +1,4 @@
-package dat.security.controllers;
+package dat.Security.controllers;
 import io.javalin.http.Context;
 
 public interface IAccessController {

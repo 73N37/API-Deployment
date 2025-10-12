@@ -1,17 +1,16 @@
-package dat.security.daos;
+package dat.Security.daos;
 
 
-import dat.security.entities.Role;
-import dat.security.entities.User;
-import dat.security.exceptions.ApiException;
-import dat.security.exceptions.ValidationException;
+import dat.Security.entities.Role;
+import dat.Security.entities.User;
+import dat.Security.exceptions.ApiException;
+import dat.Security.exceptions.ValidationException;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 

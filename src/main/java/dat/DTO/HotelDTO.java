@@ -1,8 +1,8 @@
-package dat.DTOs;
+package dat.DTO;
 
-import dat.Annotations.IgnoreMapping;
-import dat.Annotations.MapTo;
-import dat.Entities.Hotel;
+import dat.Annotation.IgnoreMapping;
+import dat.Annotation.MapTo;
+import dat.Entity.Hotel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

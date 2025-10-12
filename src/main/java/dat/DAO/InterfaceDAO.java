@@ -1,7 +1,7 @@
-package dat.DAOs;
+package dat.DAO;
 
-import dat.DTOs.AbstractDTO;
-import dat.Entities.AbstractEntity;
+import dat.DTO.AbstractDTO;
+import dat.Entity.AbstractEntity;
 
 import java.io.Serializable;
 import java.util.List;

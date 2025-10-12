@@ -1,7 +1,7 @@
-package dat.Controllers;
+package dat.Controller;
 
-import dat.DTOs.AbstractDTO;
-import dat.Entities.AbstractEntity;
+import dat.DTO.AbstractDTO;
+import dat.Entity.AbstractEntity;
 import io.javalin.http.Context;
 
 import java.io.Serializable;

@@ -1,8 +1,8 @@
-package dat.config;
+package dat.Config;
 
 
-import dat.entities.Hotel;
-import dat.entities.Room;
+import dat.Entity.Hotel;
+import dat.Entity.Room;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 

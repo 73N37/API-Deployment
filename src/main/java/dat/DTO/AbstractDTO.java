@@ -1,5 +1,5 @@
-package dat.DTOs;
-import dat.Unities.Unit;
+package dat.DTO;
+import dat.Data.AbstractData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
@@ -8,7 +8,12 @@ import java.io.Serializable;
 @Getter
 public abstract class AbstractDTO<  DTO extends AbstractDTO,
                                     ID  extends Serializable>
-                                        extends Unit {
-    protected ID id;
+                                        extends AbstractData
+{
+    public ID id;
 
+    public ID getIdentifier()
+    {
+        return id;
+    }
 }

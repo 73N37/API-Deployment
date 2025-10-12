@@ -1,10 +1,10 @@
-package dat.Controllers.impl;
-import dat.Annotations.RouteHandler;
-import dat.Controllers.InterfaceController;
-import dat.DTOs.AbstractDTO;
-import dat.Entities.AbstractEntity;
-import dat.Factories.AbstractFactory;
-import dat.Services.InterfaceService;
+package dat.Controller.impl;
+import dat.Annotation.RouteHandler;
+import dat.Controller.InterfaceController;
+import dat.DTO.AbstractDTO;
+import dat.Entity.AbstractEntity;
+import dat.Factory.AbstractFactory;
+import dat.Service.InterfaceService;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
@@ -21,9 +21,9 @@ public abstract class AbstractController<   Entity  extends AbstractEntity,
                                             implements InterfaceController< Entity, DTO, ID> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractController.class);
-    protected final InterfaceService<Entity, DTO, ID> service;
+    public final InterfaceService<Entity, DTO, ID> service;
 
-    protected AbstractController(InterfaceService< Entity, DTO, ID> service,
+    public AbstractController(InterfaceService< Entity, DTO, ID> service,
                                  Class<Entity>                      entityClass,
                                  Class<DTO>                         dtoClass,
                                  Class<ID>                          idClass) {

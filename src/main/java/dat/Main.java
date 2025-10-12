@@ -1,17 +1,11 @@
 package dat;
-import dat.config.ApplicationConfig;
-import dat.config.HibernateConfig;
-import dat.controllers.InterfaceController;
-import dat.dtos.AbstractDTO;
-import dat.dtos.HotelDTO;
-import dat.dtos.RoomDTO;
-import dat.entities.AbstractEntity;
-import dat.entities.Hotel;
-import dat.entities.Room;
-import dat.factories.Factory;
-import dat.routes.AbstractRoutes;
-import dat.routes.InterfaceRoutes;
-import dat.factories.AbstractClass;
+import dat.Config.ApplicationConfig;
+import dat.Config.HibernateConfig;
+import dat.DTO.HotelDTO;
+import dat.DTO.RoomDTO;
+import dat.Entity.Hotel;
+import dat.Entity.Room;
+import dat.Factory.Factory;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 

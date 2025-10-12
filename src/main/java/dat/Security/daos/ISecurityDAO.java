@@ -1,7 +1,7 @@
-package dat.security.daos;
+package dat.Security.daos;
 
-import dat.security.entities.User;
-import dat.security.exceptions.ValidationException;
+import dat.Security.entities.User;
+import dat.Security.exceptions.ValidationException;
 import dk.bugelhartmann.UserDTO;
 
 public interface ISecurityDAO {

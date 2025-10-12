@@ -1,10 +1,10 @@
-package dat.utils;
+package dat.Utils;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import dat.security.exceptions.ApiException;
+import dat.Security.exceptions.ApiException;
 import io.javalin.http.Context;
 
 import java.io.IOException;

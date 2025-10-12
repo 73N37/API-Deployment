@@ -1,7 +1,7 @@
-package dat.DTOs;
+package dat.DTO;
 
-import dat.Annotations.IgnoreMapping;
-import dat.Entities.Room;
+import dat.Annotation.IgnoreMapping;
+import dat.Entity.Room;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

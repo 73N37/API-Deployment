@@ -18,9 +18,9 @@ public abstract class AbstractRoute<   Entity  extends     AbstractEntity,
                                                 extends AbstractFactory<  Entity, DTO, ID>
                                                 implements InterfaceRoute<Entity, DTO, ID>
 {
-    protected final InterfaceController<Entity, DTO, ID> controller;
+    public final InterfaceController<Entity, DTO, ID> controller;
     @Getter
-    protected Set<Method> methodSet;
+    public Set<Method> methodSet;
 
     public AbstractRoute(InterfaceController<Entity, DTO, ID>  controller,
                          Class<Entity>                         entityClass,
@@ -117,7 +117,7 @@ public abstract class AbstractRoute<   Entity  extends     AbstractEntity,
         };
     }
 
-    protected boolean removeRoute(Method method) {
+    public boolean removeRoute(Method method) {
         //TODO give this MODERATOR rights ONLY
         return methodSet.remove(method);
     }

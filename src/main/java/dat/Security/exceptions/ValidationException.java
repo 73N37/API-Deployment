@@ -1,4 +1,4 @@
-package dat.security.exceptions;
+package dat.Security.exceptions;
 
 /**
  * Purpose: To handle validation exceptions in the API

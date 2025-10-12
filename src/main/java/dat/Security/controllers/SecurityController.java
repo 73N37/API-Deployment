@@ -1,16 +1,16 @@
-package dat.security.controllers;
+package dat.Security.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nimbusds.jose.JOSEException;
-import dat.utils.Utils;
-import dat.config.HibernateConfig;
-import dat.security.daos.ISecurityDAO;
-import dat.security.daos.SecurityDAO;
-import dat.security.entities.User;
-import dat.security.exceptions.ApiException;
-import dat.security.exceptions.NotAuthorizedException;
-import dat.security.exceptions.ValidationException;
+import dat.Utils.Utils;
+import dat.Config.HibernateConfig;
+import dat.Security.daos.ISecurityDAO;
+import dat.Security.daos.SecurityDAO;
+import dat.Security.entities.User;
+import dat.Security.exceptions.ApiException;
+import dat.Security.exceptions.NotAuthorizedException;
+import dat.Security.exceptions.ValidationException;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
 import dk.bugelhartmann.UserDTO;

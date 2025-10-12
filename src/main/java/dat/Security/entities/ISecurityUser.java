@@ -1,4 +1,4 @@
-package dat.security.entities;
+package dat.Security.entities;
 
 public interface ISecurityUser {
     boolean verifyPassword(String pw);

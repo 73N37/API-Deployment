@@ -1,6 +1,4 @@
-package dat.security.exceptions;
-
-import dat.utils.Utils;
+package dat.Security.exceptions;
 
 /**
  * Purpose: To handle exceptions in the API

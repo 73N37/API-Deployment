@@ -1,4 +1,4 @@
-package dat.security.entities;
+package dat.Security.entities;
 
 import jakarta.persistence.*;
 import lombok.ToString;

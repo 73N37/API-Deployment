@@ -10,7 +10,7 @@
 //
 //    private final HotelController hotelController = new HotelController();
 //
-//    protected EndpointGroup getRoutes() {
+//    public EndpointGroup getRoutes() {
 //
 //        return () -> {
 //            get("/populate", hotelController::populate);

@@ -1,4 +1,4 @@
-package dat.security.enums;
+package dat.Security.enums;
 
 import io.javalin.security.RouteRole;
 

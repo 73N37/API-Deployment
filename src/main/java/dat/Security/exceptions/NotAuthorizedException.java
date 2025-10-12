@@ -1,4 +1,4 @@
-package dat.security.exceptions;
+package dat.Security.exceptions;
 
 /**
  * Purpose: To handle No authorized exceptions in the API

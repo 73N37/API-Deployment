@@ -8,24 +8,23 @@ import dat.Route.InterfaceRoute;
 import dat.Service.InterfaceService;
 import dat.Unit.AbstractUnit;
 import lombok.Getter;
-
 import java.io.Serializable;
 
 @Getter
-public abstract class AbstractFactory<  Entity  extends     AbstractEntity,
-                                        DTO     extends     AbstractDTO,
-                                        ID      extends     Serializable>
-                                                extends     AbstractUnit
+public  class AbstractFactory<  Entity  extends     AbstractEntity,
+                                DTO     extends     AbstractDTO,
+                                ID      extends     Serializable>
+                                        extends     AbstractUnit
 {
-    protected final Class<Entity>   entityClass;
-    protected final Class<DTO>      dtoClass;
-    protected final Class<ID>       idClass;
-    protected  InterfaceController  controller;
-    protected  InterfaceDAO         dao;
-    protected  InterfaceService     service;
-    protected InterfaceRoute routes;
-
-    protected AbstractFactory(Class<Entity>   entityClass,
+    public Class<Entity>         entityClass;
+    public Class<DTO>            dtoClass;
+    public Class<ID>             idClass;
+    public InterfaceController   controller;
+    public InterfaceDAO          dao;
+    public InterfaceService      service;
+    public InterfaceRoute        routes;
+    
+    public AbstractFactory(Class<Entity>   entityClass,
                               Class<DTO>      dtoClass,
                               Class<ID>       idClass)
     {
@@ -34,11 +33,7 @@ public abstract class AbstractFactory<  Entity  extends     AbstractEntity,
         this.idClass =      idClass;
     }
 
-    AbstractFactory<Entity, DTO, ID> getThis(){
-        return this;
-    }
-
-    protected ID parseId(String idString)
+    public ID parseId(String idString)
     {
         try {
             return idClass.cast(idClass.getMethod("valueOf", String.class).invoke(null, idString));
@@ -48,7 +43,8 @@ public abstract class AbstractFactory<  Entity  extends     AbstractEntity,
     }
 
     @Override
-    public ID getIdentifier() {
+    public ID getIdentifier()
+    {
         return parseId(entityClass.getSimpleName() + "Factory");
     }
 

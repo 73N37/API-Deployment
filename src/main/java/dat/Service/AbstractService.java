@@ -53,7 +53,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
                                                 implements InterfaceService<Entity, DTO, ID>
 {
     private static final Logger log = LoggerFactory.getLogger(AbstractService.class);
-    protected final InterfaceDAO<Entity, DTO,ID> dao;
+    public final InterfaceDAO<Entity, DTO,ID> dao;
 
     public AbstractService(InterfaceDAO<Entity, DTO, ID>dao,
                            Class<Entity>                entityClass,

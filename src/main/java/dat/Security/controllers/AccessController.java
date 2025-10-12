@@ -1,6 +1,6 @@
-package dat.security.controllers;
+package dat.Security.controllers;
 
-import dat.security.enums.Role;
+import dat.Security.enums.Role;
 import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
