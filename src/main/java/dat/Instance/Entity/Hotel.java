@@ -15,12 +15,14 @@ import java.util.Set;
 @NoArgsConstructor
 //@Entity
 @Table(name = "hotel")
-public class Hotel extends AbstractEntity<Integer> {
+public class Hotel extends dat.Instance.Entity.Entity {
 
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(name = "hotel_id", nullable = false, unique = true)
 //    private Object hotelId;
+
+    private Integer id;
 
     @Setter
     @Column(name = "hotel_name", nullable = false, unique = true)

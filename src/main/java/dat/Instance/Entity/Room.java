@@ -14,12 +14,12 @@ import java.util.Objects;
 @NoArgsConstructor
 //@Entity
 @Table(name = "room")
-public class Room extends AbstractEntity<Integer> {
+public class Room extends dat.Instance.DTO.DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id", nullable = false, unique = true)
-    private Integer roomId;
+    private Integer id;
 
     @Setter
     @Column(name = "room_number", nullable = false)
