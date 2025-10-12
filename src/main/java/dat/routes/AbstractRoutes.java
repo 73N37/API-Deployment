@@ -88,14 +88,14 @@ public abstract class AbstractRoutes<   Entity  extends     AbstractEntity,
         {
             // If the method is called 'delete()',
             // the method will return: delete/{Class}/{id}
-            case "read", "update", "delete" -> method.getClass().getSimpleName() + "/{id}";
+            case "read", "update", "delete" -> method.getClass().getSimpleName().toLowerCase() + "/{id}";
 
             // If the method is called 'readAll()',
             // the method will return: readAll/{Class}
-            case "readAll", "create" -> method.getClass().getSimpleName();
+            case "readAll", "create" -> method.getClass().getSimpleName().toLowerCase();
 
             // returns the class's name as a String (Java Class type token)
-            default -> method.getClass().getSimpleName()+"s";
+            default -> method.getClass().getSimpleName().toLowerCase()+"s";
         };
     }
 
