@@ -1,6 +1,7 @@
-package dat.Entity;
+package dat.Instance.Entity;
 
-import dat.DTO.RoomDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Instance.DTO.RoomDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,9 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
-@Entity
+//@Entity
 @Table(name = "room")
-public class Room extends AbstractEntity<Room, Integer> {
+public class Room extends AbstractEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

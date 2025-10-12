@@ -1,4 +1,4 @@
-package dat.Unit;
+package dat.Blueprint.Unit;
 
 /*
     This is the super-class for AbstractDTO & AbstractEntity
@@ -7,11 +7,8 @@ package dat.Unit;
     in case their comes a day when i need it.
  */
 
-import dat.DTO.AbstractDTO;
-import dat.Data.AbstractData;
-import dat.Entity.AbstractEntity;
-import dat.Factory.AbstractFactory;
-import dat.Security.controllers.SecurityController;
+import dat.Blueprint.Data.AbstractData;
+import dat.Blueprint.Factory.AbstractFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

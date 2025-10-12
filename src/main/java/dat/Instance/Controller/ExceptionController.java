@@ -1,7 +1,7 @@
-package dat.Controller.impl;
+package dat.Instance.Controller;
 
-import dat.Exception.ApiException;
-import dat.Exception.Message;
+import dat.Blueprint.Exception.ApiException;
+import dat.Blueprint.Entity.Message;
 import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

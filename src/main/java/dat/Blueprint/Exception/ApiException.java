@@ -1,4 +1,4 @@
-package dat.Exception;
+package dat.Blueprint.Exception;
 
 import dat.Enum.ErrorTypes;
 

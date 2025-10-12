@@ -1,10 +1,10 @@
-package dat.Route;
+package dat.Blueprint.Route;
 
 import dat.Annotation.RouteHandler;
-import dat.Controller.InterfaceController;
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
-import dat.Factory.AbstractFactory;
+import dat.Blueprint.Controller.InterfaceController;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Blueprint.Factory.AbstractFactory;
 import io.javalin.Javalin;
 import lombok.Getter;
 import io.javalin.http.Handler;

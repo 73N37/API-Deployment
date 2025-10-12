@@ -1,7 +1,7 @@
-package dat.Controller;
+package dat.Blueprint.Controller;
 
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
 import io.javalin.http.Handler;
 import java.io.Serializable;
 

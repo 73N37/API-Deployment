@@ -1,6 +1,7 @@
-package dat.Entity;
+package dat.Instance.Entity;
 
-import dat.DTO.HotelDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Instance.DTO.HotelDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,9 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-@Entity
+//@Entity
 @Table(name = "hotel")
-public class Hotel extends AbstractEntity<Hotel, Integer> {
+public class Hotel extends AbstractEntity<Integer> {
 
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)

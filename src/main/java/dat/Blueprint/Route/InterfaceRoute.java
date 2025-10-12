@@ -1,7 +1,7 @@
-package dat.Route;
+package dat.Blueprint.Route;
 
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
 import io.javalin.Javalin;
 
 import java.io.Serializable;

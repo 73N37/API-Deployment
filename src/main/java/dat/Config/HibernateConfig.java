@@ -1,7 +1,7 @@
 package dat.Config;
 
-import dat.Entity.Hotel;
-import dat.Entity.Room;
+import dat.Instance.Entity.Hotel;
+import dat.Instance.Entity.Room;
 import dat.Security.entities.Role;
 import dat.Security.entities.User;
 import dat.Utils.Utils;

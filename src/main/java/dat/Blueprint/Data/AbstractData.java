@@ -1,6 +1,5 @@
-package dat.Data;
-import dat.Factory.AbstractFactory;
-import dat.Unit.AbstractUnit;
+package dat.Blueprint.Data;
+import dat.Blueprint.Unit.AbstractUnit;
 
 import java.io.Serializable;
 

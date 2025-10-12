@@ -1,8 +1,8 @@
 package dat.Config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.Factory.Factory;
-import dat.Route.InterfaceRoute;
+import dat.Instance.Factory.Factory;
+import dat.Blueprint.Route.InterfaceRoute;
 import dat.Security.controllers.AccessController;
 import dat.Security.controllers.SecurityController;
 import dat.Security.enums.Role;

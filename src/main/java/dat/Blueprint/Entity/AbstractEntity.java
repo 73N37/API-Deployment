@@ -1,6 +1,5 @@
-package dat.Entity;
-import dat.Data.AbstractData;
-import dat.Unit.AbstractUnit;
+package dat.Blueprint.Entity;
+import dat.Blueprint.Data.AbstractData;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @MappedSuperclass // Hibernate retrieve the table name automatically from the class-name
-public abstract class AbstractEntity<   Entity  extends AbstractEntity,
-                                        ID      extends Serializable>
+public abstract class AbstractEntity<   ID      extends Serializable>
                                                 extends AbstractData
 {
     @Id

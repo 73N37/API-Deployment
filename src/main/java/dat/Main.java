@@ -1,11 +1,11 @@
 package dat;
 import dat.Config.ApplicationConfig;
 import dat.Config.HibernateConfig;
-import dat.DTO.HotelDTO;
-import dat.DTO.RoomDTO;
-import dat.Entity.Hotel;
-import dat.Entity.Room;
-import dat.Factory.Factory;
+import dat.Instance.DTO.HotelDTO;
+import dat.Instance.DTO.RoomDTO;
+import dat.Instance.Entity.Hotel;
+import dat.Instance.Entity.Room;
+import dat.Instance.Factory.Factory;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 

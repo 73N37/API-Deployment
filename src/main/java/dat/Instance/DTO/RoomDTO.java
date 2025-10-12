@@ -1,7 +1,8 @@
-package dat.DTO;
+package dat.Instance.DTO;
 
 import dat.Annotation.IgnoreMapping;
-import dat.Entity.Room;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Instance.Entity.Room;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class RoomDTO extends AbstractDTO<RoomDTO, Integer> {
+public class RoomDTO extends AbstractDTO<Integer> {
     private Integer roomNumber;
     private Integer roomPrice;
     @IgnoreMapping
@@ -20,6 +21,10 @@ public class RoomDTO extends AbstractDTO<RoomDTO, Integer> {
         this.roomNumber = room.getRoomNumber();
         this.roomPrice = room.getRoomPrice().intValue();
         this.roomType = room.getRoomType();
+    }
+
+    public Integer getId(){
+        return id;
     }
 
     public static List<RoomDTO> toRoomDTOList(List<Room> rooms) {

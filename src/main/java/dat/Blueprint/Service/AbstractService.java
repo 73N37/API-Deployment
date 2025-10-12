@@ -1,12 +1,12 @@
-package dat.Service;
+package dat.Blueprint.Service;
 import dat.Enum.ErrorTypes;
 import dat.Annotation.IgnoreMapping;
 import dat.Annotation.MapTo;
-import dat.DAO.InterfaceDAO;
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
-import dat.Exception.ApiException;
-import dat.Factory.AbstractFactory;
+import dat.Blueprint.DAO.InterfaceDAO;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Blueprint.Exception.ApiException;
+import dat.Blueprint.Factory.AbstractFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +46,8 @@ Field[]:
 - class.getFields(): Iterates through ONLY public Fields in a class and adds them to an Array (datatype Field[]): Order is unspecified: don’t rely on array order being source order; sort if you care
             */
 
-public abstract class AbstractService<  Entity  extends AbstractEntity,
-                                        DTO     extends AbstractDTO,
+public abstract class AbstractService<  Entity  extends AbstractEntity<Integer>,
+                                        DTO     extends AbstractDTO<Integer>,
                                         ID      extends Serializable>
                                                 extends AbstractFactory<      Entity, DTO, ID>
                                                 implements InterfaceService<Entity, DTO, ID>
@@ -57,7 +57,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
     private final Field[] cachedEntityFields;
     private final Field[] cachedDtoFields;
 
-    public AbstractService(InterfaceDAO<Entity, DTO, ID>dao,
+    public AbstractService(InterfaceDAO<Entity, ID>dao,
                            Class<Entity>                entityClass,
                            Class<DTO>                   dtoClass,
                            Class<ID>                    idClass)
@@ -102,7 +102,6 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
 
                 // Skips a field in the annotation @IgnoreMapping is present above a given field
                 if(dtoField.isAnnotationPresent(IgnoreMapping.class)){
-
                     // continues the for-each loop without doing anything
                     continue;
                 }
@@ -202,7 +201,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
                 log.error("Entity is null");
                 throw new ApiException(ErrorTypes.BAD_REQUEST, "Failed to convert DTO to Entity");
             }
-            Entity databaseEntry = dao.create(entity);
+            Entity databaseEntry =  dao.post(entity);
             log.info("Successfully add this {} as a new entry in the database ", databaseEntry.getClass().getSimpleName());;
             return entityToDTO(databaseEntry);
         } catch (ApiException e) {
@@ -226,7 +225,7 @@ public abstract class AbstractService<  Entity  extends AbstractEntity,
     @Override
     public DTO update(ID id, DTO dto){
         log.debug("Updating database entry with id {}", id);
-        Optional<Entity> updateEntry = dao.update(id, dtoToEntity(dto));
+        Optional<Entity> updateEntry = dao.put(id, dtoToEntity(dto));
         if(updateEntry.isPresent()){
             return entityToDTO(updateEntry.get());
         }

@@ -1,7 +1,7 @@
-package dat.DAO;
+package dat.Blueprint.DAO;
 
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,14 +9,13 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface InterfaceDAO<  Entity  extends AbstractEntity,
-                                DTO     extends AbstractDTO,
                                 ID      extends Serializable>
 {
     //Class<Entity> getEntityClass();
     Optional<Entity> get(ID id);
     List<Entity> getAll();
-    Entity create(Entity entity);
-    Optional<Entity> update(ID id, Entity entity);
+    Entity post(Entity entity);
+    Optional<Entity> put(ID id, Entity entity);
     void delete(ID id);
     boolean validatePrimaryKey(ID id);
 

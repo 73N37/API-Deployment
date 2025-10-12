@@ -1,11 +1,10 @@
-package dat.DAO.impl;
+package dat.Blueprint.DAO;
 
 import dat.Enum.ErrorTypes;
-import dat.DAO.InterfaceDAO;
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
-import dat.Exception.ApiException;
-import dat.Factory.AbstractFactory;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Blueprint.Exception.ApiException;
+import dat.Blueprint.Factory.AbstractFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
@@ -17,19 +16,20 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
-public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entity, ID>,
-                                    DTO     extends         AbstractDTO<DTO, ID>,
+public abstract class AbstractDAO<  Entity  extends         AbstractEntity<ID>,
+                                    DTO     extends         AbstractDTO<ID>,
                                     ID      extends         Serializable> extends AbstractFactory<Entity, DTO, ID>
-                                            implements      InterfaceDAO<Entity, DTO, ID>
+                                            implements      InterfaceDAO<Entity, ID>
 {
     private static final Logger log = LoggerFactory.getLogger(AbstractDAO.class);
     public EntityManagerFactory emf;
 
-    public AbstractDAO(EntityManagerFactory emf,
-                       Class<Entity> entityClass,
-                       Class<DTO> dtoClass,
-                       Class<ID> idClass){
+    public AbstractDAO(EntityManagerFactory     emf,
+                       Class<Entity>            entityClass,
+                       Class<DTO>               dtoClass,
+                       Class<ID>                idClass){
         super(entityClass,dtoClass, idClass);
         this.emf = emf;
     }
@@ -63,7 +63,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
         log.debug("Retrieving all entities of type: {}", entityClass.getSimpleName());
         try (EntityManager em = emf.createEntityManager()){
             String jpql = "SELECT  a FROM " + entityClass.getSimpleName() + " a";
-            List<Entity> result = em.createQuery(jpql, entityClass).getResultList();
+            List<Entity> result = () em.createQuery(jpql, entityClass).getResultList();
             log.info("Retrieved {} entities of type: {} in {} ms",
                     result.size(), entityClass.getSimpleName());
             return result;
@@ -74,7 +74,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
     }
 
     @Override
-    public Entity create(Entity entity){
+    public Entity post(Entity entity){
         log.debug("Creating a new entity of type {}",  entityClass.getSimpleName());
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
@@ -89,7 +89,7 @@ public abstract class AbstractDAO<  Entity  extends         AbstractEntity<Entit
     }
 
     @Override
-    public Optional<Entity> update(ID id, Entity entity){
+    public Optional<Entity> put(ID id, Entity entity){
         log.debug("Updating entity of type: {} with Object: {}", entityClass.getSimpleName(), id);
         if (id == null || entity == null){
             return null;

@@ -1,8 +1,9 @@
-package dat.DTO;
+package dat.Instance.DTO;
 
 import dat.Annotation.IgnoreMapping;
 import dat.Annotation.MapTo;
-import dat.Entity.Hotel;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Instance.Entity.Hotel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class HotelDTO extends AbstractDTO<HotelDTO, Integer> {
+public class HotelDTO extends AbstractDTO< Integer> {
 
     private Integer id;
     @MapTo("hotelName")

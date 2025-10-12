@@ -1,18 +1,17 @@
-package dat.Factory;
-import dat.Controller.InterfaceController;
-import dat.DAO.InterfaceDAO;
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
-import dat.Route.InterfaceRoute;
-import dat.Service.InterfaceService;
-import dat.Unit.AbstractUnit;
-import io.javalin.http.Context;
+package dat.Blueprint.Factory;
+import dat.Blueprint.Controller.InterfaceController;
+import dat.Blueprint.DAO.InterfaceDAO;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Blueprint.Route.InterfaceRoute;
+import dat.Blueprint.Service.InterfaceService;
+import dat.Blueprint.Unit.AbstractUnit;
 import io.javalin.http.Handler;
 import lombok.Getter;
 import java.io.Serializable;
 
 @Getter
-public  class AbstractFactory<  Entity  extends     AbstractEntity,
+public abstract  class AbstractFactory<  Entity  extends     AbstractEntity,
                                 DTO     extends     AbstractDTO,
                                 ID      extends     Serializable>
                                         extends     AbstractUnit

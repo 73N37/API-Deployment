@@ -1,10 +1,9 @@
-package dat.Controller.impl;
+package dat.Blueprint.Controller;
 import dat.Annotation.RouteHandler;
-import dat.Controller.InterfaceController;
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
-import dat.Factory.AbstractFactory;
-import dat.Service.InterfaceService;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Blueprint.Factory.AbstractFactory;
+import dat.Blueprint.Service.InterfaceService;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;

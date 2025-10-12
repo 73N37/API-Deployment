@@ -1,28 +1,24 @@
-package dat.Factory;
+package dat.Instance.Factory;
 
-import dat.Controller.InterfaceController;
-import dat.Controller.impl.AbstractController;
-import dat.DAO.InterfaceDAO;
-import dat.DAO.impl.AbstractDAO;
-import dat.DTO.AbstractDTO;
-import dat.Entity.AbstractEntity;
-import dat.Route.AbstractRoute;
-import dat.Route.InterfaceRoute;
-import dat.Security.enums.Role;
-import dat.Service.AbstractService;
-import dat.Service.InterfaceService;
-import io.javalin.http.Context;
+import dat.Blueprint.Controller.InterfaceController;
+import dat.Blueprint.Controller.AbstractController;
+import dat.Blueprint.DAO.InterfaceDAO;
+import dat.Blueprint.DAO.AbstractDAO;
+import dat.Blueprint.DTO.AbstractDTO;
+import dat.Blueprint.Entity.AbstractEntity;
+import dat.Blueprint.Factory.AbstractFactory;
+import dat.Blueprint.Route.AbstractRoute;
+import dat.Blueprint.Route.InterfaceRoute;
+import dat.Blueprint.Service.AbstractService;
+import dat.Blueprint.Service.InterfaceService;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.Getter;
 import java.io.Serializable;
-import java.util.Set;
-
-import io.javalin.http.Handler;
 
 
 @Getter
-public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
-                        DTO     extends AbstractDTO<DTO,ID>,
+public class Factory<   Entity  extends AbstractEntity<ID>,
+                        DTO     extends AbstractDTO<ID>,
                         ID      extends Serializable>
                                 extends AbstractFactory<Entity, DTO, ID>
 {
@@ -49,7 +45,7 @@ public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
         createRoutes();
     }
 
-    public InterfaceDAO<Entity, DTO, ID> createDAO(EntityManagerFactory emf)
+    public InterfaceDAO<Entity, ID> createDAO(EntityManagerFactory emf)
     {
         this.dao = new AbstractDAO<>(emf, entityClass, dtoClass, idClass) {};
         return dao;
