@@ -20,20 +20,26 @@ import java.io.Serializable;
 public class Factory<   Entity  extends dat.Instance.Entity.Entity,
                         DTO     extends dat.Instance.DTO.DTO,
                         ID      extends Serializable>
-                                extends AbstractFactory<Entity, DTO, ID>
+                                //extends AbstractFactory<Entity, DTO, ID>
 {
     public final EntityManagerFactory       emf;
     public InterfaceController              controller;
     public InterfaceDAO                     dao;
     public InterfaceService                 service;
     public InterfaceRoute                   routes;
+    Class<Entity>        entityClass;
+    Class<DTO>           dtoClass;
+    Class<ID>            idClass;
 
     public Factory(Class<Entity>        entityClass,
                    Class<DTO>           dtoClass,
                    Class<ID>            idClass,
                    EntityManagerFactory emf)
     {
-        super(entityClass, dtoClass, idClass);
+        //super();
+        this.entityClass = entityClass;
+        this.dtoClass = dtoClass;
+        this.idClass = idClass;
         this.emf =          emf;
     }
 
