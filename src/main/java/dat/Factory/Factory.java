@@ -1,15 +1,15 @@
-package dat.Factories;
+package dat.Factory;
 
-import dat.Controllers.InterfaceController;
-import dat.Controllers.impl.AbstractController;
-import dat.DAOs.InterfaceDAO;
-import dat.DAOs.impl.AbstractDAO;
-import dat.DTOs.AbstractDTO;
-import dat.Entities.AbstractEntity;
-import dat.Routes.AbstractRoutes;
-import dat.Routes.InterfaceRoutes;
-import dat.Services.AbstractService;
-import dat.Services.InterfaceService;
+import dat.Controller.InterfaceController;
+import dat.Controller.impl.AbstractController;
+import dat.DAO.InterfaceDAO;
+import dat.DAO.impl.AbstractDAO;
+import dat.DTO.AbstractDTO;
+import dat.Entity.AbstractEntity;
+import dat.Route.AbstractRoute;
+import dat.Route.InterfaceRoute;
+import dat.Service.AbstractService;
+import dat.Service.InterfaceService;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.Getter;
 import java.io.Serializable;
@@ -24,7 +24,7 @@ public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
     public InterfaceController              controller;
     public InterfaceDAO                     dao;
     public InterfaceService                 service;
-    public InterfaceRoutes                  routes;
+    public InterfaceRoute routes;
 
     public Factory(Class<Entity>        entityClass,
                    Class<DTO>           dtoClass,
@@ -61,9 +61,9 @@ public class Factory<   Entity  extends AbstractEntity<Entity, ID>,
         return controller;
     }
 
-    public InterfaceRoutes<Entity, DTO, ID> createRoutes()
+    public InterfaceRoute<Entity, DTO, ID> createRoutes()
     {
-        this.routes = new AbstractRoutes<>(controller, entityClass, dtoClass, idClass) {};
+        this.routes = new AbstractRoute<>(controller, entityClass, dtoClass, idClass) {};
         return routes;
     }
 }
