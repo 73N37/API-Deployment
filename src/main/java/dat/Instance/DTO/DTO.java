@@ -9,5 +9,4 @@ import java.io.Serializable;
 public class DTO <ID extends Serializable> extends Data {
 
     public Integer id;
-
 }
