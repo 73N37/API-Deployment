@@ -9,7 +9,8 @@ import dat.Factory.Factory;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
-public class Main {
+public class Main
+{ // TODO Please read the book!!! We had a deal...
     public static void main(String[] args) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
         EntityManagerFactory emf = HibernateConfig.createEMF(false);
