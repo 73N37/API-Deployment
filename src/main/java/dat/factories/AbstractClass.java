@@ -11,9 +11,9 @@ import lombok.Getter;
 import java.io.Serializable;
 
 @Getter
-public class AbstractClass< Entity  extends     AbstractEntity,
-                            DTO     extends     AbstractDTO,
-                            ID      extends     Serializable>
+public abstract class AbstractClass<Entity  extends     AbstractEntity,
+                                    DTO     extends     AbstractDTO,
+                                    ID      extends     Serializable>
 {
     protected final Class<Entity>   entityClass;
     protected final Class<DTO>      dtoClass;
