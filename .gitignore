@@ -8,6 +8,7 @@
 config.properties
 /src/main/resources/**
 http-client.env.json
+/src/main/resources/http/http-client.env.json
 **/http-client.env.json
 dev.http
 **/dev.http
