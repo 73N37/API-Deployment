@@ -10,7 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class RoomDTO extends AbstractDTO<Integer> {
+public class RoomDTO extends dat.Instance.DTO.DTO {
     private Integer roomNumber;
     private Integer roomPrice;
     @IgnoreMapping
@@ -23,9 +23,9 @@ public class RoomDTO extends AbstractDTO<Integer> {
         this.roomType = room.getRoomType();
     }
 
-    public Integer getId(){
-        return id;
-    }
+//    public Integer getId(){
+//        return id;
+//    }
 
     public static List<RoomDTO> toRoomDTOList(List<Room> rooms) {
         return List.of(rooms.stream().map(RoomDTO::new).toArray(RoomDTO[]::new));
