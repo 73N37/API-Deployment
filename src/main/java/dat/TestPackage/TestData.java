@@ -54,14 +54,17 @@ public final class TestData
     @Annotation(requiresGlobalState = true, value = "FIELD")
     private static dat.TestPackage.TestData.Interface   globalInterface;
 
+    @Annotation(requiresGlobalState = true, value = "FIELD")
+    private static dat.TestPackage.TestData instance;
+
     @Annotation(requiresGlobalState = true, value = "CONSTRUCTOR")
     private TestData(){}
 
     @Annotation(requiresGlobalState = true, value = "CONSTRUCTOR")
     public TestData getInstance()
     {
-        if(this == null) return new TestData();
-        else return this;
+        if(instance == null) instance = new TestData();
+        return instance;
     }
 
     private interface Unit{
@@ -137,7 +140,7 @@ public final class TestData
                 return globalRecord;
             }
 
-            @Annotation(requiresGlobalState = true, value = "UPDATE-METHOD", dependsOn = {TestData.Record.class})
+            @Annotation(requiresGlobalState = true, value = "UPDATE-METHOD", dependsOn = {dat.TestPackage.TestData.Record.class})
             public static void
             setRecord(dat.TestPackage.TestData.Record record)
             {
@@ -209,7 +212,7 @@ public final class TestData
                 return dat.TestPackage.TestData.Entity.name;
             }
 
-            @Annotation(value = "ENTITY", dependsOn = TestData.Entity.class)
+            @Annotation(value = "ENTITY", dependsOn = dat.TestPackage.TestData.Entity.class)
             public static java.lang.Integer
             getId(dat.TestPackage.TestData.Entity entity)
             {
