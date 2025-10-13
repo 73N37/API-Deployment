@@ -14,7 +14,7 @@ import java.io.Serializable;
 public abstract  class AbstractFactory<     Entity  extends     dat.Instance.Entity.Entity,
                                             DTO     extends     dat.Instance.DTO.DTO,
                                             ID      extends     Serializable>
-                                                    extends     AbstractUnit implements InterfaceFactory<Integer>
+                                                    extends     AbstractUnit implements InterfaceFactory<ID>
 {
     public Class<Entity>         entityClass;
     public Class<DTO>            dtoClass;
@@ -33,7 +33,7 @@ public abstract  class AbstractFactory<     Entity  extends     dat.Instance.Ent
         this.idClass =      idClass;
     }
 
-    public Integer parseId(String idString)
+    public ID parseId(String idString)
     {
         try {
             return idClass.cast(idClass.getMethod("valueOf", String.class).invoke(null, idString));

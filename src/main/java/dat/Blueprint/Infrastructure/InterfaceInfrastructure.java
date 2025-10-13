@@ -1,6 +1,6 @@
 package dat.Blueprint.Infrastructure;
 
-public interface InterfaceInfrastructure extends  {
+public interface InterfaceInfrastructure {
 }
 
 /*
