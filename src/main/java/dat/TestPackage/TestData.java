@@ -5,6 +5,8 @@ package dat.TestPackage;
             is through my Methods class
  */
 
+import jakarta.persistence.*;
+
 public final class TestData
 {
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -80,9 +82,8 @@ public final class TestData
     {   // The ONLY purpose of this class is to be manipulated from an outside classes
         // This class must ONLY contain a Constructor with public static Fields
 
-        @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-        @jakarta.persistence.Id
         @Annotation( value = "FIELD")
+        @Id
         private static java.lang.Integer   id;
 
         @Annotation( value = "FIELD")
@@ -93,6 +94,12 @@ public final class TestData
         {
             this.name =     name;
             globalEntity =  this;
+        }
+
+        @Override
+        public java.lang.String toString(){
+
+            return "ID = {"+ id +"}, Name = {"+ name +"}";
         }
     }
 
@@ -105,12 +112,20 @@ public final class TestData
                 globalMethod = this;
             }
 
+            public static Class<? extends Unit> getUnitClass(DataType type){
+                // I chose not to @Override Java's 'getClass()' method.
+                // Just in case if I at some point in the future would need its functionality
+                if (type == DataType.ENTITY) return dat.TestPackage.TestData.Entity.class;
+                if (type == DataType.RECORD) return dat.TestPackage.TestData.Record.class;
+                return null;
+            }
+
             // ########################{Constructor Methods}######################################
             public static dat.TestPackage.TestData.Unit
             constructor(DataType type, String name)
             {
                 if (type.equals(DataType.RECORD)) return new dat.TestPackage.TestData.Record(name);
-                if (type.equals(DataType.ENTITY)) return new dat.TestPackage.TestData.Entity(name);
+                if (type.equals(DataType.ENTITY)) return new dat.TestPackage.TestData.Entity(name); // TODO No ID is generated. You need to create a DAO methods first (use JPA persist)
                 // This is unreachable, since Methods does not allow
                 return null;
             }
