@@ -75,8 +75,8 @@ public final class TestData
 
     @lombok.Setter
     @lombok.Getter
-    @Annotation(value = "ENTITY", dependsOn = {TestData.class})
-    private static class Entity implements Unit
+    @Annotation(value = "ENTITY")
+    private static class Entity implements dat.TestPackage.TestData.Unit
     {   // The ONLY purpose of this class is to be manipulated from an outside classes
         // This class must ONLY contain a Constructor with public static Fields
 
@@ -96,9 +96,7 @@ public final class TestData
         }
     }
 
-
-
-        @Annotation(requiresGlobalState = true, value = "METHOD", dependsOn = {dat.TestPackage.TestData.class})
+        @Annotation(requiresGlobalState = true, value = "METHOD")
         public abstract static class Methods implements dat.TestPackage.TestData.Interface
         {   // TODO: This class is exclusively used for defining Methods
             // TODO: Every method needs to be public static
@@ -116,7 +114,6 @@ public final class TestData
                 // This is unreachable, since Methods does not allow
                 return null;
             }
-
 
             // ########################{Global Methods}######################################
             @Annotation( value = "READ-METHOD")
