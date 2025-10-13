@@ -95,7 +95,7 @@ public final class TestData
             globalEntity =  this;
         }
     }
-    
+
         @Annotation(requiresGlobalState = true, value = "METHOD")
         public abstract static class Methods implements dat.TestPackage.TestData.Interface
         {   // TODO: This class is exclusively used for defining Methods
@@ -114,7 +114,6 @@ public final class TestData
                 // This is unreachable, since Methods does not allow
                 return null;
             }
-
 
             // ########################{Global Methods}######################################
             @Annotation( value = "READ-METHOD")
