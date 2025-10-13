@@ -10,6 +10,10 @@ public abstract class AbstractDTO<  ID  extends Serializable>
                                         extends AbstractData
 {
     public ID id;
+    public AbstractDTO(ID id){
+        this.id = id;
+    }
+
 
     public ID getIdentifier()
     {

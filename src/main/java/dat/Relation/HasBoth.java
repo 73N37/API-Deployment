@@ -1,6 +1,8 @@
 package dat.Relation;
 
-public interface HasBoth<Parent, Child>
+import dat.Instance.Unit.Unit;
+
+public interface HasBoth<Parent extends Unit, Child extends Unit>
         extends IsParent<Child>,
                 IsChild<Parent>
 {

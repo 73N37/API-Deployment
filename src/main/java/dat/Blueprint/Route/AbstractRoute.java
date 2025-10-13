@@ -5,12 +5,15 @@ import dat.Blueprint.Controller.InterfaceController;
 import dat.Blueprint.DTO.AbstractDTO;
 import dat.Blueprint.Entity.AbstractEntity;
 import dat.Blueprint.Factory.AbstractFactory;
-import io.javalin.Javalin;
+import io.javalin.*;
+import io.javalin.apibuilder.ApiBuilder;
 import lombok.Getter;
 import io.javalin.http.Handler;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
+
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public abstract class AbstractRoute<   Entity  extends     dat.Instance.Entity.Entity,
                                         DTO     extends     dat.Instance.DTO.DTO,
@@ -33,49 +36,70 @@ public abstract class AbstractRoute<   Entity  extends     dat.Instance.Entity.E
     }
 
     @Override
-    public void generateRoutes(Javalin app) {
+    public void generateRoutes(Javalin app)
+    {   log.info("Generating routes for {}", entityClass.getSimpleName().toLowerCase());
         // Create an Array that contains the methods from my controller class.
         // The controller class that is tied to this Routes class via my (superclass) AbstractFactory
-        Method[] methods = controller.getClass().getMethods();
+//        Method[] methods = controller.getClass().getMethods();
+//
+//        // Iterates through every method in my controller class
+//        for (Method method : methods) {
+//
+//            // If a method does not have exactly 1 parameter my for-loop goes to the next entry in my methods array.
+//            // If the first (and ONLY) parameter does not use the datatype Context my for-loop goes to the next entry in my methods array.
+//            if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].equals(io.javalin.http.Context.class)) {
+//                // Goes to the next entry in my methods array with performing any operations
+//                continue;
+//            }
+//
+//                // Determines what Enum (HandlerType) a given method must be
+//                io.javalin.http.HandlerType httpMethod = determineHttpMethod(method);
+//
+//                // Makes sure that httpMethod isn't invalid
+//                if (httpMethod != null && getFullPath(method) != null) {
+//                    try {
+//
+//                        /*
+//                         You don't know at compile-time which specific controller method will be called. (Java reflection API)
+//                         The method is determined dynamically at runtime. The method is determined by how far in the methods array (line 68) you have come
+//                         */
+//                        Handler handler = ctx -> method.invoke(controller, ctx);
+//
+//                        // Register route based on HTTP method type
+//                        switch (httpMethod) {
+//                            case GET    -> app.get(     getFullPath(method), handler);
+//                            case POST   -> app.post(    getFullPath(method), handler);
+//                            case PUT    -> app.put(     getFullPath(method), handler);
+//                            case DELETE -> app.delete(  getFullPath(method), handler);
+//                        }
+//
+//                        // Since a method satisfies the criteria (only 1 parameter & it must be the datatype javalin.Context)
+//                        methodSet.add(method);
+//                    } catch (Exception e) {
+//                        throw new RuntimeException("Failed to register route: " + getFullPath(method), e);
+//                    }
+//                }
+//        }
 
-        // Iterates through every method in my controller class
-        for (Method method : methods) {
+        String basePath = "/" + entityClass.getSimpleName().toLowerCase()+"s";
+        log.info("Base path: {}", basePath);
+        // Use Javalin app directly to create paths for my API
+        app.get(basePath+"/{id}", controller.get());        // endpoint: GET {domain}/api/{className}s/{id}
+        log.info("Route generated: GET {}/{id}", basePath);
 
-            // If a method does not have exactly 1 parameter my for-loop goes to the next entry in my methods array.
-            // If the first (and ONLY) parameter does not use the datatype Context my for-loop goes to the next entry in my methods array.
-            if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].equals(io.javalin.http.Context.class)) {
-                // Goes to the next entry in my methods array with performing any operations
-                continue;
-            }
+        app.get(basePath, controller.getAll());                  // endpoint: GET {domain}/api/{className}s
+        log.info("Route generated: GET {}", basePath);
 
-                // Determines what Enum (HandlerType) a given method must be
-                io.javalin.http.HandlerType httpMethod = determineHttpMethod(method);
+        app.post(basePath, controller.post());                  // endpoint: POST {domain}/api/{className}
+        log.info("Route generated: POST {}/{dto.json}", basePath);
 
-                // Makes sure that httpMethod isn't invalid
-                if (httpMethod != null && getFullPath(method) != null) {
-                    try {
+        app.put(basePath, controller.put());                    // endpoint: PUT  {domain}/api/{className}
+        log.info("Route generated: PUT {}/{dto.json}", basePath);
 
-                        /*
-                         You don't know at compile-time which specific controller method will be called. (Java reflection API)
-                         The method is determined dynamically at runtime. The method is determined by how far in the methods array (line 68) you have come
-                         */
-                        Handler handler = ctx -> method.invoke(controller, ctx);
+        app.delete(basePath, controller.delete());
+        log.info("Route generated: DELETE {}/{id}", basePath);  // endpoint: DELETE {domain}/api/{className}/{id}
 
-                        // Register route based on HTTP method type
-                        switch (httpMethod) {
-                            case GET    -> app.get(     getFullPath(method), handler);
-                            case POST   -> app.post(    getFullPath(method), handler);
-                            case PUT    -> app.put(     getFullPath(method), handler);
-                            case DELETE -> app.delete(  getFullPath(method), handler);
-                        }
-
-                        // Since a method satisfies the criteria (only 1 parameter & it must be the datatype javalin.Context)
-                        methodSet.add(method);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to register route: " + getFullPath(method), e);
-                    }
-                }
-        }
+        log.info("Completed route generation for {}", entityClass.getSimpleName());
     }
 
     private String getFullPath(Method method){

@@ -14,7 +14,7 @@ import java.io.Serializable;
 public abstract  class AbstractFactory<     Entity  extends     dat.Instance.Entity.Entity,
                                             DTO     extends     dat.Instance.DTO.DTO,
                                             ID      extends     Serializable>
-                                                    extends     AbstractUnit
+                                                    extends     AbstractUnit implements InterfaceFactory<ID>
 {
     public Class<Entity>         entityClass;
     public Class<DTO>            dtoClass;

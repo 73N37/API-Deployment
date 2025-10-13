@@ -1,4 +1,6 @@
 package dat.Instance.Data;
 
-public class Data {
+import dat.Instance.Unit.Unit;
+
+public class Data extends Unit {
 }
