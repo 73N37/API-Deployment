@@ -9,9 +9,12 @@ package dat.Blueprint.Unit;
 
 import dat.Blueprint.Data.AbstractData;
 import dat.Blueprint.Factory.AbstractFactory;
+import dat.Instance.Entity.Entity;
+import dat.Instance.Factory.Factory;
+import dat.Instance.Unit.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import dat.Instance.Data.Data;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
@@ -19,12 +22,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 // Available to BOTH AbstractData & AbstractFactory (this is the top-class for the entire project)
-public abstract class AbstractUnit<ID extends Serializable>
+public abstract class AbstractUnit<ID extends Serializable> extends Data, Factory<> implements InterfaceUnit
 {
     // Unified logger for every class within this project.
     // Since every class inherits from this one, 'log.error(""), log.debug(""), log.info(""), can be called fron any class.
     public Logger log = LoggerFactory.getLogger(getUnitClass());
-
     // Global Set<> that every instance and blueprint will be a part of
     public static final Set<AbstractUnit> REGISTRY = ConcurrentHashMap.newKeySet();
 
@@ -37,20 +39,14 @@ public abstract class AbstractUnit<ID extends Serializable>
         REGISTRY.add(this);
     }
 
-    public  Class<?> getUnitClass()
+    public Class<?> getUnitClass()
     {
         // Purpose: Used in every error message to show class accountability.
         // Reason:  Making debugging easier in the long run.
         return this.getClass();
     }
 
-    enum UnitType
-    {   // Return types for getUnitType()
-        DATA,               // Inherits from AbstractUnit (Entities & DTOs)
-        INFRASTRUCTURE,     // Inherits from AbstractUnit (Factory) [AbstractDAO, AbstractService, AbstractController, AbstractRoute] inherits from AbstractFactory
-        UNIT,               // Is Unit
-        ERROR;              // Is NOT Unit (This should NEVER be possible, regard this as en Exception in enum form)
-    }
+
 
     public UnitType getUnitType()
     { /*    TODO: Jeg blev nød til at opgraderer fra Java 17 (Corretto Alpine) til Java SDK 21,
@@ -59,8 +55,8 @@ public abstract class AbstractUnit<ID extends Serializable>
 
         UnitType result = UnitType.ERROR;
         try {// This method is used on generic methods to determine behavior depending on what UnitType a given instance (Object) or blueprint (Class)
-            if (this instanceof AbstractData)       result = UnitType.DATA;
-            if (this instanceof AbstractFactory)    result = UnitType.INFRASTRUCTURE;
+            if (this instanceof AbstractData || this instanceof Data)       result = UnitType.DATA;
+            if (this instanceof AbstractFactory || this instanceof Factory)    result = UnitType.INFRASTRUCTURE;
             if (this instanceof AbstractUnit)       result = UnitType.UNIT;
         } catch (Exception e)
         {

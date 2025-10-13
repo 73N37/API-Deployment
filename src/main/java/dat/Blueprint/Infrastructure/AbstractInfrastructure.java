@@ -1,4 +1,4 @@
 package dat.Blueprint.Infrastructure;
 
-public class AbstractInfrastructure {
+public abstract class AbstractInfrastructure implements InterfaceInfrastructure {
 }

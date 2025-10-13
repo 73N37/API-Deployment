@@ -1,4 +1,4 @@
-package dat.Instance.DTO;
+package dat.TestPackage.TestBlueprint.TestDTO;
 
 public class TestRoomDTO {
 }

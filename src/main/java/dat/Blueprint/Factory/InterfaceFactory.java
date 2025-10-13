@@ -1,4 +1,8 @@
 package dat.Blueprint.Factory;
 
-public interface InterfaceFactory {
+import java.io.Serializable;
+
+public interface InterfaceFactory<ID extends Serializable> {
+    ID parseId(String idString);
+
 }

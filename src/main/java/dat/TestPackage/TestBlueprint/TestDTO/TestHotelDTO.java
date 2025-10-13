@@ -1,11 +1,15 @@
-package dat.Instance.DTO;
+package dat.TestPackage.TestBlueprint.TestDTO;
 
 import dat.Annotation.IgnoreMapping;
 import dat.Annotation.MapTo;
+import dat.Instance.DTO.HotelDTO;
+import dat.Instance.DTO.RoomDTO;
 import dat.Instance.Entity.Hotel;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TestHotelDTO extends dat.Blueprint.DTO.AbstractDTO<Integer>
 {
@@ -16,11 +20,38 @@ public class TestHotelDTO extends dat.Blueprint.DTO.AbstractDTO<Integer>
     private Hotel.HotelType hotelType; // TODO: Will be ignored by "dtoToEntity" method due to @IgnoreMapping
     private Set<RoomDTO> rooms = new HashSet<>();
 
-    public TestHotelDTO(Hotel hotel){
+    public TestHotelDTO(Hotel hotel)
+    {
         super(hotel.getId());
         this.hotelName = hotel.getHotelName();
         this.hotelAddress = hotel.getHotelAddress();
         this.hotelType = hotel.getHotelType();
         // this.rooms = hotel.getRooms();
+    }
+
+    public TestHotelDTO(String hotelName, String hotelAddress, Hotel.HotelType hotelType)
+    {
+        this.hotelName = hotelName;
+        this.hotelAddress = hotelAddress;
+        this.hotelType = hotelType;
+    }
+
+    public static List<HotelDTO> toHotelDTOList(List<Hotel> hotels) {
+        return hotels.stream().map(HotelDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof HotelDTO hotelDto)) return false;
+
+        return getId().equals(hotelDto.getId());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return getId().hashCode();
     }
 }

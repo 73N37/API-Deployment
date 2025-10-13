@@ -1,12 +1,9 @@
-package dat.Instance.Factory;
+package dat.TestPackage.TestBlueprint.TestFactory;
 
 import dat.Blueprint.Controller.InterfaceController;
 import dat.Blueprint.Controller.AbstractController;
 import dat.Blueprint.DAO.InterfaceDAO;
 import dat.Blueprint.DAO.AbstractDAO;
-import dat.Blueprint.DTO.AbstractDTO;
-import dat.Blueprint.Entity.AbstractEntity;
-import dat.Blueprint.Factory.AbstractFactory;
 import dat.Blueprint.Route.AbstractRoute;
 import dat.Blueprint.Route.InterfaceRoute;
 import dat.Blueprint.Service.AbstractService;

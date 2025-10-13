@@ -1,4 +1,6 @@
 package dat.Instance.DAO;
 
-public class DAO {
+import dat.Blueprint.DAO.AbstractDAO;
+
+public class InsDAO extends AbstractDAO {
 }
