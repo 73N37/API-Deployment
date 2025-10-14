@@ -1,9 +1,9 @@
 name: Mirror
 on:
-    workflow_dispatch
+    workflow_dispatch:
         inputs:
             file_path:
-                description: "My attempt to create a design-patter 'Abstract-Generic Piping'"
+                description: "My attempt at creating a design-pattern"
                 required: true
 jobs:
     update-gist:
