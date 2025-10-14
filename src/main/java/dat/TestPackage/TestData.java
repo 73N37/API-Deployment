@@ -5,6 +5,8 @@ package dat.TestPackage;
             is through my Methods class
  */
 
+import jakarta.persistence.*;
+
 public final class TestData
 {
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -39,35 +41,35 @@ public final class TestData
         The ONLY way to access them is though my entity methods
     */
 
-    @Annotation(requiresGlobalState = true, value = "FIELD")
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
     private static dat.TestPackage.TestData.Entity  globalEntity;
 
-    @Annotation(requiresGlobalState = true, value = "FIELD")
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
     private static dat.TestPackage.TestData.Record  globalRecord;
 
-    @Annotation(requiresGlobalState = true, value = "FIELD")
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
     private static dat.TestPackage.TestData.Methods globalMethod;
 
-    @Annotation(requiresGlobalState = true, value = "FIELD")
-    private static dat.TestPackage.TestData.Annotation  globalAnnotation;
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
+    public static dat.TestPackage.TestData.Annotation  globalAnnotation;
 
-    @Annotation(requiresGlobalState = true, value = "FIELD")
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
     private static dat.TestPackage.TestData.Interface   globalInterface;
 
-    @Annotation(requiresGlobalState = true, value = "FIELD")
-    private static dat.TestPackage.TestData instance;
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
+    public static dat.TestPackage.TestData instance;
 
-    @Annotation(requiresGlobalState = true, value = "CONSTRUCTOR")
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
     private TestData(){}
 
-    @Annotation(requiresGlobalState = true, value = "CONSTRUCTOR")
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
     public TestData getInstance()
     {
         if(instance == null) instance = new TestData();
         return instance;
     }
 
-    private interface Unit{
+    private interface DataUnit {
         // This interface is just a super-class.
         // Since records cant extend from abstract classes,
         // I was forced to use an interface
@@ -75,119 +77,153 @@ public final class TestData
 
     @lombok.Setter
     @lombok.Getter
-    @Annotation(value = "ENTITY")
-    private static class Entity implements dat.TestPackage.TestData.Unit
+    @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.ENTITY)
+    private static class Entity implements DataUnit
     {   // The ONLY purpose of this class is to be manipulated from an outside classes
         // This class must ONLY contain a Constructor with public static Fields
 
-        @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-        @jakarta.persistence.Id
-        @Annotation( value = "FIELD")
+        @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.FIELD)
+        @Id
         private static java.lang.Integer   id;
 
-        @Annotation( value = "FIELD")
+        @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.FIELD)
         private static java.lang.String    name;
 
-        @Annotation(requiresGlobalState = true, value = "CONSTRUCTOR")
+        @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
         private Entity(java.lang.String   name)
         {
             this.name =     name;
             globalEntity =  this;
         }
+
+        @Override
+        public java.lang.String toString(){
+
+            return "ID = {"+ id +"}, Name = {"+ name +"}";
+        }
     }
 
-        @Annotation(requiresGlobalState = true, value = "METHOD")
+        @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.METHOD)
         public abstract static class Methods implements dat.TestPackage.TestData.Interface
         {   // TODO: This class is exclusively used for defining Methods
             // TODO: Every method needs to be public static
             private Methods()
             {
-                globalMethod = this;
+                //globalMethod = this;
+            }
+
+            public static Class<? extends dat.TestPackage.TestData.DataUnit> getUnitClass(DataType type){
+                // I chose not to @Override Java's 'getClass()' method.
+                // Just in case if I at some point in the future would need its functionality
+                if (type == DataType.ENTITY) return dat.TestPackage.TestData.Entity.class;
+                if (type == DataType.RECORD) return dat.TestPackage.TestData.Record.class;
+                return null;
             }
 
             // ########################{Constructor Methods}######################################
-            public static dat.TestPackage.TestData.Unit
-            constructor(DataType type, String name)
+            public static dat.TestPackage.TestData.DataUnit
+            constructor(dat.TestPackage.TestData.DataType data, String name)
             {
-                if (type.equals(DataType.RECORD)) return new dat.TestPackage.TestData.Record(name);
-                if (type.equals(DataType.ENTITY)) return new dat.TestPackage.TestData.Entity(name);
+                if (data.equals(dat.TestPackage.TestData.DataType.RECORD)) return new dat.TestPackage.TestData.Record(name);
+                if (data.equals(dat.TestPackage.TestData.DataType.ENTITY)) return new dat.TestPackage.TestData.Entity(name); // TODO No ID is generated. You need to create a DAO methods first (use JPA persist)
                 // This is unreachable, since Methods does not allow
                 return null;
             }
 
             // ########################{Global Methods}######################################
-            @Annotation( value = "READ-METHOD")
+            @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.READ)
             public static dat.TestPackage.TestData.Entity
             getEntity()
             {
                 return globalEntity;
             }
 
-            @Annotation(requiresGlobalState = true, value = "UPDATE-METHOD", dependsOn = {dat.TestPackage.TestData.Entity.class})
-            public static void
-            setEntity(dat.TestPackage.TestData.Entity entity)
+            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = {dat.TestPackage.TestData.OperationType.UPDATE}, dependsOn = {dat.TestPackage.TestData.Entity.class})
+            private static void
+            putGlobalEntity(dat.TestPackage.TestData.Entity value)
             {
-                globalEntity = entity;
+                globalEntity = value;
             }
 
-            @Annotation( value = "READ-METHOD")
+            @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.READ)
             public static dat.TestPackage.TestData.Record
-            getRecord()
+            getGlobalRecord()
             {
                 return globalRecord;
             }
 
-            @Annotation(requiresGlobalState = true, value = "UPDATE-METHOD", dependsOn = {dat.TestPackage.TestData.Record.class})
-            public static void
-            setRecord(dat.TestPackage.TestData.Record record)
+            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {dat.TestPackage.TestData.Record.class})
+            private static void
+            putGlobalRecord(dat.TestPackage.TestData.Record value)
             {
-                globalRecord = record;
+                globalRecord = value;
             }
 
-            @Annotation( value = "READ-METHOD")
+            @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.READ)
             public static dat.TestPackage.TestData.Methods
-            getMethod()
+            getGlobalMethod()
             {
                 return globalMethod;
             }
 
-            @Annotation( value = "READ-METHOD")
+            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {dat.TestPackage.TestData.Methods.class})
+            private static void
+            putGlobalMethod(Methods value)
+            {
+                globalMethod = value;
+            }
+
+            @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.READ)
             public static dat.TestPackage.TestData.Annotation
             getAnnotation()
             {
                 return globalAnnotation;
             }
 
-            @Annotation( value = "READ-METHOD")
+            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {dat.TestPackage.TestData.Methods.class})
+            private static void
+            putGlobalAnnotation(dat.TestPackage.TestData.Annotation value)
+            {
+                globalAnnotation = value;
+            }
+
+            @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.READ)
             public static dat.TestPackage.TestData.Interface
             getInterface()
             {
                 return globalInterface;
             }
 
+            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {dat.TestPackage.TestData.Interface.class})
+            private static void
+            putInterface(Interface value)
+            {
+                globalInterface = value;
+            }
+
             // ########################{Record Methods}######################################
-            @Annotation(value = "RECORD", dependsOn = java.lang.Integer.class)
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = java.lang.Integer.class)
             public static dat.TestPackage.TestData.Record
             putRecord(java.lang.String name)
             {
                 return new dat.TestPackage.TestData.Record(name);
             }
 
-            @Annotation(value = "RECORD", dependsOn = {java.lang.Integer.class, java.lang.String.class})
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {java.lang.Integer.class, java.lang.String.class})
             public static dat.TestPackage.TestData.Record
             putRecord(java.lang.Integer id, java.lang.String name)
             {
                 return new TestData.Record(id, name);
             }
 
-            @Annotation(value = "RECORD", dependsOn = dat.TestPackage.TestData.Record.class)
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = dat.TestPackage.TestData.Record.class)
             public static java.lang.Integer
             getId(dat.TestPackage.TestData.Record record)
             {
                 return record.id();
             }
 
-            @Annotation(value = "RECORD", dependsOn = dat.TestPackage.TestData.Entity.class)
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = dat.TestPackage.TestData.Entity.class)
             public static dat.TestPackage.TestData.Record
             entityToRecord(dat.TestPackage.TestData.Entity entity)
             {
@@ -195,28 +231,28 @@ public final class TestData
             }
 
             // ########################{Entity Methods}######################################
-            @Annotation(value = "ENTITY", dependsOn = {java.lang.String.class, java.lang.Integer.class})
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.ENTITY, dependsOn = {java.lang.String.class, java.lang.Integer.class})
             public static dat.TestPackage.TestData.Entity
             putEntity(java.lang.String name, java.lang.Integer id)
             {
                 return new dat.TestPackage.TestData.Entity(name);
             }
 
-            @Annotation(value = "ENTITY")
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.ENTITY)
             public static java.lang.String
             getEntityName()
             {
                 return dat.TestPackage.TestData.Entity.name;
             }
 
-            @Annotation(value = "ENTITY", dependsOn = dat.TestPackage.TestData.Entity.class)
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.ENTITY, dependsOn = dat.TestPackage.TestData.Entity.class)
             public static java.lang.Integer
             getId(dat.TestPackage.TestData.Entity entity)
             {
                 return entity.id;
             }
 
-            @Annotation(value = "ENTITY", dependsOn = dat.TestPackage.TestData.Record.class)
+            @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.ENTITY, dependsOn = dat.TestPackage.TestData.Record.class)
             public static dat.TestPackage.TestData.Entity
             recordToEntity(dat.TestPackage.TestData.Record record)
             {
@@ -224,54 +260,54 @@ public final class TestData
             }
         }
 
-    @Annotation(value = "CONSTRUCTOR")
-    private record Record(java.lang.Integer id, java.lang.String name, dat.TestPackage.TestData.DataType record) implements dat.TestPackage.TestData.Unit
+    @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
+    private record Record(java.lang.Integer id, java.lang.String name, dat.TestPackage.TestData.DataType record) implements DataUnit
     {
         // TODO: This method is exclusively used to store data between Methods, Fields & Classes
         // Since records are immutable data can ONLY be assigned on instantiation
-        @Annotation( value = "CONSTRUCTOR", dependsOn = {java.lang.String.class})
+        @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR, dependsOn = {java.lang.String.class})
         private Record(java.lang.String name)
         {
             this(null,name, dat.TestPackage.TestData.DataType.RECORD);
+            dat.TestPackage.TestData.Methods.putGlobalRecord(this);
         }
 
-        @Annotation(value = "CONSTRUCTOR", dependsOn = {java.lang.String.class, java.lang.Integer.class})
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR, dependsOn = {java.lang.String.class, java.lang.Integer.class})
         private Record(java.lang.Integer id, java.lang.String name)
         {
             this(id, name, dat.TestPackage.TestData.DataType.RECORD);
+            dat.TestPackage.TestData.Methods.putGlobalRecord(this);
         }
-
-
     }
 
-    @Annotation(value = "INTERFACE")
+    @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.INTERFACE)
     private interface Interface<ID extends java.io.Serializable>
     {   // TODO: This class is exclusively for defining relations to
         //Identity (for annotation-driven validation)
-        @Annotation(value = "IDENTIFIER", requiresGlobalState = true)
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.IDENTIFIER, requiresGlobalState = true)
         ID getId();
 
-        @Annotation(value = "READ-METHOD", dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.READ, dependsOn = dat.Security.entities.Role.class)
         boolean canRead(    dat.Security.entities.Role role);
 
-        @Annotation(value = "WRITE-METHOD", dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.WRITE, dependsOn = dat.Security.entities.Role.class)
         boolean canWrite(   dat.Security.entities.Role role);
 
-        @Annotation(value = "DELETE-METHOD", dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.DELETE, dependsOn = dat.Security.entities.Role.class)
         boolean canDelete(  dat.Security.entities.Role role);
 
-        @Annotation(value = "UPDATE-METHOD", dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = dat.Security.entities.Role.class)
         boolean canUpdate( dat.Security.entities.Role role);
 
         // Validation (reads annotations to validate state)
-        @Annotation(value = "VALIDATOR", requiresGlobalState = true)
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.VALIDATOR, requiresGlobalState = true)
         default boolean isValid()
         {
             return getId() != null && getId().toString().matches("^[0-9]+$");
         }
 
         // Annotation-driven CRUD check
-        @Annotation(value = "CrudValidator", dependsOn = {dat.Security.entities.Role.class, java.lang.String.class})
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CRUD_VALIDATOR, dependsOn = {dat.Security.entities.Role.class, java.lang.String.class})
         default boolean canPerformCrud(dat.Security.entities.Role role, java.lang.String operation)
         {
             return switch(operation.toUpperCase())
@@ -286,7 +322,8 @@ public final class TestData
 
     private @interface Annotation
     {
-        java.lang.String value() default "";
+        //java.lang.String value() default "";
+        dat.TestPackage.TestData.OperationType[] value() default {dat.TestPackage.TestData.OperationType.UNKNOWN};
         boolean requiresGlobalState() default false;
         java.lang.Class<?>[] dependsOn() default {};
     }
@@ -294,6 +331,23 @@ public final class TestData
     public enum DataType{
         ENTITY,
         RECORD;
+    }
+    
+    private enum OperationType{
+        ENTITY,
+        DATA,
+        IDENTIFIER,
+        VALIDATOR,
+        CRUD_VALIDATOR,
+        UPDATE,
+        READ,
+        WRITE,
+        DELETE,
+        CONSTRUCTOR,
+        FIELD,
+        METHOD,
+        INTERFACE,
+        UNKNOWN;
     }
 
 }

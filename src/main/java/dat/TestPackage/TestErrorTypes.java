@@ -1,6 +1,8 @@
-//package dat.Enum;
+//package dat.TestPackage;
 //
-//public enum ErrorTypes {
+//public enum TestErrorTypes {
+//
+//
 //    BAD_REQUEST(400, "Bad request"),
 //    UNAUTHORIZED(401, "Unauthorized Access"),
 //    FORBIDDEN(403, "Forbidden Access"),
@@ -25,7 +27,7 @@
 //    private final int errorCode;
 //    private final String errorMessage;
 //
-//    ErrorTypes(int errorCode, String errorMsg) {
+//    TestErrorTypes(int errorCode, String errorMsg) {
 //        this.errorCode = errorCode;
 //        this.errorMessage = errorMsg;
 //    }
@@ -35,8 +37,8 @@
 //    }
 //
 //
-//    public static ErrorTypes getType(int errorCode) {
-//        for (ErrorTypes type : ErrorTypes.values()) {
+//    public static TestErrorTypes getType(int errorCode) {
+//        for (TestErrorTypes type : TestErrorTypes.values()) {
 //            if (type.getErrorCode() == errorCode) {
 //                return type;
 //            }
@@ -47,5 +49,4 @@
 //    public String getErrorMessage() {
 //        return errorMessage;
 //    }
-//
 //}

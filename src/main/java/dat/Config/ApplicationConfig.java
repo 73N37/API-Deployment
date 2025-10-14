@@ -1,7 +1,6 @@
 package dat.Config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.Instance.Factory.Factory;
 import dat.Blueprint.Route.InterfaceRoute;
 import dat.Security.controllers.AccessController;
 import dat.Security.controllers.SecurityController;
@@ -36,9 +35,9 @@ public class ApplicationConfig {
         config.router.apiBuilder(SecurityRoutes.getSecurityRoutes());
     }
 
-    public static void registerRoutes(Javalin app, Factory<?,?,?> factory){
-        factory.getRoutes().generateRoutes(app);
-    }
+//    public static void registerRoutes(Javalin app, Factory<?,?,?> factory){
+//        factory.getRoutes().generateRoutes(app);
+//    }
 
     public Javalin startServer(int port) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
