@@ -7,8 +7,6 @@ package dat.TestPackage;
 
 import jakarta.persistence.*;
 
-import java.lang.annotation.Annotation;
-
 public final class TestData
 {
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -140,7 +138,7 @@ public final class TestData
                 return globalEntity;
             }
 
-            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {dat.TestPackage.TestData.Entity.class})
+            @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = {dat.TestPackage.TestData.OperationType.UPDATE}, dependsOn = {dat.TestPackage.TestData.Entity.class})
             private static void
             putGlobalEntity(dat.TestPackage.TestData.Entity value)
             {
@@ -330,7 +328,7 @@ public final class TestData
         java.lang.Class<?>[] dependsOn() default {};
     }
 
-    private enum DataType{
+    public enum DataType{
         ENTITY,
         RECORD;
     }
