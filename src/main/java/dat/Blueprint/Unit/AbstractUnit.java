@@ -10,7 +10,6 @@ package dat.Blueprint.Unit;
 import dat.Blueprint.Data.AbstractData;
 import dat.Blueprint.Factory.AbstractFactory;
 import dat.Instance.Entity.Entity;
-import dat.Instance.Factory.Factory;
 import dat.Instance.Unit.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
