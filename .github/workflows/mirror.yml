@@ -19,16 +19,8 @@ jobs:
           github-token: ${{ secrets.GIST.TOKEN }}
           script: |
             const fs = require('fs');
-            const path = require('path');
-            const filePath = process.env.FILE_PATH;
-            const gistId = process.env.GIST_ID;
-            if (!gistId){
-            core.setFailed('No Gist ID provided (input or vars.GIST_ID.)');
-            return;
-            }
-            const content = ds.readFileSync(filePath, 'utf'8);
-            const gistFilename = path.basename(filePath); // auto filename
+            const content = fs.readFileSync(process.env.FILE_PATH, 'utf8');
             await github.request('PATCH /gists/{gist_id}', {
-            gist_id: gistId,
-            files: {[gistFilename]: {content}}
+              gist_id: process.env.GIST_ID,
+              files: { [process.env.GIST_FILENAME]: { content } }
             });
