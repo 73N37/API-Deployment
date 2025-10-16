@@ -59,6 +59,8 @@ public final class TestData
         The ONLY way to access them is though my entity methods
     */
 
+    private static java.lang.Integer id;
+
     // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
     @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
     @lombok.Getter
@@ -75,6 +77,7 @@ public final class TestData
     @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
     @lombok.Getter
     private static dat.TestPackage.TestData.Record  globalRecord;
+
 
 
     @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.FIELD)
@@ -117,7 +120,11 @@ public final class TestData
     interface DataUnit {
         // This interface is just a super-class.
         // Since records cant extend from abstract classes,
-        // I was forced to use an interface to create an 'umbrella' for Record & Entity
+        // This is a functional-interface since it only has 1 method
+        static java.lang.Integer getId()
+        {
+            return dat.TestPackage.TestData.id;
+        }
     }
 
     /**
@@ -247,13 +254,13 @@ public final class TestData
          * @return A new instance of the specified type
          * @throws IllegalArgumentException if the type cannot be instantiated (no accessible no-arg constructor)
          */
-         static <Data extends dat.TestPackage.TestData.DataUnit> Data create(Class<Data> type) {
+         static <Data extends dat.TestPackage.TestData.DataUnit> Data create(java.lang.Class<Data> type) {
             try {
                 // Uses reflection to invoke the no-argument cnstructor
                 // This is necessary because Java's type erasure prevents 'new T()'
                 return type.getDeclaredConstructor().newInstance();
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalArgumentException("Cannot instantiate " + type.getName(), e);
+            } catch (java.lang.ReflectiveOperationException e) {
+                throw new java.lang.IllegalArgumentException("Cannot instantiate " + type.getName(), e);
             }
         }
 
@@ -266,11 +273,11 @@ public final class TestData
          * @param type The DataType enum value (ENTITY or RECORD)
          * @return The Class object representing the specified type, or null if type is unrecognized
          */
-        static Class<? extends dat.TestPackage.TestData.DataUnit> getUnitClass(DataType type){
+        static java.lang.Class<? extends dat.TestPackage.TestData.DataUnit> getUnitClass(DataType type){
             // Check if the requested type is ENTITY
-            if (type == DataType.ENTITY) return dat.TestPackage.TestData.Entity.class;
+            if (type == dat.TestPackage.TestData.DataType.ENTITY) return dat.TestPackage.TestData.Entity.class;
             // Check if the requested type is RECORD
-            if (type == DataType.RECORD) return dat.TestPackage.TestData.Record.class;
+            if (type == dat.TestPackage.TestData.DataType.RECORD) return dat.TestPackage.TestData.Record.class;
             // Return null for unrecognized types
             return null;
         }
@@ -302,16 +309,25 @@ public final class TestData
             return null;
         }
 
-        public static dat.TestPackage.TestData.DataUnit
-        constructor(boolean trueIsRecord_falseIsEntity, String name)
+        public static dat.  // @return something that lives in the dat package (super-package)
+                        TestPackage.    // @return something that lives in the TestPackage (dat.testPackage)
+                                    TestData.
+                                            DataUnit
+        constructor(boolean trueIsRecord_falseIsEntity, java.lang.String name)
         {
             if (trueIsRecord_falseIsEntity)
             {
-                    return new dat.TestPackage.TestData.Entity(name);
+                    return new dat. // @return something that lives in the dat package (super-package)
+                                    TestPackage.
+                                                TestData.
+                                                        Entity(name);
             }
             else
             {
-                return new dat.TestPackage.TestData.Record(name);
+                return new dat.
+                                TestPackage.
+                                            TestData.
+                                                    Record(name);
             }
             // Check if an Entity should be created
             // Note: ID generation requires JPA persistence - use DAO methods
@@ -344,13 +360,13 @@ public final class TestData
          * @param data The DataUnit to convert
          * @return The Entity class reference if the data represents an entity, null otherwise
          */
-        public static Class<? extends dat.TestPackage.TestData.Entity>
+        public static java.lang.Class<? extends dat.TestPackage.TestData.Entity>
         dataUnitToEntity(dat.TestPackage.TestData.DataUnit data)
         {
-            // TODO {TLDR}: Checks if the data unit is a entity type, and return Entity.class if it is indeed a record type.
+            // TODO {TLDR}: Checks if the data unit is a entity type, and return Entity.class if it is indeed a entity type.
             // TODO {TLDR}: If anythings fails return null;
 
-            if (data.   // performs an operation on the @param data
+            if (data. // Performs an operation on the @param data
                     equals(dat. // Checks if @param equals something inside dat (super-package)
                                 TestPackage.    // Checks if @param equals something inside TestPackage (sub-package)
                                             TestData.   // Checks if @param equals something inside TestData (super-class {public final class})
@@ -372,7 +388,7 @@ public final class TestData
          * @param data The DataUnit to convert
          * @return The Record class reference if the data represents a record, null otherwise
          */
-        public static Class<? extends dat.TestPackage.TestData.Record>
+        public static java.lang.Class<? extends dat.TestPackage.TestData.Record>
         dataUnitToRecord(dat.TestPackage.TestData.DataUnit data)
         {
             // TODO {TLDR}: Checks if the data unit is a record type, and return Record.class if it is indeed a record type.
@@ -716,7 +732,7 @@ public final class TestData
          * @return true if the role can read, false otherwise
          */
         @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.READ, dependsOn = dat.Security.entities.Role.class)
-        boolean canRead(    dat.Security.entities.Role role);
+        boolean canRead(dat.Security.entities.Role role);
 
         /**
          * Checks if the specified role has write permission.
@@ -725,7 +741,7 @@ public final class TestData
          * @return true if the role can write, false otherwise
          */
         @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.WRITE, dependsOn = dat.Security.entities.Role.class)
-        boolean canWrite(   dat.Security.entities.Role role);
+        boolean canWrite(dat.Security.entities.Role role);
 
         /**
          * Checks if the specified role has delete permission.
@@ -734,7 +750,7 @@ public final class TestData
          * @return true if the role can delete, false otherwise
          */
         @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.DELETE, dependsOn = dat.Security.entities.Role.class)
-        boolean canDelete(  dat.Security.entities.Role role);
+        boolean canDelete(dat.Security.entities.Role role);
 
         /**
          * Checks if the specified role has update permission.
@@ -743,7 +759,7 @@ public final class TestData
          * @return true if the role can update, false otherwise
          */
         @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = dat.Security.entities.Role.class)
-        boolean canUpdate( dat.Security.entities.Role role);
+        boolean canUpdate(dat.Security.entities.Role role);
 
         /**
          * Validates the current state of the object.
@@ -837,7 +853,8 @@ public final class TestData
      * <p><b>ENTITY:</b> Represents mutable, persistable data objects</p>
      * <p><b>RECORD:</b> Represents immutable, transferable data objects</p>
      */
-    public enum DataType{
+    public enum DataType
+    {
         /** Mutable data structure for persistence */
         ENTITY,
         /** Immutable data structure for transfer */
@@ -850,7 +867,8 @@ public final class TestData
      * <p>Used by the @Annotation to document what type of operation
      * a method, field, or class represents.</p>
      */
-    private enum OperationType{
+    private enum OperationType
+    {
         /** Entity-related operations */
         ENTITY,
         /** Record-related operations */
