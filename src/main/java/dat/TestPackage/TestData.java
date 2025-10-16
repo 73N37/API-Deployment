@@ -147,7 +147,16 @@ public final class TestData
         @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.FIELD)
         @lombok.Getter
         @lombok.Setter
-        static java.lang.Integer   id;
+        static java.lang.Integer id;
+
+        /**
+         * The name property of the entity.
+         * This field stores the identifying name/label for the entity instance.
+         */
+        @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.FIELD)
+        @lombok.Getter
+        @lombok.Setter
+        static java.lang.String name;
 
         /**
          * Constructs a new Entity with the specified name.
@@ -164,14 +173,7 @@ public final class TestData
             globalEntity =  this;
         }
 
-        /**
-         * The name property of the entity.
-         * This field stores the identifying name/label for the entity instance.
-         */
-        @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.FIELD)
-        @lombok.Getter
-        @lombok.Setter
-        static java.lang.String name;
+
 
         /**
          * Retrieves the ID of this entity.
@@ -241,11 +243,11 @@ public final class TestData
          * </ul>
          *
          * @param type The Class object representing the type to instantiate (Entity or Record)
-         * @param <T> The generic type parameter extending DataUnit
+         * @param <Data> The generic type parameter extending DataUnit
          * @return A new instance of the specified type
          * @throws IllegalArgumentException if the type cannot be instantiated (no accessible no-arg constructor)
          */
-        public static <T extends dat.TestPackage.TestData.DataUnit> T create(Class<T> type) {
+         static <Data extends dat.TestPackage.TestData.DataUnit> Data create(Class<Data> type) {
             try {
                 // Uses reflection to invoke the no-argument cnstructor
                 // This is necessary because Java's type erasure prevents 'new T()'
@@ -264,7 +266,7 @@ public final class TestData
          * @param type The DataType enum value (ENTITY or RECORD)
          * @return The Class object representing the specified type, or null if type is unrecognized
          */
-        public static Class<? extends dat.TestPackage.TestData.DataUnit> getUnitClass(DataType type){
+        static Class<? extends dat.TestPackage.TestData.DataUnit> getUnitClass(DataType type){
             // Check if the requested type is ENTITY
             if (type == DataType.ENTITY) return dat.TestPackage.TestData.Entity.class;
             // Check if the requested type is RECORD
@@ -275,7 +277,7 @@ public final class TestData
 
         // ########################{Constructor Methods}######################################
 
-        /**
+        /***************************************************************************************************************
          * Factory method for creating DataUnit instances (Entity or Record).
          *
          * <p>This is the primary constructor method that determines which concrete type
@@ -284,21 +286,52 @@ public final class TestData
          * <p><b>Important:</b> When creating an ENTITY, the ID will not be generated
          * until the entity is persisted through JPA. Use a DAO persist method for ID generation.</p>
          *
-         * @param data The type of data unit to create (ENTITY or RECORD)
+         * @param dataType The type of data unit to create (ENTITY or RECORD)
          * @param name The name to assign to the created instance
          * @return A new DataUnit instance (either Entity or Record), or null if type is unrecognized
-         */
-        public static dat.TestPackage.TestData.DataUnit
-        constructor(dat.TestPackage.TestData.DataType data, String name)
+         **************************************************************************************************************/
+        public static dat.TestPackage.TestData.Record
+        constructor(dat.TestPackage.TestData.DataType dataType, String name)
         {
             // Check if a Record should be created
-            if (data.equals(dat.TestPackage.TestData.DataType.RECORD)) return new dat.TestPackage.TestData.Record(name);
+            if (dataType == dat.TestPackage.TestData.DataType.RECORD) {
+                return new dat.TestPackage.TestData.Record(name);
+            }
 
+            // Return null for unrecognized types
+            return null;
+        }
+
+        public static dat.TestPackage.TestData.DataUnit
+        constructor(boolean trueIsRecord_falseIsEntity, String name)
+        {
+            if (trueIsRecord_falseIsEntity)
+            {
+                    return new dat.TestPackage.TestData.Entity(name);
+            }
+            else
+            {
+                return new dat.TestPackage.TestData.Record(name);
+            }
             // Check if an Entity should be created
             // Note: ID generation requires JPA persistence - use DAO methods
-            if (data.equals(dat.TestPackage.TestData.DataType.ENTITY)) return new dat.TestPackage.TestData.Entity(name);
+        }
 
-            // Return null for unrecognized types (unreachable in normal operation)
+        public static dat.TestPackage.TestData.DataUnit
+        constructor(dat.TestPackage.TestData.DataType dataType, java.lang.Integer id, String name)
+        {
+            // Check if an Entity should be created with ID
+            if (dataType == dat.TestPackage.TestData.DataType.ENTITY) {
+                dat.TestPackage.TestData.Entity entity = new dat.TestPackage.TestData.Entity(name);
+                entity.id = id;
+                return entity;
+            }
+
+            // Check if a Record should be created with ID
+            if (dataType == dat.TestPackage.TestData.DataType.RECORD) {
+                return new dat.TestPackage.TestData.Record(id, name);
+            }
+            // Return null for unrecognized types
             return null;
         }
 
@@ -312,26 +345,64 @@ public final class TestData
          * @return The Entity class reference if the data represents an entity, null otherwise
          */
         public static Class<? extends dat.TestPackage.TestData.Entity>
-        dataTypeToEntity(dat.TestPackage.TestData.DataUnit data)
+        dataUnitToEntity(dat.TestPackage.TestData.DataUnit data)
         {
-            // Check if the data unit is an entity type
-            if (data.equals(dat.TestPackage.TestData.OperationType.ENTITY)) return dat.TestPackage.TestData.Entity.class;
-            else return null;
+            // TODO {TLDR}: Checks if the data unit is a entity type, and return Entity.class if it is indeed a record type.
+            // TODO {TLDR}: If anythings fails return null;
+
+            if (data.   // performs an operation on the @param data
+                    equals(dat. // Checks if @param equals something inside dat (super-package)
+                                TestPackage.    // Checks if @param equals something inside TestPackage (sub-package)
+                                            TestData.   // Checks if @param equals something inside TestData (super-class {public final class})
+                                                    OperationType.ENTITY)) return dat.  // Checks if @param equals ENTITY inside OperationType (sub-class {enum}})
+                                                                                    TestPackage.    // If @param equals OperationType.ENTITY @return something inside dat.TestPackage
+                                                                                                TestData.   // If @param equals OperationType.ENTITY @return something inside data.TestPackage.TestData
+                                                                                                        Entity. // If @param equals OperationType.ENTITY @return something inside data.TestPackage.TestData.Entity
+                                                                                                                class;  // If every step was successful @return data.TestPackage.TestData.Entity.class
+            else return null; // If any of the steps above-mentioned fails return null
         }
 
+
         /**
-         * Converts a DataType enum to a Record class reference.
+         * Converts a DataUnit to a Record class reference.
          *
-         * @param data The DataType enum value to check
-         * @return The Record class reference if data is RECORD type, null otherwise
+         * <p><b>Warning:</b> This method appears to have a logic issue - it compares
+         * a DataUnit against OperationType.RECORD instead of DataType.RECORD.</p>
+         *
+         * @param data The DataUnit to convert
+         * @return The Record class reference if the data represents a record, null otherwise
          */
-        public static Class<? extends Record>
-        dataTypeToRecord(dat.TestPackage.TestData.DataType data)
+        public static Class<? extends dat.TestPackage.TestData.Record>
+        dataUnitToRecord(dat.TestPackage.TestData.DataUnit data)
         {
-            // Check if the data type is RECORD
-            if (data.equals(dat.TestPackage.TestData.DataType.RECORD)) return (Record.class);
-            else return null;
+            // TODO {TLDR}: Checks if the data unit is a record type, and return Record.class if it is indeed a record type.
+            // TODO {TLDR}: If anythings fails return null;
+
+            if (data. // performs an operation on the @param data
+                    equals(dat. // Checks if @param equals something inside dat (super-package)
+                                TestPackage.    // Checks if @param equals something inside TestPackage (sub-package)
+                                            TestData.   // Checks if @param equals something inside TestData (super-class {public final class})
+                                                    OperationType.RECORD)) return dat. // Checks if @param equals RECORD inside OperationType (sub-class {enum}})
+                                                                                        TestPackage. // If @param equals OperationType.RECORD @return something inside dat.TestPackage
+                                                                                                    TestData.   // If @param equals OperationType.RECORD @return something inside data.TestPackage.TestData
+                                                                                                            Record. // If @param equals OperationType.RECORD @return something inside data.TestPackage.TestData.Record
+                                                                                                                    class; // If every step was successful @return data.TestPackage.TestData.Record.class
+            else return null;   // If any of the steps above-mentioned fails return null
         }
+
+//        /**
+//         * Converts a DataType enum to a Record class reference.
+//         *
+//         * @param data The DataType enum value to check
+//         * @return The Record class reference if data is RECORD type, null otherwise
+//         */
+//        public static Class<? extends Record>
+//        dataUnitToRecord(dat.TestPackage.TestData.DataType data)
+//        {
+//            // Check if the data type is RECORD
+//            if (data.equals(dat.TestPackage.TestData.DataType.RECORD)) return (Record.class);
+//            else return null;
+//        }
 
         // ########################{Global Methods}######################################
 
@@ -360,7 +431,7 @@ public final class TestData
          */
         @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = {dat.TestPackage.TestData.OperationType.UPDATE}, dependsOn = {dat.TestPackage.TestData.Entity.class})
         public static void
-        putGlobalEntity(dat.TestPackage.TestData.Entity value)
+        putEntity(dat.TestPackage.TestData.Entity value)
         {
             // Update the global entity reference
             globalEntity = value;
@@ -373,7 +444,7 @@ public final class TestData
          */
         @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.READ)
         public static dat.TestPackage.TestData.Record
-        getGlobalRecord()
+        getRecord()
         {
             return globalRecord;
         }
@@ -384,11 +455,12 @@ public final class TestData
          * @param value The Record class to set as the global record
          */
         @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = {dat.TestPackage.TestData.Record.class})
-        public static void
-        putGlobalRecord(dat.TestPackage.TestData.Record value)
+        public static dat.TestPackage.TestData.Record
+        putRecord(dat.TestPackage.TestData.Record value)
         {
             // Update the global record reference
             globalRecord = value;
+            return value;
         }
 
         // ########################{Record Methods}######################################
@@ -402,13 +474,13 @@ public final class TestData
          * @param name The name for the new record
          * @return A new Record instance with null ID
          */
-        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = java.lang.Integer.class)
-        public static dat.TestPackage.TestData.Record
-        putRecord(java.lang.String name)
-        {
-            // Create and return a new Record with null ID
-            return new dat.TestPackage.TestData.Record(name);
-        }
+//        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.UPDATE, dependsOn = java.lang.Integer.class)
+//        public static dat.TestPackage.TestData.Record
+//        putRecord(java.lang.String name)
+//        {
+//            // Create and return a new Record with null ID
+//            return new dat.TestPackage.TestData.Record(name);
+//        }
 
         /**
          * Creates a new Record with both ID and name.
@@ -424,7 +496,7 @@ public final class TestData
         putRecord(java.lang.Integer id, java.lang.String name)
         {
             // Create and return a new Record with both ID and name
-            return new TestData.Record(id, name);
+            return new dat.TestPackage.TestData.Record(id, name);
         }
 
         /**
@@ -586,7 +658,7 @@ public final class TestData
             // Call canonical constructor with null ID
             this(null,name, dat.TestPackage.TestData.DataType.RECORD);
             // Register this record as the global record
-            dat.TestPackage.TestData.Methods.putGlobalRecord(this);
+            dat.TestPackage.TestData.Methods.putRecord(this);
         }
 
         /**
@@ -604,7 +676,7 @@ public final class TestData
             // Call canonical constructor with provided ID and name
             this(id, name, dat.TestPackage.TestData.DataType.RECORD);
             // Register this record as the global record
-            dat.TestPackage.TestData.Methods.putGlobalRecord(this);
+            dat.TestPackage.TestData.Methods.putRecord(this);
         }
     }
 
