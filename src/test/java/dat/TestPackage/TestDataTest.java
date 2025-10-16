@@ -112,8 +112,9 @@ class TestDataTest {
     void TestPutGlobalEntity()
     {
         TestData.DataUnit global = TestData.Methods.constructor(TestData.DataType.ENTITY, "GlobalEntity");
-        Class<? extends TestData.Entity> globalEntity = TestData.Methods.dataTypeToEntity(global);
-        TestData.DataUnit entity = TestData.Methods.putGlobalEntity(globalEntity);
+        Class<? extends dat.TestPackage.TestData.DataUnit> globalEntity = TestData.Methods.dataUnitToEntity(global);
+        dat.TestPackage.TestData.Entity test =(dat.TestPackage.TestData.Entity)  dat.TestPackage.TestData.Methods.create(globalEntity);
+        TestData.Methods.putGlobalEntity(test);
     }
 
 }
