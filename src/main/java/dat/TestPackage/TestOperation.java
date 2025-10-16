@@ -7,7 +7,9 @@ package dat.TestPackage;
 
 import java.util.Set;
 
-public final class TestOperation{
+public final class TestOperation<   E extends dat.TestPackage.TestData.Entity,
+                                    R extends dat.TestPackage.TestData.Record,
+                                    I extends java.io.Serializable>{
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -38,43 +40,73 @@ public final class TestOperation{
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
         public jakarta.persistence.EntityManagerFactory emf;
 
-        public class Factory<Entity, DTO, ID>
+        public class Factory<E, R, I>
         {
+            public static abstract class Methods
+            {
+                public static dat.TestPackage.TestOperation.Factory ResourceFactory()
+                {
 
+                }
+            }
+
+            interface Interface
+            {
+                dat.TestPackage.TestOperation.DAO.Interface         createDAO       (jakarta.persistence.EntityManagerFactory   emf);
+                dat.TestPackage.TestOperation.Service.Interface     createService   (DAO.Interface                              dao);
+                dat.TestPackage.TestOperation.Controller.Interface  createController(Service.Interface                          service);
+                dat.TestPackage.TestOperation.Routes.Interface      createRoutes    (Controller.Interface                       routes);
+                dat.TestPackage.TestOperation.Factory               createFactory   (io.javalin.Javalin                         app);
+            }
         }
 
 
-    static class DAO{
-
-         interface Interface
+    static class DAO<E ,R>{
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
+         interface Interface<E, R>
          {
-             dat.TestPackage.TestData.Entity read(java.lang.Integer id);
-            java.util.List<dat.TestPackage.TestData.Entity> readAll();
-             dat.TestPackage.TestData.Entity create(dat.TestPackage.TestData.Entity entity);
-             dat.TestPackage.TestData.Entity update(dat.TestPackage.TestData.Entity entity, java.lang.Integer id);
-            void delete(java.lang.Integer id);
-            boolean validatePrimaryKey(java.lang.Integer id);
+             E read(java.lang.Integer id);
+             java.util.List<E> readAll();
+             E create(E entity);
+             E update(E entity, java.lang.Integer id);
+             void delete(java.lang.Integer id);
+             boolean validatePrimaryKey(java.lang.Integer id);
         }
     }
 
-    static class Service
+    static class Service<E, R, I>
     {
-        interface Interface
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
+        interface Interface<E, R, I>
         {
-            dat.TestPackage.TestData.Record create(dat.TestPackage.TestData.Record dto);
-            dat.TestPackage.TestData.Record read(java.lang.Integer id);
-            dat.TestPackage.TestData.Record update(java.lang.Integer id, dat.TestPackage.TestData.Record dto);
+            R create(R dto);
+            R read(java.lang.Integer id);
+            R update(java.lang.Integer id, R dto);
             void delete(java.lang.Integer id);
-            void delete(dat.TestPackage.TestData.Entity entity);
-            java.util.Set<dat.TestPackage.TestData.Record> readAllDTOs();
-            java.util.Set<dat.TestPackage.TestData.Entity> readAllEntities();
-            dat.TestPackage.TestData.Entity dtoToEntity(dat.TestPackage.TestData.Record dto);
-            dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity);
+            void delete(E entity);
+            java.util.Set<R> readAllDTOs();
+            java.util.Set<E> readAllEntities();
+            E dtoToEntity(R dto);
+            R entityToDTO(E entity);
         }
 
         public class Methods implements dat.TestPackage.TestOperation.Service.Interface
         {
+            private final jakarta.persistence.EntityManagerFactory emf;
+            private final Class<E> entityClass;
+            private final Class<R> recordClass;
+            private final Class<I> idClass;
 
+            public Methods( jakarta.persistence.EntityManagerFactory    emf,
+                            Class<E>                                    entityClass,
+                            Class<R>                                    recordClass,
+                            Class<I>                                    idClass)
+            {
+                this.emf            = emf;
+                this.entityClass    = entityClass;
+                this.recordClass    = recordClass;
+                this.idClass        = idClass;
+            }
 
             public dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity)
             {
@@ -86,7 +118,7 @@ public final class TestOperation{
                                                     Methods.    // find a method within 'dat.TestPackage.TestData.Methods'.
                                                             entityToRecord(entity); // Use 'entityToRecord' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Record' based on @param.
                 }
-                else return null;   // return null if @param is null OR any of the above-mentioned steps fail
+                else return null;   // return null if @param is null OR any of the steps above fail
             }
 
             public dat.TestPackage.TestData.Entity dtoToEntity(dat.TestPackage.TestData.Record record)
@@ -99,7 +131,7 @@ public final class TestOperation{
                                                     Methods.   // find a method within 'dat.TestPackage.TestData.Methods'.
                                                             recordToEntity(record); // Use 'recordToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
                 }
-                else return null; // return null if @param is null OR any of the above-mentioned steps fail
+                else return null; // return null if @param is null OR any of the steps above fail
             }
         }
 
@@ -109,7 +141,7 @@ public final class TestOperation{
 
     static class Controller
     {
-
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Controller.class);
         interface Interface
         {
             void read(io.javalin.http.Context ctx);
@@ -122,7 +154,15 @@ public final class TestOperation{
         }
     }
 
-    static class Routes{}
+    static class Routes
+    {
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Routes.class);
+
+        interface Interface
+        {
+            void AddRoutes(io.javalin.Javalin app);
+        }
+    }
 
 
 
