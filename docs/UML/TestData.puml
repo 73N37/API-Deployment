@@ -2,20 +2,45 @@
 'https://plantuml.com/class-diagram
 
 'abstract class Methods
-abstract Methods
-Class Entity
-Record Record
-interface List
-interface Collection
-class TestData
+abstract Methods implements Interface
+class Entity implements DataUnit
+record Record implements DataUnit
+interface Interface
+interface DataUnit
 
 class TestData{
 'Global Fields
-- static Class<? extends Entity> globalEntity
-- static Class<? extends Record> globalRecord
-- static Class<? extends Methods> globalMethods
+- Entity globalEntity
+- Record globalRecord
++ TestData instance
 
-+ abstract class Methods{}
+- TestData()
++ TestData getInstance()
++ abstract class Methods()
+- interface Interface()
+- class Entity()
+}
+
+class Entity{
+- Integer id
+- String name
+Entity(String name)
+- Integer getId()
++ toString()
+}
+
+abstract class Methods{
+- Methods()
+- <Data extends DataUnit> create(Class<Data>)
+- Class<? extends DataUnit> getUnitClass(DataType type)
++ DataUnit constructor(DataType data, String name)
++ Class<? extends Entity> dataUnitToEntity(DataUnit data)
++ Class<? extends Record> dataUnitToRecord(DataUnit data)
++ Entity getEntity()
++ putEntity(Entity value)
++ Record getRecord()
++ putRecord(Record value)
++ Record putRecord
 }
 
 @enduml
