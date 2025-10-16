@@ -5,12 +5,9 @@ package dat.TestPackage;
             is through my Methods class
  */
 
+import java.util.Set;
 
-import jakarta.persistence.EntityManagerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public final class TestOperation {
+public final class TestOperation{
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -38,26 +35,93 @@ public final class TestOperation {
  */
 
 
-        private static final Logger log = LoggerFactory.getLogger(TestOperation.class);
-        public EntityManagerFactory emf;
-        //lombok.var test
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
+        public jakarta.persistence.EntityManagerFactory emf;
+
+        public class Factory<Entity, DTO, ID>
+        {
+
+        }
+
 
     static class DAO{
 
-
-         interface Interface<Entity, ID>
+         interface Interface
          {
-            Entity read(ID id);
-            java.util.List<Entity> readAll();
-            Entity create(Entity entity);
-            Entity update(Entity entity, ID id);
-            void delete(ID id);
-            boolean validatePrimaryKey(ID id);
+             dat.TestPackage.TestData.Entity read(java.lang.Integer id);
+            java.util.List<dat.TestPackage.TestData.Entity> readAll();
+             dat.TestPackage.TestData.Entity create(dat.TestPackage.TestData.Entity entity);
+             dat.TestPackage.TestData.Entity update(dat.TestPackage.TestData.Entity entity, java.lang.Integer id);
+            void delete(java.lang.Integer id);
+            boolean validatePrimaryKey(java.lang.Integer id);
         }
     }
 
-    static class Service{}
-    static class Controller{}
+    static class Service
+    {
+        interface Interface
+        {
+            dat.TestPackage.TestData.Record create(dat.TestPackage.TestData.Record dto);
+            dat.TestPackage.TestData.Record read(java.lang.Integer id);
+            dat.TestPackage.TestData.Record update(java.lang.Integer id, dat.TestPackage.TestData.Record dto);
+            void delete(java.lang.Integer id);
+            void delete(dat.TestPackage.TestData.Entity entity);
+            java.util.Set<dat.TestPackage.TestData.Record> readAllDTOs();
+            java.util.Set<dat.TestPackage.TestData.Entity> readAllEntities();
+            dat.TestPackage.TestData.Entity dtoToEntity(dat.TestPackage.TestData.Record dto);
+            dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity);
+        }
+
+        public class Methods implements dat.TestPackage.TestOperation.Service.Interface
+        {
+
+
+            public dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity)
+            {
+                if(entity != null)
+                {
+                    return dat.     // return something that lives in 'dat' (super-package).
+                                TestPackage.    // return something that lives in 'dat.TestPackage' (sub-package).
+                                            TestData.   // return something that lives in 'dat.TestPackage.TestData'.
+                                                    Methods.    // find a method within 'dat.TestPackage.TestData.Methods'.
+                                                            entityToRecord(entity); // Use 'entityToRecord' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Record' based on @param.
+                }
+                else return null;   // return null if @param is null OR any of the above-mentioned steps fail
+            }
+
+            public dat.TestPackage.TestData.Entity dtoToEntity(dat.TestPackage.TestData.Record record)
+            {
+                if(record != null)
+                {
+                    return dat.     // return something that lives in 'dat' (super-package).
+                                TestPackage.    // return something that lives in 'dat.TestPackage' (sub-package).
+                                            TestData.   // return something that lives in 'dat.TestPackage.TestData'.
+                                                    Methods.   // find a method within 'dat.TestPackage.TestData.Methods'.
+                                                            recordToEntity(record); // Use 'recordToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
+                }
+                else return null; // return null if @param is null OR any of the above-mentioned steps fail
+            }
+        }
+
+
+
+    }
+
+    static class Controller
+    {
+
+        interface Interface
+        {
+            void read(io.javalin.http.Context ctx);
+            void readALL(io.javalin.http.Context ctx);
+            void create (io.javalin.http.Context ctx);
+            void update(io.javalin.http.Context ctx);
+            void delete(io.javalin.http.Context ctx);
+            boolean validatePrimaryKey(java.lang.Integer id);
+            dat.TestPackage.TestData.Entity validateEntity(io.javalin.http.Context ctx);
+        }
+    }
+
     static class Routes{}
 
 
