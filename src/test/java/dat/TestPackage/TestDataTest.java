@@ -22,7 +22,6 @@ class TestDataTest {
         assertSame(instance1, instance2);
     }
 
-
     @Test
     void testGetUnitClassForEntity()
     {
@@ -31,7 +30,6 @@ class TestDataTest {
         assertEquals("Entity", clazz.getSimpleName());
     }
 
-
     @Test
     void testGetUnitClassForRecord()
     {
@@ -39,7 +37,6 @@ class TestDataTest {
         assertNotNull(clazz);
         assertEquals("Record", clazz.getSimpleName());
     }
-
 
     @Test
     void testConstructorCreatesEntity()
@@ -65,19 +62,19 @@ class TestDataTest {
         assertNotNull(entity);
     }
 
-
     @Test
     void testGetGlobalRecordReturnsGlobalRecord()
     {
         TestData.Methods.constructor(TestData.DataType.RECORD, "GlobalRecord");
-        TestData.Record record = TestData.Methods.getGlobalRecord();
+        TestData.Record record = TestData.Methods.getRecord();
         assertNotNull(record);
     }
 
     @Test
     void testPutRecordWithNameOnly()
     {
-        TestData.DataUnit record = TestData.Methods.putRecord("NewRecord");
+        TestData.DataUnit test = dat.TestPackage.TestData.Methods.constructor( true, "NewRecord");
+        TestData.DataUnit record = TestData.Methods.putRecord((dat.TestPackage.TestData.Record) test);
         assertNotNull(record);
         assertEquals("NewRecord", TestData.Methods.getRecordName());
     }
@@ -87,7 +84,7 @@ class TestDataTest {
     {
         TestData.DataUnit record = TestData.Methods.putRecord(42, "RecordWithId");
         assertNotNull(record);
-        Integer id = TestData.Methods.getId((TestData.DataUnit) record);
+        Integer id = TestData.Methods.getId( record);
         assertEquals(42, id);
     }
 
@@ -95,7 +92,7 @@ class TestDataTest {
     void testGetIdFromRecord()
     {
         TestData.DataUnit record = TestData.Methods.putRecord(100, "TestRecord");
-        Integer id = TestData.Methods.getId((TestData.DataUnit) record);
+        Integer id = TestData.Methods.getId(record);
         assertEquals(100, id);
     }
 
@@ -114,7 +111,17 @@ class TestDataTest {
         TestData.DataUnit global = TestData.Methods.constructor(TestData.DataType.ENTITY, "GlobalEntity");
         Class<? extends dat.TestPackage.TestData.DataUnit> globalEntity = TestData.Methods.dataUnitToEntity(global);
         dat.TestPackage.TestData.Entity test =(dat.TestPackage.TestData.Entity)  dat.TestPackage.TestData.Methods.create(globalEntity);
-        TestData.Methods.putGlobalEntity(test);
+        TestData.Methods.putEntity(test);
+        assertEquals(global, TestData.getGlobalEntity());
     }
 
+    @Test
+    void TestPutGlobalRecord()
+    {
+        TestData.DataUnit global = TestData.Methods.constructor(TestData.DataType.RECORD, "GlobalRecord");
+        Class<? extends dat.TestPackage.TestData.DataUnit> globalRecord = TestData.Methods.dataUnitToEntity(global);
+        dat.TestPackage.TestData.Record test =(dat.TestPackage.TestData.Record)  dat.TestPackage.TestData.Methods.create(globalRecord);
+        TestData.Methods.putRecord(test);
+        assertEquals(global, TestData.getGlobalRecord());
+    }
 }

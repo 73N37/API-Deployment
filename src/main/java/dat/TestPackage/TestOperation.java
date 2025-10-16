@@ -45,7 +45,8 @@ public final class TestOperation {
     static class DAO{
 
 
-         interface Interface<Entity, ID>{
+         interface Interface<Entity, ID>
+         {
             Entity read(ID id);
             java.util.List<Entity> readAll();
             Entity create(Entity entity);
