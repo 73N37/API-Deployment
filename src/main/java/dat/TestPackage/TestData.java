@@ -59,7 +59,7 @@ public final class TestData
         The ONLY way to access them is though my entity methods
     */
 
-    private static java.lang.Integer id;
+    private static java.lang.Integer globalId;
 
     // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
     @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true,
@@ -90,8 +90,7 @@ public final class TestData
      * Private constructor to prevent direct instantiation.
      * Use getInstance() method to obtain the singleton instance.
      */
-    @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true,
-                                            value               = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
+    @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true)
     TestData(){}
 
     /**
@@ -102,8 +101,7 @@ public final class TestData
      *
      * @return The singleton TestData instance
      */
-    @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true,
-                                            value               = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
+    @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true)
     public TestData getInstance()
     {
         // Check if instance has been created yet
@@ -123,14 +121,8 @@ public final class TestData
      * and immutable records without forcing inheritance constraints.</p>
      */
     interface DataUnit {
-        // This interface is just a super-class.
-        // Since records cant extend from abstract classes,
-        // This is a functional-interface since it only has 1 method
-        @dat.TestPackage.TestData.Annotation(value = {dat.TestPackage.TestData.OperationType.FIELD})
-        static java.lang.Integer getId()
-        {
-            return dat.TestPackage.TestData.id;
-        }
+        // This interface is just a super-class to Record & Entity.
+        // Since records cant extend from abstract classes, it must be an interface.
     }
 
     /**
@@ -178,8 +170,7 @@ public final class TestData
          *
          * @param name The name to assign to this entity
          */
-        @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true,
-                                                value               = {dat.TestPackage.TestData.OperationType.CONSTRUCTOR})
+        @dat.TestPackage.TestData.Annotation(   requiresGlobalState = true)
         Entity(java.lang.String   name)
         {
             // Assign the provided name to the instance field
@@ -187,12 +178,13 @@ public final class TestData
             // Register this entity's class as the current global entity
             globalEntity =  this;
         }
-        
+
         /**
          * Retrieves the ID of this entity.
          *
          * @return The entity's ID, or null if not yet persisted
          */
+        @dat.TestPackage.TestData.Annotation(   value = {dat.TestPackage.TestData.OperationType.METHOD})
         static java.lang.Integer
         getId()
         {
@@ -204,6 +196,7 @@ public final class TestData
          *
          * @return A formatted string in the format "ID = {id}, Name = {name}"
          */
+        @dat.TestPackage.TestData.Annotation(   value = {dat.TestPackage.TestData.OperationType.METHOD})
         @Override
         public java.lang.String toString(){
 
@@ -234,7 +227,7 @@ public final class TestData
      *   <li><b>Conversion Methods:</b> Transform between Entity and Record types</li>
      * </ul>
      */
-    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true)
+    @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.CLASS)
     public abstract static class Methods implements dat.TestPackage.TestData.Interface
     {
         /**
@@ -260,6 +253,7 @@ public final class TestData
          * @return A new instance of the specified type
          * @throws IllegalArgumentException if the type cannot be instantiated (no accessible no-arg constructor)
          */
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.METHOD)
          static <Data extends dat.TestPackage.TestData.DataUnit> Data create(java.lang.Class<Data> type) {
             try {
                 // Uses reflection to invoke the no-argument cnstructor
@@ -279,6 +273,7 @@ public final class TestData
          * @param type The DataType enum value (ENTITY or RECORD)
          * @return The Class object representing the specified type, or null if type is unrecognized
          */
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.METHOD)
         static java.lang.Class<? extends dat.TestPackage.TestData.DataUnit> getUnitClass(DataType type){
             // Check if the requested type is ENTITY
             if (type == dat.TestPackage.TestData.DataType.ENTITY) return dat.TestPackage.TestData.Entity.class;
@@ -289,46 +284,34 @@ public final class TestData
         }
 
         // ########################{Constructor Methods}######################################
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
         public static dat.TestPackage.TestData.Record
         recordConstructor(java.lang.String name)
         {
             return new dat. // return something that lives in 'dat' (super-package)
-                    TestPackage.    // return something that lives in 'dat.TestPackage' (sub.package)
-                    TestData.   // return something that lives in 'dat.TestPackage.TestData (super-class)
-                    Record(name);   // @return a new instance of 'Record' (sub-class)
+                            TestPackage.    // return something that lives in 'dat.TestPackage' (sub.package)
+                                        TestData.   // return something that lives in 'dat.TestPackage.TestData (super-class)
+                                                Record(name);   // @return a new instance of 'Record' (sub-class)
         }
 
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
+        public static dat.TestPackage.TestData.Record
+        recordConstructor(java.lang.Integer id, java.lang.String name)
+        {
+            return new dat. // return something that lives in 'dat' (super-package)
+                    TestPackage.    // return something that lives in 'dat.TestPackage' (sub-package)
+                    TestData.   // return something that lives in 'dat.TestPackage.TestData' (super-class)
+                    Record(id, name);   // @return a new instance of 'Record' (sub-class)
+        }
+
+        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
         public static dat.TestPackage.TestData.Entity
         entityConstructor(java.lang.String name)
         {
             return new dat. // return something that lives in the 'dat' (super-package)
-                    TestPackage.    // return something that lives in  'dat.TestPackage' (sub-package)
-                    TestData.   // return something that lives in 'dat.TestPackage.TestData' (super-class)
-                    Entity(name);   // @return a new instance of 'Entity' (sub-class)
-        }
-
-
-        public static dat.TestPackage.TestData.DataUnit
-        constructor(dat.TestPackage.TestData.DataType dataType, java.lang.Integer id, String name)
-        {
-            // Check if an Entity should be created with ID
-            if (dataType.equals(dat.    // Checks if  @param 'dataType' equals something that lives in 'dat' (super-package)
-                                TestPackage.    // Checks if @param 'dataType' equals something that lives in 'dat.TestPackage' (sub-package)
-                                            TestData.   // Checks if @param 'dataType' equals something that lives in 'dat.TestPackage.TestData' (super-class)
-                                                    DataType.   // Checks if @param 'dataType equals something that lives in 'dat.TestPackage.TestData.DataType' (sub-class [enum])
-                                                            ENTITY)) // Checks if 'dataType'
-            {   // Since every check has passed the next code block will be executed
-                dat.TestPackage.TestData.Entity entity = new dat.TestPackage.TestData.Entity(name);
-                entity.id = id;
-                return entity;
-            }
-
-            // Check if a Record should be created with ID
-            if (dataType == dat.TestPackage.TestData.DataType.RECORD) {
-                return new dat.TestPackage.TestData.Record(id, name);
-            }
-            // Return null for unrecognized types
-            return null;
+                            TestPackage.    // return something that lives in  'dat.TestPackage' (sub-package)
+                                        TestData.   // return something that lives in 'dat.TestPackage.TestData' (super-class)
+                                                Entity(name);   // @return a new instance of 'Entity' (sub-class)
         }
 
         /**
@@ -625,7 +608,6 @@ public final class TestData
      * @param name The name/label for this record
      * @param record The DataType enum value (always RECORD for this type)
      */
-    @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR)
     record Record(java.lang.Integer id, java.lang.String name, dat.TestPackage.TestData.DataType record) implements DataUnit
     {
         /**
@@ -636,7 +618,7 @@ public final class TestData
          *
          * @param name The name for this record
          */
-        @dat.TestPackage.TestData.Annotation( value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR, dependsOn = {java.lang.String.class})
+        @dat.TestPackage.TestData.Annotation( dependsOn = {java.lang.String.class})
         private Record(java.lang.String name)
         {
             // Call canonical constructor with null ID
@@ -654,7 +636,7 @@ public final class TestData
          * @param id The unique identifier for this record
          * @param name The name for this record
          */
-        @dat.TestPackage.TestData.Annotation(value = dat.TestPackage.TestData.OperationType.CONSTRUCTOR, dependsOn = {java.lang.String.class, java.lang.Integer.class})
+        @dat.TestPackage.TestData.Annotation( dependsOn = {java.lang.String.class, java.lang.Integer.class})
         private Record(java.lang.Integer id, java.lang.String name)
         {
             // Call canonical constructor with provided ID and name
