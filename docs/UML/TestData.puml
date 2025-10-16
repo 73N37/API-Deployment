@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'abstract class Methods
+abstract Methods
+Class Entity
+Record Record
+interface List
+interface Collection
+class TestData
+
+class TestData{
+'Global Fields
+- static Class<? extends Entity> globalEntity
+- static Class<? extends Record> globalRecord
+- static Class<? extends Methods> globalMethods
+
++ abstract class Methods{}
+}
+
+@enduml
