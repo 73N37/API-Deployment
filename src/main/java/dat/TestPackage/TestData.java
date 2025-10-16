@@ -25,7 +25,7 @@ package dat.TestPackage;
  * @version 1.0
  * @since 2025-10-15
  */
-public final class TestData
+public final class TestData<E extends TestData.Entity, R extends TestData.Record>
 {
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -142,7 +142,7 @@ public final class TestData
      */
     @dat.TestPackage.TestData.Annotation(   value        = {dat.TestPackage.TestData.OperationType.CLASS},
                                             dataUnitType = {dat.TestPackage.TestData.DataType.ENTITY})
-    static class Entity implements DataUnit
+    protected static class Entity implements DataUnit
     {
         /**
          * Primary key identifier for the entity.
@@ -228,8 +228,14 @@ public final class TestData
      * </ul>
      */
     @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.CLASS)
-    public abstract static class Methods implements dat.TestPackage.TestData.Interface
+    public abstract static class Methods<E extends TestData.Entity, R extends TestData.Record> implements dat.TestPackage.TestData.Interface
     {
+        // Common CRUD methods that needs to implemented in the sub-class
+        public abstract R create(R record);
+        public abstract R read(java.lang.Integer id);
+        public abstract R update(java.lang.Integer id, R record);
+        public abstract void delete(java.lang.Integer id);
+
         /**
          * Private constructor prevents instantiation.
          * All methods in this class are static and should be accessed without creating instances.
@@ -608,7 +614,7 @@ public final class TestData
      * @param name The name/label for this record
      * @param record The DataType enum value (always RECORD for this type)
      */
-    record Record(java.lang.Integer id, java.lang.String name, dat.TestPackage.TestData.DataType record) implements DataUnit
+    protected record Record(java.lang.Integer id, java.lang.String name, dat.TestPackage.TestData.DataType record) implements DataUnit
     {
         /**
          * Constructs a Record with only a name (ID will be null).

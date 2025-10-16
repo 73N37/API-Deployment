@@ -24,8 +24,8 @@ public class Main
 
         app.start(7070);
 
-        System.out.println("Record Data = " + dat.TestPackage.TestData.Methods.constructor(dat.TestPackage.TestData.DataType.RECORD, "Through hard work comes EXCELLENCE"));
-        System.out.println("Entity Data = " + dat.TestPackage.TestData.Methods.constructor(dat.TestPackage.TestData.DataType.ENTITY, "Merovingian"));
+        System.out.println("Record Data = " + dat.TestPackage.TestData.Methods.constructor(true, "Through hard work comes EXCELLENCE"));
+        System.out.println("Entity Data = " + dat.TestPackage.TestData.Methods.constructor(false, "Merovingian"));
         System.out.println(("globalEntity Name = {Merovingian} = " + dat.TestPackage.TestData.Methods.getEntity()));
         System.out.println("globalRecord Name {Through hard work comes EXCELLENCE}, " + dat.TestPackage.TestData.Methods.getRecord());
         System.out.println("=== MAIN IS COMPLETE ===");
