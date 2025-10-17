@@ -40,7 +40,9 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
         public jakarta.persistence.EntityManagerFactory emf;
 
-        public class Factory<Entity, Record, Id>
+        public class Factory<   Entity  extends dat.TestPackage.TestData.Entity,
+                                Record  extends dat.TestPackage.TestData.Record,
+                                Id      extends java.io.Serializable>
         {
             public static abstract class Methods
             {
