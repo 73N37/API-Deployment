@@ -7,9 +7,9 @@ package dat.TestPackage;
 
 import java.util.Set;
 
-public final class TestOperation<   E extends dat.TestPackage.TestData.Entity,
-                                    R extends dat.TestPackage.TestData.Record,
-                                    I extends java.io.Serializable>{
+public final class TestOperation<   Entity extends dat.TestPackage.TestData.Entity,
+                                    Record extends dat.TestPackage.TestData.Record,
+                                    Id extends java.io.Serializable>{
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -40,7 +40,7 @@ public final class TestOperation<   E extends dat.TestPackage.TestData.Entity,
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
         public jakarta.persistence.EntityManagerFactory emf;
 
-        public class Factory<E, R, I>
+        public class Factory<Entity, Record, Id>
         {
             public static abstract class Methods
             {
@@ -61,52 +61,62 @@ public final class TestOperation<   E extends dat.TestPackage.TestData.Entity,
         }
 
 
-    static class DAO<E ,R>{
+    static class DAO<   Entity  extends dat.TestPackage.TestData.Entity,
+                        Id      extends java.io.Serializable>{
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
-         interface Interface<E, R>
+         interface Interface<Entity, Id>
          {
-             E read(java.lang.Integer id);
-             java.util.List<E> readAll();
-             E create(E entity);
-             E update(E entity, java.lang.Integer id);
-             void delete(java.lang.Integer id);
-             boolean validatePrimaryKey(java.lang.Integer id);
+             Entity read(Id id);
+             java.util.List<Entity> readAll();
+             Entity create(Entity entity);
+             Entity update(Entity entity, Id id);
+             void delete(Id id);
+             boolean validatePrimaryKey(Id id);
         }
     }
 
-    static class Service<E, R, I>
+    static class Service<   Entity  extends dat.TestPackage.TestData.Entity,
+                            Record  extends dat.TestPackage.TestData.Record,
+                            Id      extends java.io.Serializable>
     {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
-        interface Interface<E, R, I>
+        interface Interface<Entity  extends dat.TestPackage.TestData.Entity,
+                            Record  extends dat.TestPackage.TestData.Record,
+                            Id      extends java.io.Serializable>
         {
-            R create(R dto);
-            R read(java.lang.Integer id);
-            R update(java.lang.Integer id, R dto);
-            void delete(java.lang.Integer id);
-            void delete(E entity);
-            java.util.Set<R> readAllDTOs();
-            java.util.Set<E> readAllEntities();
-            E dtoToEntity(R dto);
-            R entityToDTO(E entity);
+            Record create(Record dto);
+            Record read(Id id);
+            Record update(Id id, Record dto);
+            void delete(Id id);
+            void delete(Entity entity);
+            java.util.Set<Record> readAllDTOs();
+            java.util.Set<Entity> readAllEntities();
+            Entity dtoToEntity(Record dto);
+            Record entityToDTO(Entity entity);
         }
 
-        public class Methods implements dat.TestPackage.TestOperation.Service.Interface
+        public class Methods implements dat.TestPackage.TestOperation.Service.Interface,
+                                        dat.TestPackage.TestOperation.DAO.Interface,
+                                        dat.TestPackage.TestOperation.Controller.Interface,
+                                        dat.TestPackage.TestOperation.Routes.Interface
         {
             private final jakarta.persistence.EntityManagerFactory emf;
-            private final Class<E> entityClass;
-            private final Class<R> recordClass;
-            private final Class<I> idClass;
+            private final Class<Entity> entityClass;
+            private final Class<Record> recordClass;
+            private final Class<Id> idClass;
 
             public Methods( jakarta.persistence.EntityManagerFactory    emf,
-                            Class<E>                                    entityClass,
-                            Class<R>                                    recordClass,
-                            Class<I>                                    idClass)
+                            Class<Entity>                               entityClass,
+                            Class<Record>                               recordClass,
+                            Class<Id>                                   idClass)
             {
                 this.emf            = emf;
                 this.entityClass    = entityClass;
                 this.recordClass    = recordClass;
                 this.idClass        = idClass;
             }
+
+
 
             public dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity)
             {
