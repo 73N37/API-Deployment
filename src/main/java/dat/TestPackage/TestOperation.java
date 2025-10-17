@@ -100,10 +100,10 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
                                         dat.TestPackage.TestOperation.Controller.Interface,
                                         dat.TestPackage.TestOperation.Routes.Interface
         {
-            private final jakarta.persistence.EntityManagerFactory emf;
-            private final Class<Entity> entityClass;
-            private final Class<Record> recordClass;
-            private final Class<Id> idClass;
+            private final jakarta.persistence.EntityManagerFactory  emf;
+            private final Class<Entity>                             entityClass;
+            private final Class<Record>                             recordClass;
+            private final Class<Id>                                 idClass;
 
             public Methods( jakarta.persistence.EntityManagerFactory    emf,
                             Class<Entity>                               entityClass,
