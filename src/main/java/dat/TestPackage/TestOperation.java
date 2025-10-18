@@ -9,7 +9,8 @@ import java.util.Set;
 
 public final class TestOperation<   Entity extends dat.TestPackage.TestData.Entity,
                                     Record extends dat.TestPackage.TestData.Record,
-                                    Id extends java.io.Serializable>{
+                                    Id extends java.io.Serializable>
+{   // TestOperation [super-class] begins
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -43,39 +44,49 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         public class Factory<   Entity  extends dat.TestPackage.TestData.Entity,
                                 Record  extends dat.TestPackage.TestData.Record,
                                 Id      extends java.io.Serializable>
-        {
-            public static abstract class Methods
-            {
-                public static dat.TestPackage.TestOperation.Factory ResourceFactory()
-                {
+        {   // Factory [class] begins
+            public static dat.TestPackage.TestOperation.Factory ResourceFactory()
+            {   // ResourceFactory [method] begins
 
-                }
-            }
+            }   // ResourceFactory [method] ends
 
             interface Interface
-            {
-                dat.TestPackage.TestOperation.DAO.Interface         createDAO       (jakarta.persistence.EntityManagerFactory   emf);
-                dat.TestPackage.TestOperation.Service.Interface     createService   (DAO.Interface                              dao);
-                dat.TestPackage.TestOperation.Controller.Interface  createController(Service.Interface                          service);
-                dat.TestPackage.TestOperation.Routes.Interface      createRoutes    (Controller.Interface                       routes);
-                dat.TestPackage.TestOperation.Factory               createFactory   (io.javalin.Javalin                         app);
-            }
-        }
+            {   // Interface begins
+                dat.TestPackage.TestOperation.DAO.Interface createDAO(jakarta.persistence.EntityManagerFactory emf);
+
+                dat.TestPackage.TestOperation.Service.Interface createService(DAO.Interface dao);
+
+                dat.TestPackage.TestOperation.Controller.Interface createController(Service.Interface service);
+
+                dat.TestPackage.TestOperation.Routes.Interface createRoutes(Controller.Interface routes);
+
+                dat.TestPackage.TestOperation.Factory createFactory(io.javalin.Javalin app);
+            }   // Interface [class] ends
+        }   // Factory [class] ends
 
 
     static class DAO<   Entity  extends dat.TestPackage.TestData.Entity,
                         Id      extends java.io.Serializable>
-    {
+    {   // DAO [class] begins
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
-         interface Interface<Entity extends dat.TestPackage.TestData.Entity, Id extends java.io.Serializable>
-         {
+         interface Interface<   Entity  extends dat.TestPackage.TestData.Entity,
+                                Id      extends java.io.Serializable>
+         {  // Interface [class] begins
              Entity read(Id id);
              java.util.List<Entity> readAll();
              Entity create(Entity entity);
              Entity update(Entity entity, Id id);
              void delete(Id id);
              boolean validatePrimaryKey(Id id);
-        }
+        }   // Interface [class] ends
+
+        public abstract static class
+        Methods <   Entity  extends dat.TestPackage.TestData.Entity,
+                    Id      extends java.io.Serializable>
+                implements dat.TestPackage.TestOperation.DAO.Interface
+        {   // Methods class begins
+
+        }   // Method class begins
     }
 
     static class Service<   Entity  extends dat.TestPackage.TestData.Entity,
@@ -97,29 +108,6 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             Entity dtoToEntity(Record dto);
             Record entityToDTO(Entity entity);
         }
-
-        public class Methods implements dat.TestPackage.TestOperation.Service.Interface,
-                                        dat.TestPackage.TestOperation.DAO.Interface,
-                                        dat.TestPackage.TestOperation.Controller.Interface,
-                                        dat.TestPackage.TestOperation.Routes.Interface
-        {
-            private final jakarta.persistence.EntityManagerFactory  emf;
-            private final Class<Entity>                             entityClass;
-            private final Class<Record>                             recordClass;
-            private final Class<Id>                                 idClass;
-
-            public Methods( jakarta.persistence.EntityManagerFactory    emf,
-                            Class<Entity>                               entityClass,
-                            Class<Record>                               recordClass,
-                            Class<Id>                                   idClass)
-            {
-                this.emf            = emf;
-                this.entityClass    = entityClass;
-                this.recordClass    = recordClass;
-                this.idClass        = idClass;
-            }
-
-
 
             public dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity)
             {
@@ -148,10 +136,6 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             }
         }
 
-
-
-    }
-
     static class Controller
     {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Controller.class);
@@ -179,19 +163,22 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
 
 
 
-    static class ApiException extends RuntimeException {
+    static class ApiException extends RuntimeException
+    {
         private final int code;
         private final TestOperation.TestErrorTypes errorType;
         private static String errorMsg;
 
-        public ApiException(int code, String msg) {
+        public ApiException(int code, String msg)
+        {
             super(msg);
             this.code = code;
             this.errorType = TestOperation.TestErrorTypes.getType(code);
             this.errorMsg = errorType.getErrorMessage() + "\n";
         }
 
-        public ApiException(TestOperation.TestErrorTypes errorType, String msg) {
+        public ApiException(TestOperation.TestErrorTypes errorType, String msg)
+        {
             super(msg);
             this.errorType = errorType;
             this.code = errorType.getErrorCode();
@@ -300,21 +287,25 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         }
 
         //TODO: 510 Not extended
-        public static TestOperation.ApiException notExtended(String msg){
+        public static TestOperation.ApiException notExtended(String msg)
+        {   // notExtended(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_EXTENDED, msg + errorMsg);
-        }
+        }   // notExtended(String) [method] ends
 
         //TODO: 511 Network Authentication Required
-        public static TestOperation.ApiException authenticationRequired(String msg){
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.NETWORK_AUTHENTICATION_REQUIRED, msg + errorMsg);
-        }
+        public static TestOperation.ApiException authenticationRequired(String msg)
+        {   // authenticationRequired(String) [method] begins
+            return new dat.TestPackage.TestOperation.ApiException(TestOperation.TestErrorTypes.NETWORK_AUTHENTICATION_REQUIRED, msg + errorMsg);
+        }   // authenticationRequired(String) [method] ends
 
-        public int getStatusCode() {
-            return code;
-        }
+        public int getStatusCode()
+        {   // getStatusCode() [method] begins
+            return this.code;
+        }   // getStatusCode() [method] ends
     }
 
-    enum TestErrorTypes {
+    enum TestErrorTypes
+    {   // TestErrorTypes [enum] begins
         BAD_REQUEST(400, "Bad request"),
         UNAUTHORIZED(401, "Unauthorized Access"),
         FORBIDDEN(403, "Forbidden Access"),
@@ -339,30 +330,35 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         private final int errorCode;
         private final java.lang.String errorMessage;
 
-        TestErrorTypes(int errorCode, java.lang.String errorMsg) {
+        TestErrorTypes(int errorCode, java.lang.String errorMsg)
+        {   // TestErrorTypes(int, String) [constructor] begins
             this.errorCode = errorCode;
             this.errorMessage = errorMsg;
-        }
+        }   // TestErrorTypes(int, String) [constructor] ends
 
-        public int getErrorCode() {
+        public int getErrorCode()
+        {   // getErrorCode() [method] begins
             return errorCode;
-        }
+        }   // getErrorCode() [method] ends
 
 
-        public static TestOperation.TestErrorTypes getType(int errorCode) {
-            for (TestOperation.TestErrorTypes type : TestOperation.TestErrorTypes.values()) {
-                if (type.getErrorCode() == errorCode) {
+        public static dat.TestPackage.TestOperation.TestErrorTypes getType(int errorCode)
+        {   // getType(int) [method] begins
+            for (dat.TestPackage.TestOperation.TestErrorTypes type : dat.TestPackage.TestOperation.TestErrorTypes.values())
+            {   // TestErrorType [for-each] begins
+                if (type.getErrorCode() == errorCode)
+                {   // getErrorCode [if] begins
                     return type;
-                }
-            }
+                }   // getErrorCode [if] ends
+            }   // TestErrorType [for-each] ends
             return null; // or throw an exception if no match found
-        }
+        }   // getType(int) [method] ends
 
-        public String getErrorMessage() {
+        public java.lang.String getErrorMessage()
+        {   // getErrorMessage() [method] begins
             return errorMessage;
-        }
-    }
-
-}
+        }   // getErrorMessage() [method] ends
+    }   // TestErrorType [enum] ends
+}   // TestOperation [super-class] ends
 
 
