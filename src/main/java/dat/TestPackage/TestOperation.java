@@ -135,10 +135,10 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         }
 
     static class Controller
-    {
+    {   // Controller [middle-class] begins
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Controller.class);
         interface Interface
-        {
+        {   // interface [sub-class]
             void read(io.javalin.http.Context ctx);
             void readALL(io.javalin.http.Context ctx);
             void create (io.javalin.http.Context ctx);
@@ -146,18 +146,18 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             void delete(io.javalin.http.Context ctx);
             boolean validatePrimaryKey(java.lang.Integer id);
             dat.TestPackage.TestData.Entity validateEntity(io.javalin.http.Context ctx);
-        }
-    }
+        }   // Interface [sub-class] ends
+    }   // Controller [middle-class] ends
 
     static class Route
-    {   // Route [class] begins
+    {   // Route [middle-lass] begins
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Route.class);
 
         interface Interface
-        {   // Interface [interface] begins
+        {   // Interface [sub-class] begins
             void AddRoutes(io.javalin.Javalin app);
-        }   // Interface [interface] ends
-    }   // Route [class] ends
+        }   // Interface [sub-class] ends
+    }   // Route [middle-class] ends
 
 
 
