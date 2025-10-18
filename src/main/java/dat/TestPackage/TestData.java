@@ -228,7 +228,9 @@ public final class TestData
      * </ul>
      */
     @dat.TestPackage.TestData.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestData.OperationType.CLASS)
-    public abstract static class Methods<E extends TestData.Entity, R extends TestData.Record> implements dat.TestPackage.TestData.Interface
+    public abstract static class
+    Methods<E extends TestData.Entity, R extends TestData.Record>
+            implements dat.TestPackage.TestData.Interface
     {
         // Common CRUD methods that needs to implemented in the sub-class
         public abstract R create(R record);
