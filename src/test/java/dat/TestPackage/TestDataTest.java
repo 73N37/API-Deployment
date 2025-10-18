@@ -10,22 +10,22 @@ class TestDataTest {
     void setUp()
     {
         // Reset global state before each test to avoid test pollution
-        TestData.Methods.entityConstructor("ResetEntity");
-        TestData.Methods.recordConstructor("ResetRecord");
+        TestInformation.Methods.entityConstructor("ResetEntity");
+        TestInformation.Methods.recordConstructor("ResetRecord");
     }
 
     @Test
     void testGetInstanceReturnsSingleton()
     {
-        TestData instance1 = new TestData().getInstance();
-        TestData instance2 = new TestData().getInstance();
+        TestInformation instance1 = new TestInformation().getInstance();
+        TestInformation instance2 = new TestInformation().getInstance();
         assertSame(instance1, instance2);
     }
 
     @Test
     void testGetUnitClassForEntity()
     {
-        Class<?> clazz = TestData.Methods.getUnitClass(TestData.DataType.ENTITY);
+        Class<?> clazz = TestInformation.Methods.getUnitClass(TestInformation.DataType.ENTITY);
         assertNotNull(clazz);
         assertEquals("Entity", clazz.getSimpleName());
     }
@@ -33,7 +33,7 @@ class TestDataTest {
     @Test
     void testGetUnitClassForRecord()
     {
-        Class<?> clazz = TestData.Methods.getUnitClass(TestData.DataType.RECORD);
+        Class<?> clazz = TestInformation.Methods.getUnitClass(TestInformation.DataType.RECORD);
         assertNotNull(clazz);
         assertEquals("Record", clazz.getSimpleName());
     }
@@ -41,77 +41,77 @@ class TestDataTest {
     @Test
     void testConstructorCreatesEntity()
     {
-        dat.TestPackage.TestData.DataUnit entity = TestData.Methods.entityConstructor("TestEntity");
+        TestInformation.DataUnit entity = TestInformation.Methods.entityConstructor("TestEntity");
         assertNotNull(entity, "Constructor should return a non-null entity");
-        assertNotNull(TestData.Methods.getEntity(), "Global entity should be set");
-        assertEquals("TestEntity", TestData.Methods.getEntityName());
+        assertNotNull(TestInformation.Methods.getEntity(), "Global entity should be set");
+        assertEquals("TestEntity", TestInformation.Methods.getEntityName());
     }
 
     @Test
     void testConstructorCreatesRecord()
     {
-        dat.TestPackage.TestData.DataUnit record = TestData.Methods.recordConstructor("TestRecord");
+        TestInformation.DataUnit record = TestInformation.Methods.recordConstructor("TestRecord");
         assertNotNull(record);
-        assertEquals("TestRecord", TestData.Methods.getRecordName());
+        assertEquals("TestRecord", TestInformation.Methods.getRecordName());
     }
 
     @Test
     void testGetEntityReturnsGlobalEntity()
     {
-        TestData.Methods.recordConstructor("GlobalEntity");
-        TestData.DataUnit entity = TestData.Methods.getEntity();
+        TestInformation.Methods.recordConstructor("GlobalEntity");
+        TestInformation.DataUnit entity = TestInformation.Methods.getEntity();
         assertNotNull(entity);
     }
 
     @Test
     void testGetGlobalRecordReturnsGlobalRecord()
     {
-        TestData.Methods.recordConstructor("GlobalRecord");
-        TestData.Record record = TestData.Methods.getRecord();
+        TestInformation.Methods.recordConstructor("GlobalRecord");
+        TestInformation.Record record = TestInformation.Methods.getRecord();
         assertNotNull(record);
     }
 
     @Test
     void testPutRecordWithNameOnly()
     {
-        TestData.DataUnit test = dat.TestPackage.TestData.Methods.recordConstructor( "NewRecord");
-        TestData.DataUnit record = TestData.Methods.putRecord((dat.TestPackage.TestData.Record) test);
+        TestInformation.DataUnit test = TestInformation.Methods.recordConstructor( "NewRecord");
+        TestInformation.DataUnit record = TestInformation.Methods.putRecord((TestInformation.Record) test);
         assertNotNull(record);
-        assertEquals("NewRecord", TestData.Methods.getRecordName());
+        assertEquals("NewRecord", TestInformation.Methods.getRecordName());
     }
 
     @Test
     void testPutRecordWithIdAndName()
     {
-        TestData.DataUnit record = TestData.Methods.putRecord(42, "RecordWithId");
+        TestInformation.DataUnit record = TestInformation.Methods.putRecord(42, "RecordWithId");
         assertNotNull(record);
-        Integer id = TestData.Methods.getId(record);
+        Integer id = TestInformation.Methods.getId(record);
         assertEquals(42, id);
     }
 
     @Test
     void testGetIdFromRecord()
     {
-        TestData.DataUnit record = TestData.Methods.putRecord(100, "TestRecord");
-        Integer id = TestData.Methods.getId(record);
+        TestInformation.DataUnit record = TestInformation.Methods.putRecord(100, "TestRecord");
+        Integer id = TestInformation.Methods.getId(record);
         assertEquals(100, id);
     }
 
     @Test
     void testEntityToRecord()
     {
-        TestData.Methods.entityConstructor("EntityToConvert");
-        TestData.DataUnit entity = TestData.Methods.getEntity();
-        TestData.DataUnit record = TestData.Methods.entityToRecord((TestData.Entity) entity);
+        TestInformation.Methods.entityConstructor("EntityToConvert");
+        TestInformation.DataUnit entity = TestInformation.Methods.getEntity();
+        TestInformation.DataUnit record = TestInformation.Methods.entityToRecord((TestInformation.Entity) entity);
         assertNotNull(record);
     }
 
     @Test
     void TestPutGlobalEntity()
     {
-        dat.TestPackage.TestData.Entity entity = TestData.Methods.entityConstructor("global");
-        dat.TestPackage.TestData.Methods.putEntity(entity);
-        assertEquals(entity, dat.TestPackage.TestData.Methods.getEntity());
+        TestInformation.Entity entity = TestInformation.Methods.entityConstructor("global");
+        TestInformation.Methods.putEntity(entity);
+        assertEquals(entity, TestInformation.Methods.getEntity());
     }
 
     @Test
