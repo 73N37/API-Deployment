@@ -38,11 +38,11 @@ public final class TestOperation
         public jakarta.persistence.EntityManagerFactory emf;
 
         public static class Factory
-        {   // Factory [class] begins
-            protected static final jakarta.persistence.EntityManagerFactory                      emf = dat.Config.HibernateConfig.createEMF(false);
-            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass;
-            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass;
-            protected static java.lang.Class<? extends java.io.Serializable>                     idClass;
+        {   // Factory [middle-class] begins
+            protected static final jakarta.persistence.EntityManagerFactory                     emf = dat.Config.HibernateConfig.createEMF(false);
+            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>  entityClass;
+            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Record>  dtoClass;
+            protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
 
             // Restricted args constructor
             private Factory()
@@ -53,8 +53,8 @@ public final class TestOperation
                                         java.lang.Class<? extends java.io.Serializable>                     idClass)
             {   // Factory [constructor] begins
                 Factory result        = new Factory();  // create a new instance of Factory
-                result.entityClass    = entityClass;       // assigns entityClass to the Factory instance
-                result.idClass        = idClass;           // assigns idClass to the Factory instance
+                result.entityClass = entityClass;       // assigns entityClass to the Factory instance
+                result.idClass = idClass;           // assigns idClass to the Factory instance
                 return result;                             // returns the Factory which now has an idClass & entityClass, as global Fields
             }   // Factory [constructor] ends
 
@@ -62,28 +62,27 @@ public final class TestOperation
                                         java.lang.Class<? extends java.io.Serializable>                     idClass)
             {   // Factory [constructor] begins
                 Factory result      = new Factory ();    // create a new instance of Factory
-                result.dtoClass     = dtoClass;             // assigns dtoClass to the Factory instance
-                result.idClass      = idClass;              // assigns idClass to the factory instance
+                result.dtoClass = dtoClass;             // assigns dtoClass to the Factory instance
+                result.idClass = idClass;              // assigns idClass to the factory instance
                 return result;                              // returns the Factory which now has idClass & dtoClass, as global Fields
             }   // Factory [constructor] ends
 
             // All args constructor
-            public Factory(             java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass,
-                                        java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass,
-                                        java.lang.Class<? extends java.io.Serializable>                     idClass)
+            public Factory(             java.lang.Class<? extends dat.TestPackage.TestInformation.Entity> entityClass,
+                                        java.lang.Class<? extends dat.TestPackage.TestInformation.Record> dtoClass,
+                                        java.lang.Class<? extends java.io.Serializable> idClass)
             {   // Factory [constructor] begins
-                this.entityClass    = entityClass;
-                this.dtoClass       = dtoClass;
-                this.idClass        = idClass;
+                this.entityClass = entityClass;
+                this.dtoClass = dtoClass;
+                this.idClass = idClass;
             }   // Factory [constructor] ends
         }   // Factory [class] ends
 
 
     static class DAO<   Entity  extends TestInformation.Entity,
-                        DTO     extends TestInformation.Record,
                         Id      extends java.io.Serializable>
         extends dat.TestPackage.TestOperation.Factory
-    {   // DAO [class] begins
+    {   // DAO [middle-class] begins
 
         public DAO( java.lang.Class<Entity>                     entityClass,
                     java.lang.Class<Id>                         idClass)
@@ -104,7 +103,7 @@ public final class TestOperation
         }   // Interface [class] ends
 
         public abstract static class
-        Methods <   Entity  extends TestInformation.Entity,
+        Methods <   Entity  extends dat.TestPackage.TestInformation.Entity,
                     Id      extends java.io.Serializable>
                 implements dat.TestPackage.TestOperation.DAO.Interface<Entity, Id>
         {   // Methods class begins
@@ -113,12 +112,11 @@ public final class TestOperation
                 log.debug("Reading/finding entity with id {}", id);
                 try (jakarta.persistence.EntityManager em = emf.createEntityManager())
                 {
-                    java.lang.String jpql = "SELECT a FROM " + entityClass.getSimpleName() + "a WHERE a.id = :id";
-                    Entity entity = em.createQuery(jpql,entityClass)
-                                    .setParameter("id", id)
-                                    .getSingleResult();
+                    java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id";
+                    jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    query.setParameter("id", id);
                     log.debug("Found entity with id {}", id);
-                    return entity;
+                    return query.getSingleResult();
                 } catch (Exception e)
                 {   // catch
 
@@ -130,7 +128,7 @@ public final class TestOperation
     static class Service<   Entity  extends TestInformation.Entity,
                             Record  extends TestInformation.Record,
                             Id      extends java.io.Serializable>
-    {
+    {   // Service [middle-class] begins
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
         interface Interface<Entity  extends TestInformation.Entity,
                             Record  extends TestInformation.Record,
