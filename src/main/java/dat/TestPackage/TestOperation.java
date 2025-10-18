@@ -64,9 +64,10 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
 
 
     static class DAO<   Entity  extends dat.TestPackage.TestData.Entity,
-                        Id      extends java.io.Serializable>{
+                        Id      extends java.io.Serializable>
+    {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
-         interface Interface<Entity, Id>
+         interface Interface<Entity extends dat.TestPackage.TestData.Entity, Id extends java.io.Serializable>
          {
              Entity read(Id id);
              java.util.List<Entity> readAll();
