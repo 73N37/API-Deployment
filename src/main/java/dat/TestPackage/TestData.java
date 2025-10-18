@@ -25,7 +25,7 @@ package dat.TestPackage;
  * @version 1.0
  * @since 2025-10-15
  */
-public final class TestData<E extends TestData.Entity, R extends TestData.Record>
+public final class TestData
 {
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
