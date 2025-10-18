@@ -164,26 +164,26 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
 
 
     static class ApiException extends RuntimeException
-    {
+    {   // ApiException [class] begins
         private final int code;
         private final TestOperation.TestErrorTypes errorType;
         private static String errorMsg;
 
         public ApiException(int code, String msg)
-        {
-            super(msg);
+        {   // ApiException(int, string) [constructor] begins
+            super(msg); // relay msg to 'RuntimeException'
             this.code = code;
             this.errorType = TestOperation.TestErrorTypes.getType(code);
             this.errorMsg = errorType.getErrorMessage() + "\n";
-        }
+        }   // ApiException(int, string) [constructor]
 
         public ApiException(TestOperation.TestErrorTypes errorType, String msg)
-        {
-            super(msg);
+        {   // ApiException(TestErrorTypes, String) [constructor] begins
+            super(msg); // relay msg to 'RuntimeException'
             this.errorType = errorType;
             this.code = errorType.getErrorCode();
             this.errorMsg = errorType.getErrorMessage() + "\n";
-        }
+        }   // ApiException(TestErrorTypes, String) [constructor] ends
 
     /* |----------------------|
        |     CLIENT ERRORS    |
@@ -191,95 +191,113 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
     */
 
         //TODO: 400 bad request
-        public static TestOperation.ApiException badRequest (String msg) {
+        public static TestOperation.ApiException badRequest(String msg)
+        {   // badRequest(String msg) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.BAD_REQUEST, msg + errorMsg);
-        }
+        }   // badRequest(String msg) [method] ends
 
         //TODO: 401 Unauthorized
-        public static TestOperation.ApiException unauthorized (String msg) {
+        public static TestOperation.ApiException unauthorized(String msg)
+        {   // unauthorized(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.UNAUTHORIZED, msg + errorMsg);
-        }
+        }   // unauthorized(String) [method] ends
 
         //TODO: 403 Forbidden Access
-        public static TestOperation.ApiException forbidden (String msg) {
+        public static TestOperation.ApiException forbidden(String msg)
+        {   // forbidden(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.FORBIDDEN, msg + errorMsg);
-        }
+        }   // forbidden(String) [method] ends
 
         //TODO: 404 not found
-        public static TestOperation.ApiException notFound(String msg) {
+        public static TestOperation.ApiException notFound(String msg)
+        {   // notFound(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_FOUND, msg + errorMsg);
-        }
+        }   // notFound(String) [method] ends
 
         //TODO: 405 conflict
-        public static TestOperation.ApiException conflict (String msg) {
+        public static TestOperation.ApiException conflict(String msg)
+        {   // conflict(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.METHOD_NOT_ALLOWED, msg + errorMsg);
-        }
+        }   // conflict(String) [method] ends
 
         //TODO: 406 Not Acceptable
-        public static TestOperation.ApiException notAcceptable (String msg) {
+        public static TestOperation.ApiException notAcceptable (String msg)
+        {   // notAcceptable (String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_ACCEPTABLE, msg + errorMsg);
-        }
+        }   // notAcceptable (String) [method] ends
 
         //TODO: 409 already exists
-        public static TestOperation.ApiException alreadyExists(String msg) {
+        public static TestOperation.ApiException alreadyExists(String msg)
+        {   // alreadyExists(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.ALREADY_EXISTS, msg + errorMsg);
 
-        }
+        }   // alreadyExists(String) [method] ends
 
         //TODO: 413 Payload too large
-        public static TestOperation.ApiException payloadTooLarge(String msg){
+        public static TestOperation.ApiException payloadTooLarge(String msg)
+        {   // payloadTooLarge(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.PAYLOAD_TOO_LARGE, msg + errorMsg);
-        }
+        }   // payloadTooLarge(String) [method] ends
 
         //TODO: 429 Too many requests
-        public static TestOperation.ApiException tooManyRequests(String msg){
+        public static TestOperation.ApiException tooManyRequests(String msg)
+        {   // tooManyRequests(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.TOO_MANY_REQUESTS, msg + errorMsg);
-        }
+        }   // tooManyRequests(String) [method] ends
 
+
+        
     /* |----------------------|
        |     SERVER ERRORS    |
        |----------------------|
     */
-
         //TODO: 500 server error
-        public static TestOperation.ApiException serverError (String msg) {
+        public static TestOperation.ApiException serverError (String msg)
+        {   // serverError (String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.SERVER_ERROR, msg + errorMsg);
-        }
+        }   // serverError (String) [method] ends
 
         //TODO: 501 Not implemented
-        public static TestOperation.ApiException notImplemented(String msg){
+        public static TestOperation.ApiException notImplemented(String msg)
+        {   // notImplemented(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_IMPLEMENTED, msg + errorMsg);
-        }
+        }   // notImplemented(String) [method] ends
 
         //TODO: 502 Bad Gateway
-        public static TestOperation.ApiException badGateway(String msg){
+        public static TestOperation.ApiException badGateway(String msg)
+        {   // badGateway(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.BAD_GATEWAY, msg + errorMsg);
-        }
+        }   // badGateway(String) [method] ends
 
         //TODO: 503 Service Unavailable
-        public static TestOperation.ApiException serviceUnavailable(String msg){
+        public static TestOperation.ApiException serviceUnavailable(String msg)
+        {   // serviceUnavailable(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.SERVICE_UNAVAILABLE, msg + errorMsg);
-        }
+        }   // serviceUnavailable(String) [method] ends
 
         //TODO: 504 Gateway Timeout
-        public static TestOperation.ApiException gatewayTimeout(String msg){
+        public static TestOperation.ApiException gatewayTimeout(String msg)
+        {   // gatewayTimeout(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.GATEWAY_TIMEOUT, msg + errorMsg);
-        }
+        }   // gatewayTimeout(String) [method] ends
 
         //TODO: 505 HTTP Version not supported
-        public static TestOperation.ApiException versionNotSupported(String msg){
+        public static TestOperation.ApiException versionNotSupported(String msg)
+        {   // versionNotSupported(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.HTTP_VERSION_NOT_SUPPORTED, msg + errorMsg);
-        }
+        }   // versionNotSupported(String) [method] ends
 
         //TODO: 506 Variant also negotiates
-        public static TestOperation.ApiException variantNegotiates(String msg){
+        public static TestOperation.ApiException variantNegotiates(String msg)
+        {   // variantNegotiates(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.VARIANT_ALSO_NEGOTIATES, msg + errorMsg);
-        }
+        }   // variantNegotiates(String) [method] ends
 
         //TODO: 507 Insufficient storage
-        public static TestOperation.ApiException insufficientStorage(String msg){
+        public static TestOperation.ApiException insufficientStorage(String msg)
+        {   // insufficientStorage(String= [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.INSUFFICIENT_STORAGE, msg + errorMsg);
-        }
+        }   // insufficientStorage(String= [method] ends
 
         //TODO: 508 Loop detected
         public static TestOperation.ApiException loopDetected(String msg)
@@ -303,7 +321,7 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         {   // getStatusCode() [method] begins
             return this.code;
         }   // getStatusCode() [method] ends
-    }
+    }   // ApiException [class] ends
 
     enum TestErrorTypes
     {   // TestErrorTypes [enum] begins
