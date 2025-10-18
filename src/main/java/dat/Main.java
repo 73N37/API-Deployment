@@ -1,6 +1,7 @@
 package dat;
 import dat.Config.ApplicationConfig;
 import dat.Config.HibernateConfig;
+import dat.TestPackage.TestInformation;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -24,10 +25,10 @@ public class Main
 
         app.start(7070);
 
-        System.out.println("Record Data = " + dat.TestPackage.TestData.Methods.constructor(true, "Through hard work comes EXCELLENCE"));
-        System.out.println("Entity Data = " + dat.TestPackage.TestData.Methods.constructor(false, "Merovingian"));
-        System.out.println(("globalEntity Name = {Merovingian} = " + dat.TestPackage.TestData.Methods.getEntity()));
-        System.out.println("globalRecord Name {Through hard work comes EXCELLENCE}, " + dat.TestPackage.TestData.Methods.getRecord());
+        System.out.println("Record Data = " + TestInformation.Methods.recordConstructor("Through hard work comes EXCELLENCE"));
+        System.out.println("Entity Data = " + TestInformation.Methods.entityConstructor( "Merovingian"));
+        System.out.println("globalEntity Name = {Merovingian} = " + TestInformation.Methods.getEntity());
+        System.out.println("globalRecord Name {Through hard work comes EXCELLENCE}, " + TestInformation.Methods.getRecord());
         System.out.println("=== MAIN IS COMPLETE ===");
     }
 }
