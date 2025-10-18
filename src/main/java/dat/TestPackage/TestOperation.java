@@ -111,16 +111,16 @@ public final class TestOperation
             {
                 log.debug("Reading/finding entity with id {}", id);
                 try (jakarta.persistence.EntityManager em = emf.createEntityManager())
-                {
+                {   // try (EntityManager = .crateEntityManagers()) begins
                     java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id";
                     jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
                     log.debug("Found entity with id {}", id);
                     return query.getSingleResult();
                 } catch (Exception e)
-                {   // catch
-
-                }   // catch(EntityManager = .crateEntityManagers()) ends
+                {   // catch (EntityManager = .crateEntityManagers()) begins
+                    throw new ApiException(TestErrorTypes.NOT_FOUND, "Was not able to find and entity with id="+id);
+                }   // catch (EntityManager = .crateEntityManagers()) ends
             }   // get(Serializable) [method] ends
         }   // Method class begins
     }   // DAO [class] ends
