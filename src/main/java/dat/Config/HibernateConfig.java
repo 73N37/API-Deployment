@@ -53,7 +53,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Role.class);
     }
 
-    // I have made createEMF public instead of private, so I can access it from my AbstractEntity class
+    // I have made createEMF public instead of private, so I can access it from my Operation class
     public static EntityManagerFactory createEMF(boolean forTest) {
         try {
             Configuration configuration = new Configuration();
