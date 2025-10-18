@@ -282,9 +282,10 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         }
 
         //TODO: 508 Loop detected
-        public static TestOperation.ApiException loopDetected(String msg){
+        public static TestOperation.ApiException loopDetected(String msg)
+        {   // loopDetected(String) [method] begins
             return new TestOperation.ApiException(TestOperation.TestErrorTypes.LOOP_DETECTED, msg + errorMsg);
-        }
+        }   // loopDetected(String) [method] ends
 
         //TODO: 510 Not extended
         public static TestOperation.ApiException notExtended(String msg)
