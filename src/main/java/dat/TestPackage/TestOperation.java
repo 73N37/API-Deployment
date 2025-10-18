@@ -5,9 +5,7 @@ package dat.TestPackage;
             is through my Methods class
  */
 
-public final class TestOperation<   Entity extends dat.TestPackage.TestData.Entity,
-                                    Record extends dat.TestPackage.TestData.Record,
-                                    Id extends java.io.Serializable>
+public final class TestOperation
 {   // TestOperation [super-class] begins
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -39,39 +37,66 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
         public jakarta.persistence.EntityManagerFactory emf;
 
-        public class Factory<   Entity  extends dat.TestPackage.TestData.Entity,
-                                Record  extends dat.TestPackage.TestData.Record,
-                                Id      extends java.io.Serializable>
+        public static class Factory
         {   // Factory [class] begins
-            public static dat.TestPackage.TestOperation.Factory ResourceFactory()
-            {   // ResourceFactory [method] begins
+            protected static final jakarta.persistence.EntityManagerFactory                      emf = dat.Config.HibernateConfig.createEMF(false);
+            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass;
+            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass;
+            protected static java.lang.Class<? extends java.io.Serializable>                     idClass;
 
-            }   // ResourceFactory [method] ends
+            // Restricted args constructor
+            private Factory()
+            {}   // Factory [constructor] begins & ends
 
-            interface Interface
-            {   // Interface begins
-                dat.TestPackage.TestOperation.DAO.Interface createDAO(jakarta.persistence.EntityManagerFactory emf);
+            // Creates a restricted instance of Factory [constructor]
+            public Factory forEntity(   java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass,
+                                        java.lang.Class<? extends java.io.Serializable>                     idClass)
+            {   // Factory [constructor] begins
+                Factory result        = new Factory();  // create a new instance of Factory
+                result.entityClass    = entityClass;       // assigns entityClass to the Factory instance
+                result.idClass        = idClass;           // assigns idClass to the Factory instance
+                return result;                             // returns the Factory which now has an idClass & entityClass, as global Fields
+            }   // Factory [constructor] ends
 
-                dat.TestPackage.TestOperation.Service.Interface createService(DAO.Interface dao);
+            public Factory forRecord(   java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass,
+                                        java.lang.Class<? extends java.io.Serializable>                     idClass)
+            {   // Factory [constructor] begins
+                Factory result      = new Factory ();    // create a new instance of Factory
+                result.dtoClass     = dtoClass;             // assigns dtoClass to the Factory instance
+                result.idClass      = idClass;              // assigns idClass to the factory instance
+                return result;                              // returns the Factory which now has idClass & dtoClass, as global Fields
+            }   // Factory [constructor] ends
 
-                dat.TestPackage.TestOperation.Controller.Interface createController(Service.Interface service);
-
-                Route.Interface createRoutes(Controller.Interface routes);
-
-                dat.TestPackage.TestOperation.Factory createFactory(io.javalin.Javalin app);
-            }   // Interface [class] ends
+            // All args constructor
+            public Factory(             java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass,
+                                        java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass,
+                                        java.lang.Class<? extends java.io.Serializable>                     idClass)
+            {   // Factory [constructor] begins
+                this.entityClass    = entityClass;
+                this.dtoClass       = dtoClass;
+                this.idClass        = idClass;
+            }   // Factory [constructor] ends
         }   // Factory [class] ends
 
 
-    static class DAO<   Entity  extends dat.TestPackage.TestData.Entity,
+    static class DAO<   Entity  extends TestInformation.Entity,
+                        DTO     extends TestInformation.Record,
                         Id      extends java.io.Serializable>
+        extends dat.TestPackage.TestOperation.Factory
     {   // DAO [class] begins
+
+        public DAO( java.lang.Class<Entity>                     entityClass,
+                    java.lang.Class<Id>                         idClass)
+        {   // DAO [constructor] begins
+            super();
+            forEntity(entityClass, idClass);
+        }   // DAO [constructor] ends
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
-         interface Interface<   Entity  extends dat.TestPackage.TestData.Entity,
+         interface Interface<   Entity  extends TestInformation.Entity,
                                 Id      extends java.io.Serializable>
          {  // Interface [class] begins
-             Entity read(Id id);
-             java.util.List<Entity> readAll();
+             Entity get(Id id);
+             java.util.List<Entity> getAll();
              Entity create(Entity entity);
              Entity update(Entity entity, Id id);
              void delete(Id id);
@@ -79,21 +104,36 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         }   // Interface [class] ends
 
         public abstract static class
-        Methods <   Entity  extends dat.TestPackage.TestData.Entity,
+        Methods <   Entity  extends TestInformation.Entity,
                     Id      extends java.io.Serializable>
-                implements dat.TestPackage.TestOperation.DAO.Interface
+                implements dat.TestPackage.TestOperation.DAO.Interface<Entity, Id>
         {   // Methods class begins
+            public Entity get(Id id)
+            {
+                log.debug("Reading/finding entity with id {}", id);
+                try (jakarta.persistence.EntityManager em = emf.createEntityManager())
+                {
+                    java.lang.String jpql = "SELECT a FROM " + entityClass.getSimpleName() + "a WHERE a.id = :id";
+                    Entity entity = em.createQuery(jpql,entityClass)
+                                    .setParameter("id", id)
+                                    .getSingleResult();
+                    log.debug("Found entity with id {}", id);
+                    return entity;
+                } catch (Exception e)
+                {   // catch
 
+                }   // catch(EntityManager = .crateEntityManagers()) ends
+            }   // get(Serializable) [method] ends
         }   // Method class begins
-    }
+    }   // DAO [class] ends
 
-    static class Service<   Entity  extends dat.TestPackage.TestData.Entity,
-                            Record  extends dat.TestPackage.TestData.Record,
+    static class Service<   Entity  extends TestInformation.Entity,
+                            Record  extends TestInformation.Record,
                             Id      extends java.io.Serializable>
     {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
-        interface Interface<Entity  extends dat.TestPackage.TestData.Entity,
-                            Record  extends dat.TestPackage.TestData.Record,
+        interface Interface<Entity  extends TestInformation.Entity,
+                            Record  extends TestInformation.Record,
                             Id      extends java.io.Serializable>
         {
             Record create(Record dto);
@@ -107,32 +147,28 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             Record entityToDTO(Entity entity);
         }
 
-            public dat.TestPackage.TestData.Record entityToDTO(dat.TestPackage.TestData.Entity entity)
+        public TestInformation.Record entityToDTO(TestInformation.Entity entity)
+        {
+            if(entity != null)
             {
-                if(entity != null)
-                {
-                    return dat.     // return something that lives in 'dat' (super-package).
-                                TestPackage.    // return something that lives in 'dat.TestPackage' (sub-package).
-                                            TestData.   // return something that lives in 'dat.TestPackage.TestData'.
-                                                    Methods.    // find a method within 'dat.TestPackage.TestData.Methods'.
-                                                            entityToRecord(entity); // Use 'entityToRecord' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Record' based on @param.
-                }
+                return TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
+                                                Methods.    // find a method within 'dat.TestPackage.TestData.Methods'.
+                                                        entityToRecord(entity); // Use 'entityToRecord' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Record' based on @param.
+            }
                 else return null;   // return null if @param is null OR any of the steps above fail
-            }
-
-            public dat.TestPackage.TestData.Entity dtoToEntity(dat.TestPackage.TestData.Record record)
-            {
-                if(record != null)
-                {
-                    return dat.     // return something that lives in 'dat' (super-package).
-                                TestPackage.    // return something that lives in 'dat.TestPackage' (sub-package).
-                                            TestData.   // return something that lives in 'dat.TestPackage.TestData'.
-                                                    Methods.   // find a method within 'dat.TestPackage.TestData.Methods'.
-                                                            recordToEntity(record); // Use 'recordToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
-                }
-                else return null; // return null if @param is null OR any of the steps above fail
-            }
         }
+
+        public TestInformation.Entity dtoToEntity(TestInformation.Record record)
+        {
+            if(record != null)
+            {
+                return TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
+                                                Methods.   // find a method within 'dat.TestPackage.TestData.Methods'.
+                                                        recordToEntity(record); // Use 'recordToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
+            }
+            else return null; // return null if @param is null OR any of the steps above fail
+        }
+    }
 
     static class Controller
     {   // Controller [middle-class] begins
@@ -145,7 +181,7 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             void update(io.javalin.http.Context ctx);
             void delete(io.javalin.http.Context ctx);
             boolean validatePrimaryKey(java.lang.Integer id);
-            dat.TestPackage.TestData.Entity validateEntity(io.javalin.http.Context ctx);
+            TestInformation.Entity validateEntity(io.javalin.http.Context ctx);
         }   // Interface [sub-class] ends
     }   // Controller [middle-class] ends
 
@@ -158,7 +194,7 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             void AddRoutes(io.javalin.Javalin app);
         }   // Interface [sub-class] ends
     }   // Route [middle-class] ends
-    
+
     static class ApiException extends RuntimeException
     {   // ApiException [class] begins
         private final int code;
