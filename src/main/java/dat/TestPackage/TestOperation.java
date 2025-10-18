@@ -5,8 +5,6 @@ package dat.TestPackage;
             is through my Methods class
  */
 
-import java.util.Set;
-
 public final class TestOperation<   Entity extends dat.TestPackage.TestData.Entity,
                                     Record extends dat.TestPackage.TestData.Record,
                                     Id extends java.io.Serializable>
@@ -58,7 +56,7 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
 
                 dat.TestPackage.TestOperation.Controller.Interface createController(Service.Interface service);
 
-                dat.TestPackage.TestOperation.Routes.Interface createRoutes(Controller.Interface routes);
+                Route.Interface createRoutes(Controller.Interface routes);
 
                 dat.TestPackage.TestOperation.Factory createFactory(io.javalin.Javalin app);
             }   // Interface [class] ends
@@ -151,15 +149,15 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         }
     }
 
-    static class Routes
-    {
-        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Routes.class);
+    static class Route
+    {   // Route [class] begins
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Route.class);
 
         interface Interface
-        {
+        {   // Interface [interface] begins
             void AddRoutes(io.javalin.Javalin app);
-        }
-    }
+        }   // Interface [interface] ends
+    }   // Route [class] ends
 
 
 
@@ -246,7 +244,7 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
         }   // tooManyRequests(String) [method] ends
 
 
-        
+
     /* |----------------------|
        |     SERVER ERRORS    |
        |----------------------|
