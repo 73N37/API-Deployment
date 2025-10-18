@@ -158,9 +158,7 @@ public final class TestOperation<   Entity extends dat.TestPackage.TestData.Enti
             void AddRoutes(io.javalin.Javalin app);
         }   // Interface [sub-class] ends
     }   // Route [middle-class] ends
-
-
-
+    
     static class ApiException extends RuntimeException
     {   // ApiException [class] begins
         private final int code;
