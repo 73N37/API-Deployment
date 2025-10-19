@@ -1,27 +1,146 @@
-@startuml
+@startuml TestInformation Class Diagram
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
+skinparam classAttributeIconSize 0
+hide empty members
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
+package dat.TestPackage {
 
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
+    class TestInformation {
+        - {static} Integer globalId
+        - {static} Entity globalEntity
+        - {static} Record globalRecord
+        - {static} TestInformation instance
+        - TestInformation()
+    }
 
-class ArrayList {
-Object[] elementData
-size()
+    class "TestInformation.Data" as Data {
+        + TestInformation get()
+    }
+
+    interface "TestInformation.DataUnit" as DataUnit {
+    }
+
+    class "TestInformation.Entity" as Entity {
+        - {static} Integer id
+        - {static} String name
+        + Entity(String name)
+        + {static} Integer getId()
+        + String toString()
+    }
+
+    abstract class "TestInformation.Methods<E, R>" as Methods {
+        - Methods()
+        + {abstract} R create(R record)
+        + {abstract} R read(Integer id)
+        + {abstract} R update(Integer id, R record)
+        + {abstract} void delete(Integer id)
+        + {static} <Data> Data create(Class<Data> type)
+        + {static} Class<? extends DataUnit> getUnitClass(DataType type)
+        + {static} Record recordConstructor(String name)
+        + {static} Record recordConstructor(Integer id, String name)
+        + {static} Entity entityConstructor(String name)
+        + {static} Class<? extends Entity> dataUnitToEntity(DataType data)
+        + {static} Class<? extends Record> dataUnitToRecord(DataUnit data)
+        + {static} Entity getEntity()
+        + {static} void putEntity(Entity value)
+        + {static} Record getRecord()
+        + {static} Record putRecord(Record value)
+        + {static} Record putRecord(Integer id, String name)
+        + {static} Integer getId(DataUnit record)
+        + {static} Record entityToRecord(Entity entity)
+        + {static} String getRecordName()
+        + {static} Entity putEntity(String name, Integer id)
+        + {static} String getEntityName()
+        + {static} Integer getId(Entity entity)
+        + {static} Entity recordToEntity(Record record)
+    }
+
+    record "TestInformation.Record" as Record {
+        - Integer id
+        - String name
+        - DataType record
+        + Record(String name)
+        + Record(Integer id, String name)
+    }
+
+    interface "TestInformation.Interface<ID>" as Interface {
+        + ID getId()
+        + boolean canRead(Role role)
+        + boolean canWrite(Role role)
+        + boolean canDelete(Role role)
+        + boolean canUpdate(Role role)
+        + boolean isValid()
+        + boolean canPerformCrud(Role role, String operation)
+    }
+
+    annotation "TestInformation.Annotation" as Annotation {
+        + OperationType[] value()
+        + boolean requiresGlobalState()
+        + Class<?>[] dependsOn()
+        + DataType[] dataUnitType()
+        + boolean isPrimaryType()
+    }
+
+    enum "TestInformation.DataType" as DataType {
+        UNKNOWN
+        ENTITY
+        RECORD
+    }
+
+    enum "TestInformation.OperationType" as OperationType {
+        DATA
+        IDENTIFIER
+        VALIDATOR
+        CRUD_VALIDATOR
+        UPDATE
+        READ
+        WRITE
+        DELETE
+        CONSTRUCTOR
+        FIELD
+        METHOD
+        INTERFACE
+        CLASS
+        UNKNOWN
+    }
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
-}
+' Relationships
+TestInformation +-- Data
+TestInformation +-- DataUnit
+TestInformation +-- Entity
+TestInformation +-- Methods
+TestInformation +-- Record
+TestInformation +-- Interface
+TestInformation +-- Annotation
+TestInformation +-- DataType
+TestInformation +-- OperationType
+
+Data ..> TestInformation : creates
+Entity ..|> DataUnit
+Record ..|> DataUnit
+Methods ..|> Interface
+
+Methods --> Entity : uses
+Methods --> Record : uses
+Methods --> DataType : uses
+
+Annotation --> OperationType : references
+Annotation --> DataType : references
+
+TestInformation --> Entity : globalEntity
+TestInformation --> Record : globalRecord
+
+note right of Methods
+  Generic type parameters:
+  E extends Entity
+  R extends Record
+end note
+
+note right of Interface
+  Generic type parameter:
+  ID extends Serializable
+end note
 
 @enduml
