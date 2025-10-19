@@ -2,11 +2,11 @@ package dat.TestPackage;
 
 /**
  * TestData is a comprehensive data management class that provides a controlled API
- * for managing Entity and Record objects through a centralized Methods class.
+ * for managing Entity and DTO objects through a centralized Methods class.
  *
  * <p><b>Design Philosophy:</b></p>
  * <ul>
- *   <li>All internal classes (Entity, Record, Interface, Annotation) are private</li>
+ *   <li>All internal classes (Entity, DTO, Interface, Annotation) are private</li>
  *   <li>The ONLY way to manipulate these classes is through the public static Methods class</li>
  *   <li>This ensures encapsulation and controlled access to data structures</li>
  *   <li>Global state is maintained for tracking active instances</li>
@@ -15,7 +15,7 @@ package dat.TestPackage;
  * <p><b>Key Components:</b></p>
  * <ul>
  *   <li><b>Entity:</b> Mutable class for persistent data (JPA-compatible)</li>
- *   <li><b>Record:</b> Immutable record for transferring data between layers</li>
+ *   <li><b>DTO:</b> Immutable dto for transferring data between layers</li>
  *   <li><b>Methods:</b> Public API for all CRUD operations</li>
  *   <li><b>Interface:</b> Security contract for permission validation</li>
  *   <li><b>Annotation:</b> Metadata for operation types and dependencies</li>
@@ -59,33 +59,28 @@ public final class TestInformation
         The ONLY way to access them is though my entity methods
     */
 
-
-    private static java.lang.Integer globalId;
-
     // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
     @TestInformation.Annotation(    requiresGlobalState = true,
                                     value               = TestInformation.OperationType.FIELD)
-    @lombok.Getter
-    private static TestInformation.Entity globalEntity;
+    private static TestInformation.Entity   globalEntity;
 
     /**
-     * Global reference to the currently active Record class.
-     * This field stores the Class object of the most recently created Record instance.
-     * It acts as a registry layer above individual Record objects for tracking purposes.
+     * Global reference to the currently active DTO class.
+     * This field stores the Class object of the most recently created DTO instance.
+     * It acts as a registry layer above individual DTO objects for tracking purposes.
      *
      * <p>This field is accessed and modified exclusively through Methods class operations.</p>
      * <p>Lombok @Getter generates a public getter for this field.</p>
      */
     @TestInformation.Annotation(    requiresGlobalState = true,
                                     value               = TestInformation.OperationType.FIELD)
-    @lombok.Getter
-    private static TestInformation.Record  globalRecord;
+    private static TestInformation.DTO      globalDTO;
 
 
 
     @TestInformation.Annotation(    requiresGlobalState = true,
                                     value               = TestInformation.OperationType.FIELD)
-    private static TestInformation instance;
+    private static TestInformation          instance;
 
     /**
      * Private constructor to prevent direct instantiation.
@@ -108,28 +103,57 @@ public final class TestInformation
         //       like Factory is to TestOperation [class]
 
         @TestInformation.Annotation(   requiresGlobalState = true)
-        public TestInformation get()
-        {
+        public TestInformation
+        getInstance()
+        {   // getInstance() [method] begins
             // Check if instance has been created yet
-            if(instance == null) instance = new TestInformation();
+            if (instance == null) instance = new TestInformation();
             // Return the singleton instance
             return instance;
-        }
+        }   // getInstance() [method] ends
+
+        public TestInformation.DTO
+        getDTO()
+        {   // getDTO() [method] begins
+            // If the Field 'globalDTO' is null, null will be returned
+            if (globalDTO == null) return null;
+            // If the Field 'globalDTO' in NOT null, the DTO will be returned
+            return globalDTO;
+        }   // getDTO [method] ends
+
+        public TestInformation.Entity
+        getEntity()
+        {   // getEntity() [method] begins
+            // If the Field 'globalEntity' is null, null will be returned
+            if (globalEntity == null) return null;
+            // If the Field 'globalEntity' is NOT null, the Entity will be returned
+            return globalEntity;
+        }   // getEntity() [method] ends
     }
 
     /**
-     * Marker interface that serves as a common parent for both Entity and Record types.
+     * Marker interface that serves as a common parent for both Entity and DTO types.
      *
      * <p>This interface provides a polymorphic umbrella allowing methods to accept
-     * either Entity or Record objects. This is necessary because Java records cannot
+     * either Entity or DTO objects. This is necessary because Java DTOs cannot
      * extend from abstract classes, so an interface provides the shared type hierarchy.</p>
      *
      * <p><b>Design Rationale:</b> Enables type-safe polymorphism between mutable entities
-     * and immutable records without forcing inheritance constraints.</p>
+     * and immutable dtos without forcing inheritance constraints.</p>
      */
-    interface DataUnit {
-        // This interface is just a super-class to Record & Entity.
-        // Since records cant extend from abstract classes, it must be an interface.
+    static abstract class DataUnit {
+        // This abstract class just a super-class to DTO & Entity.
+        static java.lang.String name;
+        java.lang.String getName()
+        {   // getName() [method] begins
+            return this.name;
+        }   // getName() [method] ends
+
+        static java.lang.Integer id;
+        java.lang.Integer getId()
+        {   // getId() [method] begins
+            return this.id;
+        }   // getId() [method] ends
     }
 
     /**
@@ -149,7 +173,7 @@ public final class TestInformation
      */
     @TestInformation.Annotation(    value        = {TestInformation.OperationType.CLASS},
                                     dataUnitType = {TestInformation.DataType.ENTITY})
-    protected static class Entity implements DataUnit
+    protected static class Entity extends DataUnit
     {
         /**
          * Primary key identifier for the entity.
@@ -186,16 +210,12 @@ public final class TestInformation
             globalEntity =  this;
         }
 
-        /**
-         * Retrieves the ID of this entity.
-         *
-         * @return The entity's ID, or null if not yet persisted
-         */
-        @TestInformation.Annotation(   value = {TestInformation.OperationType.METHOD})
-        static java.lang.Integer
-        getId()
+        @TestInformation.Annotation(   requiresGlobalState = true)
+        Entity(java.lang.Integer id, java.lang.String name)
         {
-            return id;
+            this.id = id;
+            this.name = name;
+            globalEntity = this;
         }
 
         /**
@@ -210,39 +230,87 @@ public final class TestInformation
             return "ID = {"+ id +"}, Name = {"+ name +"}";
         }
     }
+
+    protected static class DTO extends DataUnit
+    {
+        /**
+         * Primary key identifier for the entity.
+         * Marked with @Id for JPA persistence. Expected to be auto-generated by the database.
+         *
+         * <p><b>Note:</b> Will be null until the entity is persisted to the database.</p>
+         */
+        @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
+        @lombok.Getter
+
+        static java.lang.Integer id;
+        /**
+         * The name property of the entity.
+         * This field stores the identifying name/label for the entity instance.
+         */
+        @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
+        @lombok.Getter
+        static java.lang.String name;
+
+        DTO(TestInformation.Entity entity)
+        {   // DTO [constructor] begins
+            this.name = entity.name;
+            globalDTO = this;
+        }   // DTO [constructor] ends
+
+        DTO(java.lang.Integer id , java.lang.String name)
+        {
+            this.name = name;
+            this.id = id;
+            globalDTO = this;
+        }
+
+        DTO(java.lang.String name)
+        {
+            this.name = name;
+            globalDTO = this;
+        }
+
+        @TestInformation.Annotation(   value = {TestInformation.OperationType.METHOD})
+        @Override
+        public java.lang.String toString(){
+
+            return "ID = {"+ id +"}, Name = {"+ name +"}";
+        }
+    }
+
     /**
      * Methods class serves as the exclusive public API for all data operations.
      *
      * <p><b>Design Pattern:</b> This class implements a Facade pattern, providing
-     * a simplified interface to the complex subsystem of Entity, Record, and global state management.</p>
+     * a simplified interface to the complex subsystem of Entity, DTO, and global state management.</p>
      *
      * <p><b>Key Characteristics:</b></p>
      * <ul>
      *   <li>All methods are public static for easy access</li>
      *   <li>No instance creation allowed (private constructor)</li>
-     *   <li>Provides CRUD operations for both Entity and Record</li>
+     *   <li>Provides CRUD operations for both Entity and DTO</li>
      *   <li>Manages global state through getter/setter methods</li>
-     *   <li>Handles conversions between Entity and Record types</li>
+     *   <li>Handles conversions between Entity and DTO types</li>
      * </ul>
      *
      * <p><b>Method Categories:</b></p>
      * <ul>
-     *   <li><b>Constructor Methods:</b> Factory methods for creating Entity/Record instances</li>
+     *   <li><b>Constructor Methods:</b> Factory methods for creating Entity/DTO instances</li>
      *   <li><b>Global Methods:</b> Getters/setters for global state fields</li>
-     *   <li><b>Record Methods:</b> Operations specific to Record objects</li>
+     *   <li><b>DTO Methods:</b> Operations specific to DTO objects</li>
      *   <li><b>Entity Methods:</b> Operations specific to Entity objects</li>
-     *   <li><b>Conversion Methods:</b> Transform between Entity and Record types</li>
+     *   <li><b>Conversion Methods:</b> Transform between Entity and DTO types</li>
      * </ul>
      */
     @TestInformation.Annotation(requiresGlobalState = true, value = TestInformation.OperationType.CLASS)
     public abstract static class
-    Methods<E extends TestInformation.Entity, R extends TestInformation.Record>
+    Methods<E extends TestInformation.Entity, DTO extends TestInformation.DTO>
             implements TestInformation.Interface
     {
         // Common CRUD methods that needs to implemented in the sub-class
-        public abstract R create(R record);
-        public abstract R read(java.lang.Integer id);
-        public abstract R update(java.lang.Integer id, R record);
+        public abstract DTO create(DTO dto);
+        public abstract DTO read(java.lang.Integer id);
+        public abstract DTO update(java.lang.Integer id, DTO dto);
         public abstract void delete(java.lang.Integer id);
 
         /**
@@ -263,7 +331,7 @@ public final class TestInformation
          *   <li>newInstance() - Invokes that constructor to create a new instance</li>
          * </ul>
          *
-         * @param type The Class object representing the type to instantiate (Entity or Record)
+         * @param type The Class object representing the type to instantiate (Entity or DTO)
          * @param <Data> The generic type parameter extending DataUnit
          * @return A new instance of the specified type
          * @throws IllegalArgumentException if the type cannot be instantiated (no accessible no-arg constructor)
@@ -285,34 +353,34 @@ public final class TestInformation
          * <p>This method provides runtime type information without using Java's built-in
          * getClass() method, preserving that functionality for potential future use.</p>
          *
-         * @param type The DataType enum value (ENTITY or RECORD)
+         * @param type The DataType enum value (ENTITY or DTO)
          * @return The Class object representing the specified type, or null if type is unrecognized
          */
         @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
         static java.lang.Class<? extends TestInformation.DataUnit> getUnitClass(DataType type){
             // Check if the requested type is ENTITY
             if (type == TestInformation.DataType.ENTITY) return TestInformation.Entity.class;
-            // Check if the requested type is RECORD
-            if (type == TestInformation.DataType.RECORD) return TestInformation.Record.class;
+            // Check if the requested type is DTO
+            if (type == TestInformation.DataType.DTO) return TestInformation.DTO.class;
             // Return null for unrecognized types
             return null;
         }
 
         // ########################{Constructor Methods}######################################
         @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
-        public static TestInformation.Record
-        recordConstructor(java.lang.String name)
+        public static TestInformation.DTO
+        dtoConstructor(java.lang.String name)
         {
             return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData (super-class)
-                                                Record(name);   // @return a new instance of 'Record' (sub-class)
+                                                DTO(name);   // @return a new instance of 'DTO' (sub-class)
         }
 
         @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
-        public static TestInformation.Record
-        recordConstructor(java.lang.Integer id, java.lang.String name)
+        public static TestInformation.DTO
+        dtoConstructor(java.lang.Integer id, java.lang.String name)
         {
             return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData' (super-class)
-                    Record(id, name);   // @return a new instance of 'Record' (sub-class)
+                    DTO(id, name);   // @return a new instance of 'DTO' (sub-class)
         }
 
         @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
@@ -348,39 +416,39 @@ public final class TestInformation
 
 
         /**
-         * Converts a DataUnit to a Record class reference.
+         * Converts a DataUnit to a DTO class reference.
          *
          * <p><b>Warning:</b> This method appears to have a logic issue - it compares
-         * a DataUnit against OperationType.RECORD instead of DataType.RECORD.</p>
+         * a DataUnit against OperationType.DTO instead of DataType.DTO.</p>
          *
          * @param data The DataUnit to convert
-         * @return The Record class reference if the data represents a record, null otherwise
+         * @return The DTO class reference if the data represents a DTO, null otherwise
          */
-        public static java.lang.Class<? extends TestInformation.Record>
-        dataUnitToRecord(TestInformation.DataUnit data)
+        public static java.lang.Class<? extends TestInformation.DTO>
+        dataUnitToDTO(TestInformation.DataUnit data)
         {
-            // TODO {TLDR}: Checks if the data unit is a record type, and return Record.class if it is indeed a record type.
+            // TODO {TLDR}: Checks if the data unit is a dto type, and return DTO.class if it is indeed a dto type.
             // TODO {TLDR}: If anythings fails return null;
 
             if (data. // performs an operation on the @param data
                     equals(TestInformation.   // Checks if @param equals something inside TestData (super-class {public final class})
-                                                    DataType.RECORD)) return TestInformation.   // If @param equals OperationType.RECORD @return something inside data.TestPackage.TestData
-                                                                                                    Record. // If @param equals OperationType.RECORD @return something inside data.TestPackage.TestData.Record
-                                                                                                            class; // If every step was successful @return data.TestPackage.TestData.Record.class
+                                                    DataType.DTO)) return TestInformation.   // If @param equals OperationType.DTO @return something inside data.TestPackage.TestData
+                                                                                                    DTO. // If @param equals OperationType.DTO @return something inside data.TestPackage.TestData.DTO
+                                                                                                            class; // If every step was successful @return data.TestPackage.TestData.DTO.class
             else return null;   // If any of the steps above-mentioned fails return null
         }
 
 //        /**
-//         * Converts a DataType enum to a Record class reference.
+//         * Converts a DataType enum to a DTO class reference.
 //         *
 //         * @param data The DataType enum value to check
-//         * @return The Record class reference if data is RECORD type, null otherwise
+//         * @return The DTO class reference if data is DTO type, null otherwise
 //         */
-//        public static Class<? extends Record>
-//        dataUnitToRecord(dat.TestPackage.TestData.DataType data)
+//        public static Class<? extends DTO>
+//        dataUnitToDTO(dat.TestPackage.TestData.DataType data)
 //        {
-//            // Check if the data type is RECORD
-//            if (data.equals(dat.TestPackage.TestData.DataType.RECORD)) return (Record.class);
+//            // Check if the data type is DTO
+//            if (data.equals(dat.TestPackage.TestData.DataType.DTO)) return (DTO.class);
 //            else return null;
 //        }
 
@@ -418,101 +486,100 @@ public final class TestInformation
         }
 
         /**
-         * Retrieves the globally stored Record class reference.
+         * Retrieves the globally stored DTO class reference.
          *
-         * @return The current global Record class, or null if no Record has been created
+         * @return The current global DTO class, or null if no DTO has been created
          */
         @TestInformation.Annotation( value = TestInformation.OperationType.READ)
-        public static TestInformation.Record
-        getRecord()
+        public static TestInformation.DTO
+        getDTO()
         {
-            return globalRecord;
+            return globalDTO;
         }
 
         /**
-         * Updates the global Record class reference.
+         * Updates the global DTO class reference.
          *
-         * @param value The Record class to set as the global record
+         * @param value The DTO class to set as the global dto
          */
-        @TestInformation.Annotation(requiresGlobalState = true, value = TestInformation.OperationType.UPDATE, dependsOn = {TestInformation.Record.class})
-        public static TestInformation.Record
-        putRecord(TestInformation.Record value)
+        @TestInformation.Annotation(requiresGlobalState = true, value = TestInformation.OperationType.UPDATE, dependsOn = {TestInformation.DTO.class})
+        public static TestInformation.DTO
+        putDTO(TestInformation.DTO value)
         {
-            // Update the global record reference
-            globalRecord = value;
+            // Update the global dto reference
+            globalDTO = value;
             return value;
         }
 
-        // ########################{Record Methods}######################################
+        // ########################{DTO Methods}######################################
         /**
-         * Creates a new Record with both ID and name.
+         * Creates a new DTO with both ID and name.
          *
-         * <p>Use this method when creating a record from persisted data that already has an ID.</p>
+         * <p>Use this method when creating a dto from persisted data that already has an ID.</p>
          *
-         * @param id The unique identifier for the record
-         * @param name The name for the record
-         * @return A new Record instance with the specified ID and name
+         * @param id The unique identifier for the DTO
+         * @param name The name for the DTO
+         * @return A new DTO instance with the specified ID and name
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = {java.lang.Integer.class, java.lang.String.class})
-        public static TestInformation.Record
-        putRecord(java.lang.Integer id, java.lang.String name)
+        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = { java.lang.Integer.class,
+                                                                                                java.lang.String.class})
+        public static TestInformation.DTO
+        putDTO(java.lang.Integer id, java.lang.String name)
         {
-            // Create and return a new Record with both ID and name
-            return new TestInformation.Record(id, name);
+            // Create and return a new DTO with both ID and name
+            return new TestInformation.DTO(id, name);
         }
 
         /**
-         * Extracts the ID from a DataUnit (Record).
+         * Extracts the ID from a DataUnit (DTO).
          *
-         * <p>This method converts the record to an entity to retrieve the ID.
-         * This is necessary because the Record structure stores ID differently than Entity.</p>
+         * <p>This method converts the DTO to an entity to retrieve the ID.
+         * This is necessary because the DTO structure stores ID differently than Entity.</p>
          *
-         * @param record The DataUnit (expected to be a Record) to extract ID from
-         * @return The ID of the record, or null if no ID exists
+         * @param dto The DataUnit (expected to be a DTO) to extract ID from
+         * @return The ID of the dto, or null if no ID exists
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = TestInformation.Record.class)
+        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = TestInformation.DTO.class)
         public static java.lang.Integer
-        getId(TestInformation.DataUnit record)
+        getId(TestInformation.DTO dto)
         {
-            // Cast DataUnit to Record
-            // Convert Record to Entity to access ID field
-            Entity entity = recordToEntity((Record) record);
+            // Convert DTO to Entity to access ID field
             // Return the ID from the entity
-            return entity.getId();
+            return dtoToEntity(dto).getId();
         }
 
         /**
-         * Converts an Entity to a Record.
+         * Converts an Entity to a DTO.
          *
-         * <p>This transformation creates an immutable Record from a mutable Entity,
+         * <p>This transformation creates an immutable DTO from a mutable Entity,
          * useful for transferring data between layers (e.g., from DAO to DTO).</p>
          *
          * @param entity The Entity to convert
-         * @return A new Record containing the entity's ID and name
+         * @return A new DTO containing the entity's ID and name
          */
         @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = TestInformation.Entity.class)
-        public static TestInformation.Record
-        entityToRecord(TestInformation.Entity entity)
+        public static TestInformation.DTO
+        entityToDTO(TestInformation.Entity entity)
         {
-            // Create new Record from entity's ID and name fields
-            return new TestInformation.Record(entity.id, entity.name);
+            // Create new DTO from entity's ID and name fields
+            return new TestInformation.DTO(entity.id, entity.name);
         }
 
         /**
-         * Retrieves the name from the global Record.
+         * Retrieves the name from the global DTO.
          *
-         * <p>This method accesses the name field of the most recently created Record
-         * by calling the record's name() accessor method.</p>
+         * <p>This method accesses the name field of the most recently created DTO
+         * by calling the DTOs name() accessor method.</p>
          *
-         * @return The name of the global record
+         * @return The name of the globalDTO
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.READ, dataUnitType = {TestInformation.DataType.RECORD})
+        @TestInformation.Annotation(value = TestInformation.OperationType.READ, dataUnitType = {TestInformation.DataType.DTO})
         public static java.lang.String
-        getRecordName()
+        getDtoName()
         {
-            // Call the Record's name() accessor (auto-generated by record declaration)
-            TestInformation.Record result = getGlobalRecord();
-            return result.name();
+            // Call the DTOs name() accessor (auto-generated by DTO declaration)
+            TestInformation.DTO result = getDTO();
+            return result.getName();
         }
 
         // ########################{Entity Methods}######################################
@@ -571,79 +638,25 @@ public final class TestInformation
         }
 
         /**
-         * Converts a Record to an Entity.
+         * Converts a DTO to an Entity.
          *
-         * <p>This transformation creates a mutable Entity from an immutable Record,
+         * <p>This transformation creates a mutable Entity from an immutable DTO,
          * useful when preparing to persist data or when modification is needed.</p>
          *
-         * <p><b>Note:</b> The Record's ID is not transferred to the Entity.
+         * <p><b>Note:</b> The DTOs ID is not transferred to the Entity.
          * The Entity will have a null ID until persisted.</p>
          *
-         * @param record The Record to convert
-         * @return A new Entity containing the record's name
+         * @param dto The DTOs to convert
+         * @return A new Entity containing the DTOs name
          */
         @TestInformation.Annotation(   value = {TestInformation.OperationType.READ},
                                                 dataUnitType = {TestInformation.DataType.ENTITY},
-                                                dependsOn = {TestInformation.Record.class})
+                                                dependsOn = {TestInformation.DTO.class})
         public static TestInformation.Entity
-        recordToEntity(TestInformation.Record record)
+        dtoToEntity(TestInformation.DTO dto)
         {
-            // Create new Entity from record's name (ID is not transferred)
-            return new TestInformation.Entity(record.name());
-        }
-    }
-
-    /**
-     * Record is an immutable data structure for transferring data between application layers.
-     *
-     * <p><b>Immutability:</b> As a Java record, all fields are final and cannot be modified
-     * after construction. To change values, create a new Record instance.</p>
-     *
-     * <p><b>Purpose:</b> Records serve as data carriers between Methods, Fields, and Classes,
-     * providing a type-safe way to move data without allowing mutation.</p>
-     *
-     * <p><b>Auto-registration:</b> Upon construction, automatically registers itself
-     * as the global record through Methods.putGlobalRecord().</p>
-     *
-     * @param id The unique identifier (may be null for unpersisted records)
-     * @param name The name/label for this record
-     * @param record The DataType enum value (always RECORD for this type)
-     */
-    protected record Record(java.lang.Integer id, java.lang.String name, TestInformation.DataType record) implements DataUnit
-    {
-        /**
-         * Constructs a Record with only a name (ID will be null).
-         *
-         * <p>Delegates to the canonical constructor with null ID and RECORD type,
-         * then registers itself as the global record.</p>
-         *
-         * @param name The name for this record
-         */
-        @TestInformation.Annotation( dependsOn = {java.lang.String.class})
-        private Record(java.lang.String name)
-        {
-            // Call canonical constructor with null ID
-            this(null,name, TestInformation.DataType.RECORD);
-            // Register this record as the global record
-            TestInformation.Methods.putRecord(this);
-        }
-
-        /**
-         * Constructs a Record with both ID and name.
-         *
-         * <p>Delegates to the canonical constructor with the RECORD type,
-         * then registers itself as the global record.</p>
-         *
-         * @param id The unique identifier for this record
-         * @param name The name for this record
-         */
-        @TestInformation.Annotation( dependsOn = {java.lang.String.class, java.lang.Integer.class})
-        private Record(java.lang.Integer id, java.lang.String name)
-        {
-            // Call canonical constructor with provided ID and name
-            this(id, name, TestInformation.DataType.RECORD);
-            // Register this record as the global record
-            TestInformation.Methods.putRecord(this);
+            // Create new Entity from DTOs name (ID is not transferred)
+            return new TestInformation.Entity(dto.getId(), dto.getName());
         }
     }
 
@@ -747,7 +760,8 @@ public final class TestInformation
          * @param operation The CRUD operation being performed
          * @return true if the role has permission for the operation, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.CRUD_VALIDATOR, dependsOn = {dat.Security.entities.Role.class, java.lang.String.class})
+        @TestInformation.Annotation(value = TestInformation.OperationType.CRUD_VALIDATOR, dependsOn = { dat.Security.entities.Role.class,
+                                                                                                        java.lang.String.class})
         default boolean canPerformCrud(dat.Security.entities.Role role, java.lang.String operation)
         {
             // Convert operation to uppercase and route to appropriate permission check
@@ -845,7 +859,7 @@ public final class TestInformation
         /** Mutable data structure for persistence */
         ENTITY,
         /** Immutable data structure for transfer */
-        RECORD;
+        DTO;
     }
     
     /**
