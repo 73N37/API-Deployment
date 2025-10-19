@@ -104,6 +104,7 @@ public final class TestInformation
 
         @TestInformation.Annotation(   requiresGlobalState = true)
         public TestInformation
+//###############################################[TestInformation Methods]###############################################
         getInstance()
         {   // getInstance() [method] begins
             // Check if instance has been created yet
@@ -112,6 +113,8 @@ public final class TestInformation
             return instance;
         }   // getInstance() [method] ends
 
+
+//###############################################[DTO Methods]###############################################
         public TestInformation.DTO
         getDTO()
         {   // getDTO() [method] begins
@@ -121,6 +124,31 @@ public final class TestInformation
             return globalDTO;
         }   // getDTO [method] ends
 
+        public java.lang.Integer
+        getDtoId()
+        {   // getDtoId() [method] begins
+            // Uses getDTO to retrieve the DTO which id we want returned
+            return getDTO().getId();
+        }   // getDtoId() [method] ends
+
+        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+        public dat.TestPackage.TestInformation.DTO
+        putDTO(java.lang.Integer id,
+               java.lang.String name)
+        {
+            return new dat.TestPackage.TestInformation.DTO(id, name);
+        }
+
+        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+        public dat.TestPackage.TestInformation.DTO
+        putDTO(java.lang.String name)
+        {
+            return new dat.TestPackage.TestInformation.DTO(name);
+        }
+
+
+
+//###############################################[Entity Methods]###############################################
         public TestInformation.Entity
         getEntity()
         {   // getEntity() [method] begins
@@ -129,6 +157,32 @@ public final class TestInformation
             // If the Field 'globalEntity' is NOT null, the Entity will be returned
             return globalEntity;
         }   // getEntity() [method] ends
+
+        public java.lang.Integer
+        getEntityId()
+        {   // getEntityId() [method] begins
+            // Uses getEntity to retrieve the Entity which id we want returned
+            return getEntity().getId();
+        }   // getEntityId() [method] ends
+
+        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+        public dat.TestPackage.TestInformation.Entity
+        putEntity(String name)
+        {
+            return new dat.TestPackage.TestInformation.Entity(name);   // @return a new instance of 'DTO' (sub-class)
+        }
+
+        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+        public dat.TestPackage.TestInformation.Entity
+        putEntity(java.lang.Integer id,
+                  java.lang.String name)
+        {
+            return new dat.TestPackage.TestInformation.Entity(id, name);
+        }
+
+//###############################################[Converter Methods]###############################################
+
+
     }
 
     /**
@@ -139,17 +193,17 @@ public final class TestInformation
      * extend from abstract classes, so an interface provides the shared type hierarchy.</p>
      *
      * <p><b>Design Rationale:</b> Enables type-safe polymorphism between mutable entities
-     * and immutable dtos without forcing inheritance constraints.</p>
+     * and immutable DTOs without forcing inheritance constraints.</p>
      */
     static abstract class DataUnit {
         // This abstract class just a super-class to DTO & Entity.
-        static java.lang.String name;
+        java.lang.String name;
         java.lang.String getName()
         {   // getName() [method] begins
             return this.name;
         }   // getName() [method] ends
 
-        static java.lang.Integer id;
+        java.lang.Integer id;
         java.lang.Integer getId()
         {   // getId() [method] begins
             return this.id;
@@ -184,7 +238,7 @@ public final class TestInformation
         @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
         @lombok.Getter
         @lombok.Setter
-        static java.lang.Integer id;
+        private java.lang.Integer id;
 
         /**
          * The name property of the entity.
@@ -193,7 +247,7 @@ public final class TestInformation
         @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
         @lombok.Getter
         @lombok.Setter
-        static java.lang.String name;
+        private java.lang.String name;
 
         /**
          * Constructs a new Entity with the specified name.
@@ -202,7 +256,7 @@ public final class TestInformation
          * @param name The name to assign to this entity
          */
         @TestInformation.Annotation(   requiresGlobalState = true)
-        Entity(java.lang.String   name)
+        Entity(java.lang.String name)
         {
             // Assign the provided name to the instance field
             this.name =     name;
@@ -211,7 +265,8 @@ public final class TestInformation
         }
 
         @TestInformation.Annotation(   requiresGlobalState = true)
-        Entity(java.lang.Integer id, java.lang.String name)
+        Entity(java.lang.Integer id,
+               java.lang.String name)
         {
             this.id = id;
             this.name = name;
@@ -242,14 +297,14 @@ public final class TestInformation
         @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
         @lombok.Getter
 
-        static java.lang.Integer id;
+        private java.lang.Integer id;
         /**
          * The name property of the entity.
          * This field stores the identifying name/label for the entity instance.
          */
         @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
         @lombok.Getter
-        static java.lang.String name;
+        private java.lang.String name;
 
         DTO(TestInformation.Entity entity)
         {   // DTO [constructor] begins
@@ -257,7 +312,8 @@ public final class TestInformation
             globalDTO = this;
         }   // DTO [constructor] ends
 
-        DTO(java.lang.Integer id , java.lang.String name)
+        DTO(java.lang.Integer   id,
+            java.lang.String    name)
         {
             this.name = name;
             this.id = id;
@@ -366,30 +422,6 @@ public final class TestInformation
             return null;
         }
 
-        // ########################{Constructor Methods}######################################
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
-        public static TestInformation.DTO
-        dtoConstructor(java.lang.String name)
-        {
-            return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData (super-class)
-                                                DTO(name);   // @return a new instance of 'DTO' (sub-class)
-        }
-
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
-        public static TestInformation.DTO
-        dtoConstructor(java.lang.Integer id, java.lang.String name)
-        {
-            return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData' (super-class)
-                    DTO(id, name);   // @return a new instance of 'DTO' (sub-class)
-        }
-
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
-        public static TestInformation.Entity
-        entityConstructor(java.lang.String name)
-        {
-            return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData' (super-class)
-                                                Entity(name);   // @return a new instance of 'Entity' (sub-class)
-        }
 
         /**
          * Converts a DataUnit to an Entity class reference.
