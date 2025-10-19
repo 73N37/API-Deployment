@@ -17,8 +17,8 @@ class TestDataTest {
     @Test
     void testGetInstanceReturnsSingleton()
     {
-        TestInformation instance1 = new TestInformation().getInstance();
-        TestInformation instance2 = new TestInformation().getInstance();
+        TestInformation instance1 = new TestInformation.Data().get();
+        TestInformation instance2 = new TestInformation.Data().get();
         assertSame(instance1, instance2);
     }
 
