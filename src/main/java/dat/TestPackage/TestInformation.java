@@ -59,11 +59,12 @@ public final class TestInformation
         The ONLY way to access them is though my entity methods
     */
 
+
     private static java.lang.Integer globalId;
 
     // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
-    @TestInformation.Annotation(   requiresGlobalState = true,
-                                            value               = TestInformation.OperationType.FIELD)
+    @TestInformation.Annotation(    requiresGlobalState = true,
+                                    value               = TestInformation.OperationType.FIELD)
     @lombok.Getter
     private static TestInformation.Entity globalEntity;
 
@@ -75,39 +76,45 @@ public final class TestInformation
      * <p>This field is accessed and modified exclusively through Methods class operations.</p>
      * <p>Lombok @Getter generates a public getter for this field.</p>
      */
-    @TestInformation.Annotation(   requiresGlobalState = true,
-                                            value               = TestInformation.OperationType.FIELD)
+    @TestInformation.Annotation(    requiresGlobalState = true,
+                                    value               = TestInformation.OperationType.FIELD)
     @lombok.Getter
     private static TestInformation.Record  globalRecord;
 
 
 
-    @TestInformation.Annotation(   requiresGlobalState = true,
-                                            value               = TestInformation.OperationType.FIELD)
-    public static TestInformation instance;
+    @TestInformation.Annotation(    requiresGlobalState = true,
+                                    value               = TestInformation.OperationType.FIELD)
+    private static TestInformation instance;
 
     /**
      * Private constructor to prevent direct instantiation.
      * Use getInstance() method to obtain the singleton instance.
      */
     @TestInformation.Annotation(   requiresGlobalState = true)
-    TestInformation(){}
+    private TestInformation(){}
 
     /**
-     * Retrieves the singleton instance of TestData.
+     * Retrieves the singleton instance of Data.
      * If no instance exists, creates a new one (lazy initialization).
      *
      * <p><b>Thread Safety:</b> Not thread-safe. Considering adding synchronization for multi-threaded environments.</p>
      *
-     * @return The singleton TestData instance
+     * @return The singleton Data instance
      */
-    @TestInformation.Annotation(   requiresGlobalState = true)
-    public TestInformation getInstance()
+    public static class Data
     {
-        // Check if instance has been created yet
-        if(instance == null) instance = new TestInformation();
-        // Return the singleton instance
-        return instance;
+        // TODO: This class mus be the factory for TestInformation [class],
+        //       like Factory is to TestOperation [class]
+
+        @TestInformation.Annotation(   requiresGlobalState = true)
+        public TestInformation get()
+        {
+            // Check if instance has been created yet
+            if(instance == null) instance = new TestInformation();
+            // Return the singleton instance
+            return instance;
+        }
     }
 
     /**
@@ -140,8 +147,8 @@ public final class TestInformation
      *
      * <p>Lombok annotations provide automatic getter/setter generation.</p>
      */
-    @TestInformation.Annotation(   value        = {TestInformation.OperationType.CLASS},
-                                            dataUnitType = {TestInformation.DataType.ENTITY})
+    @TestInformation.Annotation(    value        = {TestInformation.OperationType.CLASS},
+                                    dataUnitType = {TestInformation.DataType.ENTITY})
     protected static class Entity implements DataUnit
     {
         /**
