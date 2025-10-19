@@ -1,5 +1,7 @@
 package dat.TestPackage;
 
+
+
 /**
  * TestData is a comprehensive data management class that provides a controlled API
  * for managing Entity and DTO objects through a centralized Methods class.
@@ -58,11 +60,14 @@ public final class TestInformation
         Since these Fields doesn't have getters or setters,
         The ONLY way to access them is though my entity methods
     */
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestInformation.class);
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(dat.TestPackage.TestInformation.class);
     // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
-    @TestInformation.Annotation(    requiresGlobalState = true,
-                                    value               = TestInformation.OperationType.FIELD)
-    private static TestInformation.Entity   globalEntity;
+    @dat.TestPackage.TestInformation.Annotation
+            (
+                            requiresGlobalState = true,
+                            value               = dat.TestPackage.TestInformation.OperationType.FIELD
+            )
+    private static dat.TestPackage.TestInformation.Entity   globalEntity;
 
     /**
      * Global reference to the currently active DTO class.
@@ -70,23 +75,32 @@ public final class TestInformation
      * It acts as a registry layer above individual DTO objects for tracking purposes.
      *
      * <p>This field is accessed and modified exclusively through Methods class operations.</p>
-     * <p>Lombok @Getter generates a public getter for this field.</p>
+     * <p>Lombok @Getter generates a private getter for this field.</p>
      */
-    @TestInformation.Annotation(    requiresGlobalState = true,
-                                    value               = TestInformation.OperationType.FIELD)
-    private static TestInformation.DTO      globalDTO;
+    @dat.TestPackage.TestInformation.Annotation
+            (
+                            requiresGlobalState = true,
+                            value               = dat.TestPackage.TestInformation.OperationType.FIELD
+            )
+    private static dat.TestPackage.TestInformation.DTO      globalDTO;
 
 
 
-    @TestInformation.Annotation(    requiresGlobalState = true,
-                                    value               = TestInformation.OperationType.FIELD)
-    private static TestInformation          instance;
+    @dat.TestPackage.TestInformation.Annotation
+            (
+                            requiresGlobalState = true,
+                            value               = dat.TestPackage.TestInformation.OperationType.FIELD
+            )
+    private static dat.TestPackage.TestInformation          instance;
 
     /**
      * Private constructor to prevent direct instantiation.
      * Use getInstance() method to obtain the singleton instance.
      */
-    @TestInformation.Annotation(   requiresGlobalState = true)
+    @dat.TestPackage.TestInformation.Annotation
+            (
+                            requiresGlobalState = true
+            )
     private TestInformation(){}
 
     /**
@@ -99,24 +113,30 @@ public final class TestInformation
      */
     public static class Data
     {
-        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestInformation.Data.class);
-        // TODO: This class mus be the factory for TestInformation [class],
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(dat.TestPackage.TestInformation.Data.class);
+        // TODO: This class must be the factory for TestInformation [class],
         //       like Factory is to TestOperation [class]
-
-        @TestInformation.Annotation(   requiresGlobalState = true)
-        public TestInformation
 //###############################################[TestInformation Methods]###############################################
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            requiresGlobalState = true
+                )
+        public dat.TestPackage.TestInformation
         getInstance()
         {   // getInstance() [method] begins
             // Check if instance has been created yet
-            if (instance == null) instance = new TestInformation();
+            if (instance == null) return new dat.TestPackage.TestInformation();
             // Return the singleton instance
             return instance;
         }   // getInstance() [method] ends
 
 
 //###############################################[DTO Methods]###############################################
-        public TestInformation.DTO
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        public dat.TestPackage.TestInformation.DTO
         getDTO()
         {   // getDTO() [method] begins
             // If the Field 'globalDTO' is null, null will be returned
@@ -125,7 +145,10 @@ public final class TestInformation
             return globalDTO;
         }   // getDTO [method] ends
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
         public java.lang.Integer
         getDtoId()
         {   // getDtoId() [method] begins
@@ -133,14 +156,20 @@ public final class TestInformation
             return getDTO().getId();
         }   // getDtoId() [method] ends
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
         public java.lang.String
         getDtoName()
         {
             return getDTO().getName();
         }
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
         public dat.TestPackage.TestInformation.DTO
         putDTO(java.lang.Integer id,
                java.lang.String name)
@@ -148,7 +177,10 @@ public final class TestInformation
             return new dat.TestPackage.TestInformation.DTO(id, name);
         }
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
         public dat.TestPackage.TestInformation.DTO
         putDTO(java.lang.String name)
         {
@@ -157,9 +189,13 @@ public final class TestInformation
 
 
 
+
 //###############################################[Entity Methods]###############################################
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
-        public TestInformation.Entity
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        public dat.TestPackage.TestInformation.Entity
         getEntity()
         {   // getEntity() [method] begins
             // If the Field 'globalEntity' is null, null will be returned
@@ -168,7 +204,13 @@ public final class TestInformation
             return globalEntity;
         }   // getEntity() [method] ends
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
         public java.lang.Integer
         getEntityId()
         {   // getEntityId() [method] begins
@@ -176,7 +218,13 @@ public final class TestInformation
             return getEntity().getId();
         }   // getEntityId() [method] ends
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
         public java.lang.String
         getEntityName()
         {
@@ -189,7 +237,13 @@ public final class TestInformation
             return result;
         }
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
         public dat.TestPackage.TestInformation.Entity
         putEntity(java.lang.String name)
         {
@@ -201,7 +255,13 @@ public final class TestInformation
             return globalEntity;
         }
 
-        @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
         public dat.TestPackage.TestInformation.Entity
         putEntity(java.lang.Integer id,
                   java.lang.String name)
@@ -209,9 +269,82 @@ public final class TestInformation
             return new dat.TestPackage.TestInformation.Entity(id, name);
         }
 
+
+
+
 //###############################################[Converter Methods]###############################################
+        @dat.TestPackage.TestInformation.Annotation
+        (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+        )
+        public dat.TestPackage.TestInformation.Entity
+        dtoToEntity(dat.TestPackage.TestInformation.DTO dto)
+        {
+            return Methods.dtoToEntity(dto);
+        }
 
 
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        public dat.TestPackage.TestInformation.DTO
+        entityToDTO(dat.TestPackage.TestInformation.Entity entity)
+        {
+            return Methods.entityToDTO(entity);
+        }
+
+
+
+
+        //###############################################[Validation Methods]###############################################
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.VALIDATOR
+                )
+        public boolean
+        isEntityValid(Entity entity) {
+            return entity != null && entity.getId() != null;
+        }
+
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.VALIDATOR
+                )
+        public boolean
+        isDTOValid(dat.TestPackage.TestInformation.DTO dto) {
+            return dto != null && dto.getId() != null;
+        }
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.VALIDATOR
+                )
+        // Bulk operations
+        public static java.util.List<dat.TestPackage.TestInformation.DTO> entitiesToDTOs(java.util.List<dat.TestPackage.TestInformation.Entity> entities) {
+            return entities.stream()
+                    .map(Methods::entityToDTO)
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = dat.TestPackage.TestInformation.OperationType.VALIDATOR
+                )
+        public static java.util.List<dat.TestPackage.TestInformation.Entity> dtosToEntities(java.util.List<dat.TestPackage.TestInformation.DTO> dtos) {
+            return dtos.stream()
+                    .map(Methods::dtoToEntity)
+                    .collect(java.util.stream.Collectors.toList());
+        }
     }
 
     /**
@@ -226,11 +359,18 @@ public final class TestInformation
      */
     static abstract class DataUnit {
         // This abstract class just a super-class to DTO & Entity.
+
+
+
+
         java.lang.String name;
         java.lang.String getName()
         {   // getName() [method] begins
             return this.name;
         }   // getName() [method] ends
+
+
+
 
         java.lang.Integer id;
         java.lang.Integer getId()
@@ -239,23 +379,14 @@ public final class TestInformation
         }   // getId() [method] ends
     }
 
-    /**
-     * Entity class represents a mutable data object compatible with JPA persistence.
-     *
-     * <p><b>Purpose:</b> This class is designed to be manipulated by external classes
-     * through the Methods API. It contains only a constructor and public static fields
-     * to maintain simplicity and direct access patterns.</p>
-     *
-     * <p><b>Persistence:</b> Uses JPA annotations (@Id) for database mapping.
-     * The id field is intended to be auto-generated by the persistence layer.</p>
-     *
-     * <p><b>State Management:</b> Upon construction, automatically registers itself
-     * as the global entity by updating the globalEntity field.</p>
-     *
-     * <p>Lombok annotations provide automatic getter/setter generation.</p>
-     */
-    @TestInformation.Annotation(    value        = {TestInformation.OperationType.CLASS},
-                                    dataUnitType = {TestInformation.DataType.ENTITY})
+
+
+
+    @dat.TestPackage.TestInformation.Annotation
+            (
+                            value        = {dat.TestPackage.TestInformation.OperationType.CLASS},
+                            dataUnitType = {dat.TestPackage.TestInformation.DataType.ENTITY}
+            )
     protected static class Entity extends DataUnit
     {
         /**
@@ -264,19 +395,31 @@ public final class TestInformation
          *
          * <p><b>Note:</b> Will be null until the entity is persisted to the database.</p>
          */
-        @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.FIELD
+                )
         @lombok.Getter
         @lombok.Setter
         private java.lang.Integer id;
+
+
+
 
         /**
          * The name property of the entity.
          * This field stores the identifying name/label for the entity instance.
          */
-        @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.FIELD
+                )
         @lombok.Getter
         @lombok.Setter
         private java.lang.String name;
+
+
+
 
         /**
          * Constructs a new Entity with the specified name.
@@ -284,7 +427,10 @@ public final class TestInformation
          *
          * @param name The name to assign to this entity
          */
-        @TestInformation.Annotation(   requiresGlobalState = true)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        requiresGlobalState = true
+                )
         Entity(java.lang.String name)
         {
             // Assign the provided name to the instance field
@@ -293,7 +439,13 @@ public final class TestInformation
             globalEntity =  this;
         }
 
-        @TestInformation.Annotation(   requiresGlobalState = true)
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        requiresGlobalState = true
+                )
         Entity(java.lang.Integer id,
                java.lang.String name)
         {
@@ -302,12 +454,18 @@ public final class TestInformation
             globalEntity = this;
         }
 
+
+
+
         /**
          * Provides a string representation of the entity showing its ID and name.
          *
          * @return A formatted string in the format "ID = {id}, Name = {name}"
          */
-        @TestInformation.Annotation(   value = {TestInformation.OperationType.METHOD})
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = {dat.TestPackage.TestInformation.OperationType.METHOD}
+                )
         @Override
         public java.lang.String toString(){
 
@@ -315,32 +473,73 @@ public final class TestInformation
         }
     }
 
+
+
+
     protected static class DTO extends DataUnit
     {
+
+        /**
+         * Entity class represents a mutable data object compatible with JPA persistence.
+         *
+         * <p><b>Purpose:</b> This class is designed to be manipulated by external classes
+         * through the Methods API. It contains only a constructor and public static fields
+         * to maintain simplicity and direct access patterns.</p>
+         *
+         * <p><b>Persistence:</b> Uses JPA annotations (@Id) for database mapping.
+         * The id field is intended to be auto-generated by the persistence layer.</p>
+         *
+         * <p><b>State Management:</b> Upon construction, automatically registers itself
+         * as the global entity by updating the globalEntity field.</p>
+         *
+         * <p>Lombok annotations provide automatic getter/setter generation.</p>
+         */
+
         /**
          * Primary key identifier for the entity.
          * Marked with @Id for JPA persistence. Expected to be auto-generated by the database.
          *
          * <p><b>Note:</b> Will be null until the entity is persisted to the database.</p>
          */
-        @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.FIELD
+                )
         @lombok.Getter
-
         private java.lang.Integer id;
         /**
          * The name property of the entity.
          * This field stores the identifying name/label for the entity instance.
          */
-        @TestInformation.Annotation( value = TestInformation.OperationType.FIELD)
+
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.FIELD
+                )
         @lombok.Getter
         private java.lang.String name;
 
-        DTO(TestInformation.Entity entity)
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
+        DTO(dat.TestPackage.TestInformation.Entity entity)
         {   // DTO [constructor] begins
             this.name = entity.name;
             globalDTO = this;
         }   // DTO [constructor] ends
 
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
         DTO(java.lang.Integer   id,
             java.lang.String    name)
         {
@@ -349,13 +548,23 @@ public final class TestInformation
             globalDTO = this;
         }
 
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.CONSTRUCTOR
+                )
         DTO(java.lang.String name)
         {
             this.name = name;
             globalDTO = this;
         }
 
-        @TestInformation.Annotation(   value = {TestInformation.OperationType.METHOD})
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = {dat.TestPackage.TestInformation.OperationType.METHOD}
+                )
         @Override
         public java.lang.String toString(){
 
@@ -387,17 +596,10 @@ public final class TestInformation
      *   <li><b>Conversion Methods:</b> Transform between Entity and DTO types</li>
      * </ul>
      */
-    @TestInformation.Annotation(requiresGlobalState = true, value = TestInformation.OperationType.CLASS)
-    public abstract static class
-    Methods<E extends TestInformation.Entity, DTO extends TestInformation.DTO>
-            implements TestInformation.Interface
+    @dat.TestPackage.TestInformation.Annotation(requiresGlobalState = true, value = dat.TestPackage.TestInformation.OperationType.CLASS)
+    private abstract static class
+    Methods implements dat.TestPackage.TestInformation.Interface
     {
-        // Common CRUD methods that needs to implemented in the sub-class
-        public abstract DTO create(DTO dto);
-        public abstract DTO read(java.lang.Integer id);
-        public abstract DTO update(java.lang.Integer id, DTO dto);
-        public abstract void delete(java.lang.Integer id);
-
         /**
          * Private constructor prevents instantiation.
          * All methods in this class are static and should be accessed without creating instances.
@@ -421,16 +623,23 @@ public final class TestInformation
          * @return A new instance of the specified type
          * @throws IllegalArgumentException if the type cannot be instantiated (no accessible no-arg constructor)
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
-         static <Data extends TestInformation.DataUnit> Data create(java.lang.Class<Data> type) {
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        private static <Data extends dat.TestPackage.TestInformation.DataUnit> Data
+        create(java.lang.Class<Data> type) {
             try {
-                // Uses reflection to invoke the no-argument cnstructor
-                // This is necessary because Java's type erasure prevents 'new T()'
+                // Uses reflection to invoke the no-argument constructor
+                // This is necessary because Java's type erasure prevents 'new Data()'
                 return type.getDeclaredConstructor().newInstance();
             } catch (java.lang.ReflectiveOperationException e) {
                 throw new java.lang.IllegalArgumentException("Cannot instantiate " + type.getName(), e);
             }
         }
+
+
+
 
         /**
          * Retrieves the Class object for the specified DataType.
@@ -441,15 +650,21 @@ public final class TestInformation
          * @param type The DataType enum value (ENTITY or DTO)
          * @return The Class object representing the specified type, or null if type is unrecognized
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
-        static java.lang.Class<? extends TestInformation.DataUnit> getUnitClass(DataType type){
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        private static java.lang.Class<? extends dat.TestPackage.TestInformation.DataUnit>
+        getUnitClass(DataType type){
             // Check if the requested type is ENTITY
-            if (type == TestInformation.DataType.ENTITY) return TestInformation.Entity.class;
+            if (type == dat.TestPackage.TestInformation.DataType.ENTITY) return dat.TestPackage.TestInformation.Entity.class;
             // Check if the requested type is DTO
-            if (type == TestInformation.DataType.DTO) return TestInformation.DTO.class;
+            if (type == dat.TestPackage.TestInformation.DataType.DTO) return dat.TestPackage.TestInformation.DTO.class;
             // Return null for unrecognized types
             return null;
         }
+
+
 
 
         /**
@@ -461,19 +676,18 @@ public final class TestInformation
          * @param data The DataUnit to convert
          * @return The Entity class reference if the data represents an entity, null otherwise
          */
-        public static java.lang.Class<? extends TestInformation.Entity>
-        dataUnitToEntity(TestInformation.DataType data)
-        {
-            // TODO {TLDR}: Checks if the data unit is a entity type, and return Entity.class if it is indeed a entity type.
-            // TODO {TLDR}: If anythings fails return null;
-
-            if (data. // Performs an operation on the @param data
-                    equals(TestInformation.   // Checks if @param equals something inside TestData (super-class {public final class})
-                                                    DataType.ENTITY)) return TestInformation.   // If @param equals OperationType.ENTITY @return something inside data.TestPackage.TestData
-                                                                                                    Entity. // If @param equals OperationType.ENTITY @return something inside data.TestPackage.TestData.Entity
-                                                                                                            class;  // If every step was successful @return data.TestPackage.TestData.Entity.class
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        private static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>
+        dataUnitToEntity(dat.TestPackage.TestInformation.DataType data)
+        {   //  dataUnitToEntity(D
+            if (data.equals(dat.TestPackage.TestInformation.DataType.ENTITY)) return dat.TestPackage.TestInformation.Entity.class;
             else return null; // If any of the steps above-mentioned fails return null
-        }
+        }   //
+
+
 
 
         /**
@@ -485,92 +699,19 @@ public final class TestInformation
          * @param data The DataUnit to convert
          * @return The DTO class reference if the data represents a DTO, null otherwise
          */
-        public static java.lang.Class<? extends TestInformation.DTO>
-        dataUnitToDTO(TestInformation.DataUnit data)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        public static java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>
+        dataUnitToDTO(dat.TestPackage.TestInformation.DataUnit data)
         {
-            // TODO {TLDR}: Checks if the data unit is a dto type, and return DTO.class if it is indeed a dto type.
-            // TODO {TLDR}: If anythings fails return null;
-
-            if (data. // performs an operation on the @param data
-                    equals(TestInformation.   // Checks if @param equals something inside TestData (super-class {public final class})
-                                                    DataType.DTO)) return TestInformation.   // If @param equals OperationType.DTO @return something inside data.TestPackage.TestData
-                                                                                                    DTO. // If @param equals OperationType.DTO @return something inside data.TestPackage.TestData.DTO
-                                                                                                            class; // If every step was successful @return data.TestPackage.TestData.DTO.class
+            if (data.equals(dat.TestPackage.TestInformation.DataType.DTO)) return dat.TestPackage.TestInformation.DTO.class; // If every step was successful @return data.TestPackage.TestData.DTO.class
             else return null;   // If any of the steps above-mentioned fails return null
         }
 
-//        /**
-//         * Converts a DataType enum to a DTO class reference.
-//         *
-//         * @param data The DataType enum value to check
-//         * @return The DTO class reference if data is DTO type, null otherwise
-//         */
-//        public static Class<? extends DTO>
-//        dataUnitToDTO(dat.TestPackage.TestData.DataType data)
-//        {
-//            // Check if the data type is DTO
-//            if (data.equals(dat.TestPackage.TestData.DataType.DTO)) return (DTO.class);
-//            else return null;
-//        }
 
-        // ########################{Global Methods}######################################
 
-        /**
-         * Retrieves the globally stored Entity class reference.
-         *
-         * <p>This returns the Class object of the most recently created Entity,
-         * providing access to the current global entity state.</p>
-         *
-         * @return The current global Entity class, or null if no Entity has been created
-         */
-        @TestInformation.Annotation( value = TestInformation.OperationType.READ)
-        public static TestInformation.Entity
-        getEntity()
-        {
-            return globalEntity;
-        }
-
-        /**
-         * Updates the global Entity class reference.
-         *
-         * <p>Use this method to manually set which Entity class is considered the global entity.
-         * This is automatically called when creating new entities but can be overridden.</p>
-         *
-         * @param value The Entity class to set as the global entity
-         */
-        @TestInformation.Annotation(requiresGlobalState = true, value = {TestInformation.OperationType.UPDATE}, dependsOn = {TestInformation.Entity.class})
-        public static void
-        putEntity(TestInformation.Entity value)
-        {
-            // Update the global entity reference
-            globalEntity = value;
-        }
-
-        /**
-         * Retrieves the globally stored DTO class reference.
-         *
-         * @return The current global DTO class, or null if no DTO has been created
-         */
-        @TestInformation.Annotation( value = TestInformation.OperationType.READ)
-        public static TestInformation.DTO
-        getDTO()
-        {
-            return globalDTO;
-        }
-
-        /**
-         * Updates the global DTO class reference.
-         *
-         * @param value The DTO class to set as the global dto
-         */
-        @TestInformation.Annotation(requiresGlobalState = true, value = TestInformation.OperationType.UPDATE, dependsOn = {TestInformation.DTO.class})
-        public static TestInformation.DTO
-        putDTO(TestInformation.DTO value)
-        {
-            // Update the global dto reference
-            globalDTO = value;
-            return value;
-        }
 
         // ########################{DTO Methods}######################################
         /**
@@ -582,13 +723,20 @@ public final class TestInformation
          * @param name The name for the DTO
          * @return A new DTO instance with the specified ID and name
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = { java.lang.Integer.class,
-                                                                                                java.lang.String.class})
-        public static TestInformation.DTO
-        putDTO(java.lang.Integer id, java.lang.String name)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.UPDATE,
+                        dependsOn   = { java.lang.Integer.class,
+                                        java.lang.String.class}
+                )
+        public static dat.TestPackage.TestInformation.DTO
+        putDTO(
+                java.lang.Integer id,
+                java.lang.String name
+        )
         {
             // Create and return a new DTO with both ID and name
-            return new TestInformation.DTO(id, name);
+            return new dat.TestPackage.TestInformation.DTO(id, name);
         }
 
         /**
@@ -600,14 +748,21 @@ public final class TestInformation
          * @param dto The DataUnit (expected to be a DTO) to extract ID from
          * @return The ID of the dto, or null if no ID exists
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = TestInformation.DTO.class)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.UPDATE,
+                        dependsOn   = dat.TestPackage.TestInformation.DTO.class
+                )
         public static java.lang.Integer
-        getId(TestInformation.DTO dto)
+        getId(dat.TestPackage.TestInformation.DTO dto)
         {
             // Convert DTO to Entity to access ID field
             // Return the ID from the entity
             return dtoToEntity(dto).getId();
         }
+
+
+
 
         /**
          * Converts an Entity to a DTO.
@@ -618,13 +773,20 @@ public final class TestInformation
          * @param entity The Entity to convert
          * @return A new DTO containing the entity's ID and name
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = TestInformation.Entity.class)
-        public static TestInformation.DTO
-        entityToDTO(TestInformation.Entity entity)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.UPDATE,
+                        dependsOn   = dat.TestPackage.TestInformation.Entity.class
+                )
+        public static dat.TestPackage.TestInformation.DTO
+        entityToDTO(dat.TestPackage.TestInformation.Entity entity)
         {
             // Create new DTO from entity's ID and name fields
-            return new TestInformation.DTO(entity.id, entity.name);
+            return new dat.TestPackage.TestInformation.DTO(entity.id, entity.name);
         }
+
+
+
 
         /**
          * Retrieves the name from the global DTO.
@@ -634,14 +796,20 @@ public final class TestInformation
          *
          * @return The name of the globalDTO
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.READ, dataUnitType = {TestInformation.DataType.DTO})
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value           = dat.TestPackage.TestInformation.OperationType.READ,
+                        dataUnitType    = {dat.TestPackage.TestInformation.DataType.DTO}
+                )
         public static java.lang.String
         getDtoName()
         {
             // Call the DTOs name() accessor (auto-generated by DTO declaration)
-            TestInformation.DTO result = getDTO();
-            return result.getName();
+            return new dat.TestPackage.TestInformation.Data().getDTO().getName();
         }
+
+
+
 
         // ########################{Entity Methods}######################################
 
@@ -655,15 +823,22 @@ public final class TestInformation
          * @param id The ID parameter (currently unused - consider removing or implementing)
          * @return A new Entity instance with the specified name
          */
-        @TestInformation.Annotation(   dataUnitType    = TestInformation.DataType.ENTITY,
-                                                dependsOn       = { java.lang.String.class,
-                                                                    java.lang.Integer.class})
-        public static TestInformation.Entity
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        dataUnitType    = dat.TestPackage.TestInformation.DataType.ENTITY,
+                        dependsOn       = { java.lang.String.class,
+                                            java.lang.Integer.class}
+                )
+        public static dat.TestPackage.TestInformation.Entity
         putEntity(java.lang.String name, java.lang.Integer id)
         {
             // Create new Entity (id parameter is not used)
-            return new TestInformation.Entity(name);
+            return new dat.TestPackage.TestInformation.Entity(name);
         }
+
+
+
+
 
         /**
          * Retrieves the name from the global Entity.
@@ -672,7 +847,10 @@ public final class TestInformation
          *
          * @return The name of the global entity
          */
-        @TestInformation.Annotation(dataUnitType = TestInformation.DataType.ENTITY)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        dataUnitType = dat.TestPackage.TestInformation.DataType.ENTITY
+                )
         public static java.lang.String
         getEntityName()
         {
@@ -688,15 +866,21 @@ public final class TestInformation
          * @param entity The Entity to extract the ID from
          * @return The entity's ID, or null if not persisted
          */
-        @TestInformation.Annotation(value          = {TestInformation.OperationType.READ},
-                                            dataUnitType    = {TestInformation.DataType.ENTITY},
-                                            dependsOn       = {TestInformation.Entity.class})
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value           = {dat.TestPackage.TestInformation.OperationType.READ},
+                        dataUnitType    = {dat.TestPackage.TestInformation.DataType.ENTITY},
+                        dependsOn       = {dat.TestPackage.TestInformation.Entity.class}
+                )
         public static java.lang.Integer
-        getId(TestInformation.Entity entity)
+        getId(dat.TestPackage.TestInformation.Entity entity)
         {
             // Return the ID field from the entity
             return entity.id;
         }
+
+
+
 
         /**
          * Converts a DTO to an Entity.
@@ -710,14 +894,17 @@ public final class TestInformation
          * @param dto The DTOs to convert
          * @return A new Entity containing the DTOs name
          */
-        @TestInformation.Annotation(   value = {TestInformation.OperationType.READ},
-                                                dataUnitType = {TestInformation.DataType.ENTITY},
-                                                dependsOn = {TestInformation.DTO.class})
-        public static TestInformation.Entity
-        dtoToEntity(TestInformation.DTO dto)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value           = {dat.TestPackage.TestInformation.OperationType.READ},
+                        dataUnitType    = {dat.TestPackage.TestInformation.DataType.ENTITY},
+                        dependsOn       = {dat.TestPackage.TestInformation.DTO.class}
+                )
+        public static dat.TestPackage.TestInformation.Entity
+        dtoToEntity(dat.TestPackage.TestInformation.DTO dto)
         {
-            // Create new Entity from DTOs name (ID is not transferred)
-            return new TestInformation.Entity(dto.getId(), dto.getName());
+            // Create new Entity from DTOs name (ID is transferred)
+            return new dat.TestPackage.TestInformation.Entity(dto.getId(), dto.getName());
         }
     }
 
@@ -737,7 +924,10 @@ public final class TestInformation
      *
      * @param <ID> The type of the identifier (must be Serializable)
      */
-    @TestInformation.Annotation(value = TestInformation.OperationType.INTERFACE)
+    @dat.TestPackage.TestInformation.Annotation
+            (
+                    value = dat.TestPackage.TestInformation.OperationType.INTERFACE
+            )
     private interface Interface<ID extends java.io.Serializable>
     {
         /**
@@ -747,7 +937,11 @@ public final class TestInformation
          *
          * @return The unique identifier
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.IDENTIFIER, requiresGlobalState = true)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value               = dat.TestPackage.TestInformation.OperationType.IDENTIFIER,
+                        requiresGlobalState = true
+                )
         ID getId();
 
         /**
@@ -756,7 +950,11 @@ public final class TestInformation
          * @param role The user role to check
          * @return true if the role can read, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.READ, dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.READ,
+                        dependsOn   = dat.Security.entities.Role.class
+                )
         boolean canRead(dat.Security.entities.Role role);
 
         /**
@@ -765,7 +963,11 @@ public final class TestInformation
          * @param role The user role to check
          * @return true if the role can write, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.WRITE, dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.WRITE,
+                        dependsOn   = dat.Security.entities.Role.class
+                )
         boolean canWrite(dat.Security.entities.Role role);
 
         /**
@@ -774,7 +976,11 @@ public final class TestInformation
          * @param role The user role to check
          * @return true if the role can delete, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.DELETE, dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.DELETE,
+                        dependsOn   = dat.Security.entities.Role.class
+                )
         boolean canDelete(dat.Security.entities.Role role);
 
         /**
@@ -783,7 +989,11 @@ public final class TestInformation
          * @param role The user role to check
          * @return true if the role can update, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.UPDATE, dependsOn = dat.Security.entities.Role.class)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.UPDATE,
+                        dependsOn   = dat.Security.entities.Role.class
+                )
         boolean canUpdate(dat.Security.entities.Role role);
 
         /**
@@ -797,7 +1007,11 @@ public final class TestInformation
          *
          * @return true if the object is in a valid state, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.VALIDATOR, requiresGlobalState = true)
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value               = dat.TestPackage.TestInformation.OperationType.VALIDATOR,
+                        requiresGlobalState = true
+                )
         default boolean isValid()
         {
             // Check that ID exists and is numeric
@@ -821,8 +1035,12 @@ public final class TestInformation
          * @param operation The CRUD operation being performed
          * @return true if the role has permission for the operation, false otherwise
          */
-        @TestInformation.Annotation(value = TestInformation.OperationType.CRUD_VALIDATOR, dependsOn = { dat.Security.entities.Role.class,
-                                                                                                        java.lang.String.class})
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value       = dat.TestPackage.TestInformation.OperationType.CRUD_VALIDATOR,
+                        dependsOn   = { dat.Security.entities.Role.class,
+                                        java.lang.String.class}
+                )
         default boolean canPerformCrud(dat.Security.entities.Role role, java.lang.String operation)
         {
             // Convert operation to uppercase and route to appropriate permission check
@@ -862,7 +1080,7 @@ public final class TestInformation
          * The operation type(s) this element performs.
          * @return An array of OperationType values (default: UNKNOWN)
          */
-        TestInformation.OperationType[] value() default {TestInformation.OperationType.UNKNOWN};
+        dat.TestPackage.TestInformation.OperationType[] value() default {dat.TestPackage.TestInformation.OperationType.UNKNOWN};
 
         /**
          * Indicates whether this element requires global state to function.
@@ -880,7 +1098,7 @@ public final class TestInformation
          * Specifies which data unit type this element belongs to.
          * @return The DataType (ENTITY or RECORD), empty array if not applicable
          */
-        TestInformation.DataType[] dataUnitType() default {};
+        dat.TestPackage.TestInformation.DataType[] dataUnitType() default {};
 
         /**
          * Whether this is the primary type definition
@@ -914,7 +1132,7 @@ public final class TestInformation
      * <p><b>ENTITY:</b> Represents mutable, persistable data objects</p>
      * <p><b>RECORD:</b> Represents immutable, transferable data objects</p>
      */
-    public enum DataType
+    private enum DataType
     {
         UNKNOWN,
         /** Mutable data structure for persistence */
@@ -931,8 +1149,6 @@ public final class TestInformation
      */
     private enum OperationType
     {
-        /** General data operations */
-        DATA,
         /** Identity/ID-related operations */
         IDENTIFIER,
         /** Validation operations */
