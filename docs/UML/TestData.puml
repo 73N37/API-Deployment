@@ -1,27 +1,33 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+class TestInformation.Entity
+class TestInformation.Entity implements TestInformation.DataUnit
+
+
 'abstract class Methods
-abstract Methods implements Interface
-class Entity implements DataUnit
-record Record implements DataUnit
-interface Interface
-interface DataUnit
+abstract TestInformation.Methods implements TestInformation.Interface
+
+record TestInformation.Record implements TestInformation.DataUnit
+
+interface TestInformation.Interface
+
+interface TestInformation.DataUnit
 
 class TestData{
 'Global Fields
 - Entity globalEntity
 - Record globalRecord
-+ TestData instance
++ TestInformation instance
 
-- TestData()
-+ TestData getInstance()
+- TestInformation()
++ TestInformation getInstance()
 + abstract class Methods()
 - interface Interface()
 - class Entity()
 }
 
-class Entity{
+class TestInformation.Entity{
 - Integer id
 - String name
 Entity(String name)
@@ -29,7 +35,10 @@ Entity(String name)
 + toString()
 }
 
-abstract class Methods{
+record TestInformation.Record{
+}
+
+abstract class TestInformation.Methods{
 - Methods()
 - <Data extends DataUnit> create(Class<Data>)
 - Class<? extends DataUnit> getUnitClass(DataType type)
