@@ -178,16 +178,15 @@ public final class TestInformation
         public dat.TestPackage.TestInformation.DTO
         getDTO()
         {
-            dat.TestPackage.TestInformation.DTO result = null;
             try
             {   // try-block [conditional] begins
-                if (globalDTO != null) result = globalDTO;  // if globalDTO is NOT null the value will be copied
-                return result;
+                if (globalDTO != null) return globalDTO;
+                return null;
             }   // try-block [conditional] ends
             catch (Exception e)
             {   // catch-block [conditional] begins
                 log.error("Was unable to retrieve any data from 'globalDTO'. Null will be returned");
-                return result;
+                return null;
             }   // catch-block [conditional] ends
         }   // getDTO [method] ends
 
@@ -264,14 +263,14 @@ public final class TestInformation
                java.lang.String name)
         {   // putDTO(Integer, String) [method] begins
             try
-            {
-
-            }
+            {   // try-block [conditional] begins
+                return new dat.TestPackage.TestInformation.DTO(id, name);
+            }   // try-block [conditional] ends
             catch (Exception e)
-            {
-
-            }
-            return new dat.TestPackage.TestInformation.DTO(id, name);
+            {   // catch-block [conditional] begins
+                log.error("Was unable to create a new instance of DTO");
+                return null;
+            }   // catch-block [conditional] ends
         }   // putDTO(Integer,String) [method] ends
 
 
@@ -284,7 +283,15 @@ public final class TestInformation
         public dat.TestPackage.TestInformation.DTO
         putDTO(java.lang.String name)
         {   // putDTO(String) [method] begins
-            return new dat.TestPackage.TestInformation.DTO(name);
+            try
+            {   // try-block [conditional] begins
+                return new dat.TestPackage.TestInformation.DTO(name);
+            }   // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block [conditional] begins
+                log.error("Was unable to create a new instance of DTO");
+                return null;
+            }   // catch-block [conditional] ends
         }   // putDTO(String [method] ends
 
 
@@ -297,11 +304,18 @@ public final class TestInformation
                 )
         public dat.TestPackage.TestInformation.Entity
         getEntity()
-        {   // getEntity() [method] begins
-            // If the Field 'globalEntity' is null, null will be returned
-            if (globalEntity == null) return null;
-            // If the Field 'globalEntity' is NOT null, the Entity will be returned
-            return globalEntity;
+        {
+            try
+            {   // try-block [conditional] begins
+                if (globalEntity != null) return globalEntity;
+                return null;
+            }   // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block [conditional] begins
+                log.error("Was unable to retrieve any data from 'globalDTO'. Null will be returned");
+                return null;
+            }   // catch-block [conditional] ends
+
         }   // getEntity() [method] ends
 
 
