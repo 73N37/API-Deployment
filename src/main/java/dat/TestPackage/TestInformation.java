@@ -58,7 +58,7 @@ public final class TestInformation
         Since these Fields doesn't have getters or setters,
         The ONLY way to access them is though my entity methods
     */
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestInformation.class);
     // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
     @TestInformation.Annotation(    requiresGlobalState = true,
                                     value               = TestInformation.OperationType.FIELD)
@@ -99,6 +99,7 @@ public final class TestInformation
      */
     public static class Data
     {
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestInformation.Data.class);
         // TODO: This class mus be the factory for TestInformation [class],
         //       like Factory is to TestOperation [class]
 
@@ -124,12 +125,20 @@ public final class TestInformation
             return globalDTO;
         }   // getDTO [method] ends
 
+        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
         public java.lang.Integer
         getDtoId()
         {   // getDtoId() [method] begins
             // Uses getDTO to retrieve the DTO which id we want returned
             return getDTO().getId();
         }   // getDtoId() [method] ends
+
+        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
+        public java.lang.String
+        getDtoName()
+        {
+            return getDTO().getName();
+        }
 
         @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
         public dat.TestPackage.TestInformation.DTO
@@ -149,6 +158,7 @@ public final class TestInformation
 
 
 //###############################################[Entity Methods]###############################################
+        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
         public TestInformation.Entity
         getEntity()
         {   // getEntity() [method] begins
@@ -158,6 +168,7 @@ public final class TestInformation
             return globalEntity;
         }   // getEntity() [method] ends
 
+        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
         public java.lang.Integer
         getEntityId()
         {   // getEntityId() [method] begins
@@ -165,11 +176,29 @@ public final class TestInformation
             return getEntity().getId();
         }   // getEntityId() [method] ends
 
+        @TestInformation.Annotation(value = TestInformation.OperationType.METHOD)
+        public java.lang.String
+        getEntityName()
+        {
+            java.lang.String result = null;
+            try{
+                result = getEntity().getName();
+            } catch (Exception e){
+                log.error("Was unable to retrieve name from {} ", getEntity().getClass(), e);
+            }
+            return result;
+        }
+
         @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
         public dat.TestPackage.TestInformation.Entity
-        putEntity(String name)
+        putEntity(java.lang.String name)
         {
-            return new dat.TestPackage.TestInformation.Entity(name);   // @return a new instance of 'DTO' (sub-class)
+            try{
+                globalEntity = new dat.TestPackage.TestInformation.Entity(name);
+            } catch (Exception e){
+                log.error("Was unable to set 'globalEntity' param=[ DataType= {} : {}]",String.class, name, e);
+            }
+            return globalEntity;
         }
 
         @TestInformation.Annotation(value = TestInformation.OperationType.CONSTRUCTOR)
