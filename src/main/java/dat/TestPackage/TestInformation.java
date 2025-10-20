@@ -27,7 +27,7 @@ package dat.TestPackage;
  * @version 1.0
  * @since 2025-10-15
  */
-public final class TestInformation
+public final class TestInformation extends TestUtilization
 {
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -62,9 +62,11 @@ public final class TestInformation
     */
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(dat.TestPackage.TestInformation.class);
 
-    java.lang.Integer idCount;
+    // TODO:    This is my iterates 1 up everytime 'idCounter.incrementAndGet()' is called.
+    //          This is to generate IDs for entities and DTOs.
+    private static final java.util.concurrent.atomic.AtomicInteger idCounter = new java.util.concurrent.atomic.AtomicInteger(0);
 
-    // The globalEntity is NOT the same Class as the Entity Class itself, since it is a layer above the Entity Object
+    // The globalEntity is the same Class as the Entity Class itself, since it is a layer above the Entity Object
     @dat.TestPackage.TestInformation.Annotation
             (
                             requiresGlobalState = true,
@@ -105,6 +107,70 @@ public final class TestInformation
                             requiresGlobalState = true
             )
     private TestInformation(){}
+
+
+
+
+    public class EntityRepository
+    {   //
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(dat.TestPackage.TestInformation.EntityRepository.class);
+        private final jakarta.persistence.EntityManager em = dat.TestPackage.TestInformation.emf.createEntityManager();
+
+
+        public dat.TestPackage.TestInformation.Entity
+        put(dat.TestPackage.TestInformation.Entity entity)
+        {   // put(Entity) [method] begins
+            try
+            {   // try-block [conditional] begins
+                em.getTransaction().begin();
+                em.persist(entity);
+                em.getTransaction().commit();
+                return entity;
+            }   // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block [conditional] begins
+               log.error("Was unable to persist Entity={}", entity, e);
+               return null;
+            }   //catch-block [conditional] ends
+        }   // put(Entity) [method] ends
+
+
+
+        public dat.TestPackage.TestInformation.Entity
+        get(java.lang.Integer id)
+        {   // get(Integer) [method] begins
+            try
+            {   // try-block [conditional] begins
+                em.getTransaction().begin();
+                dat.TestPackage.TestInformation.Entity entity = em.find(dat.TestPackage.TestInformation.Entity.class, id);
+                em.getTransaction().commit();
+                return entity;
+            }   // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block [conditional] begins
+                em.getTransaction().rollback();
+                log.error("Was unable to find an entity with Id="+id+" in the database",e);
+                return null;
+            }   // catch-block [conditional] ends
+        }   // get(Integer) [method] ends
+
+
+        public void
+        delete(dat.TestPackage.TestInformation.Entity entity)
+        { em.remove(entity);
+            try
+            {   // try-block [conditional] begins
+                em.getTransaction().begin();
+                em.remove(entity);
+                em.getTransaction().commit();
+            }   // try-block [conditional] ends
+            catch(Exception e)
+            {   // catch(Exception e) [conditional] begins
+                em.getTransaction().rollback();
+                log.error("Was unable to delete an entity matching this in ="+entity+" in the database",e);
+            }   // catch(Exception e) [conditional] ends
+        }   // delete(Entity) [method] ends
+    }   // EntityRepository [class] ends
 
     /**
      * Retrieves the singleton instance of Data.
@@ -168,12 +234,50 @@ public final class TestInformation
         }   // clearGlobalState [method] ends
 
 
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value               = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        public java.lang.String
+        getName(dat.TestPackage.TestInformation.DataUnit dataUnit)
+        {
+            if (dataUnit instanceof DTO)    return dataUnit.getName();
+            if (dataUnit instanceof Entity) return dataUnit.getName();
+            else return null;       // Unreachable since dataUnit ONLY extends to DTO & Entity
+        }
 
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                        value               = dat.TestPackage.TestInformation.OperationType.METHOD
+                )
+        public java.lang.Integer
+        getId(dat.TestPackage.TestInformation.DataUnit dataUnit)
+        {
+            if (dataUnit instanceof DTO)    return dataUnit.getId();
+            if (dataUnit instanceof Entity) return dataUnit.getId();
+            else return null;       // Unreachable since dataUnit ONLY extends to DTO & Entity
+        }
 
 //###############################################[DTO Methods]###############################################
         @dat.TestPackage.TestInformation.Annotation
                 (
-                            value = dat.TestPackage.TestInformation.OperationType.METHOD
+                            value = {dat.TestPackage.TestInformation.OperationType.CLASS}
+                )
+        public java.lang.Class<dat.TestPackage.TestInformation.DTO>
+        getDTOClass()
+        {
+            return dat.TestPackage.TestInformation.DTO.class;
+        }
+
+
+
+
+        @dat.TestPackage.TestInformation.Annotation
+                (
+                            value = {dat.TestPackage.TestInformation.OperationType.METHOD}
                 )
         public dat.TestPackage.TestInformation.DTO
         getDTO()
@@ -289,7 +393,7 @@ public final class TestInformation
             }   // try-block [conditional] ends
             catch (Exception e)
             {   // catch-block [conditional] begins
-                log.error("Was unable to create a new instance of DTO");
+                log.error("Was unable to create a new instance of DTO={}", e);
                 return null;
             }   // catch-block [conditional] ends
         }   // putDTO(String [method] ends
@@ -297,7 +401,7 @@ public final class TestInformation
 
 
 
-//###############################################[Entity Methods]###############################################
+        //###############################################[Entity Methods]###############################################
         @dat.TestPackage.TestInformation.Annotation
                 (
                             value = dat.TestPackage.TestInformation.OperationType.METHOD
@@ -348,8 +452,6 @@ public final class TestInformation
                 return null;
             }   // catch-block [conditional] ends
         }   // getEntityId() [method] ends
-
-
 
 
         @dat.TestPackage.TestInformation.Annotation
@@ -512,7 +614,7 @@ public final class TestInformation
 
 
         protected java.lang.String name;
-        protected java.lang.String getName()
+        public java.lang.String getName()
         {   // getName() [method] begins
             return this.name;
         }   // getName() [method] ends
@@ -521,7 +623,7 @@ public final class TestInformation
 
 
         protected java.lang.Integer id;
-        java.lang.Integer getId()
+        public java.lang.Integer getId()
         {   // getId() [method] begins
             return this.id;
         }   // getId() [method] ends
@@ -557,6 +659,7 @@ public final class TestInformation
                 )
         Entity(java.lang.String name)
         {
+            this.id = idCounter.incrementAndGet();
             // Assign the provided name to the instance field
             this.name =     name;       // Uses inherited Field from DataUnit
             // Register this entity's class as the current global entity
@@ -573,7 +676,8 @@ public final class TestInformation
         Entity(java.lang.Integer id,
                java.lang.String name)
         {
-            this.id = id;               // Uses inherited Field from DataUnit
+            if ( id != null ) this.id = id;
+            else this.id = idCounter.incrementAndGet();
             this.name = name;           // Uses inherited Field from DataUnit
             globalEntity = this;
         }
@@ -590,6 +694,8 @@ public final class TestInformation
                 )
         DTO(dat.TestPackage.TestInformation.Entity entity)
         {   // DTO [constructor] begins
+            if (entity.id == null ) this.id = idCounter.incrementAndGet();
+            else this.id = entity.id;
             this.name = entity.name;
             globalDTO = this;
         }   // DTO [constructor] ends
@@ -604,9 +710,10 @@ public final class TestInformation
         DTO(java.lang.Integer   id,
             java.lang.String    name)
         {
-            this.name = name;
-            this.id = id;
-            globalDTO = this;
+            if ( id != null ) this.id = id;             //  Assigns inherited (from DataUnit) Field 'id'
+            else this.id = idCounter.incrementAndGet(); //
+            this.name = name;                           //  Assigns inherited (from DataUnit) Field 'name'
+            globalDTO = this;                           //  Assigns 'globalDTO' to this newly created instance
         }
 
 
@@ -618,6 +725,7 @@ public final class TestInformation
                 )
         DTO(java.lang.String name)
         {
+            this.id = idCounter.incrementAndGet();
             this.name = name;
             globalDTO = this;
         }
@@ -732,32 +840,39 @@ public final class TestInformation
 
 
 
-        @Override
-        public boolean
-        canRead(dat.Security.entities.Role role)
-        {
-
-        }
-
-
-
-        @Override
-        public boolean
-        canWrite(dat.Security.entities.Role role)
-        {
-
-        }
-
-
-
-        @Override
-        public boolean
-        canDelete(dat.Security.entities.Role role)
-        {
-
-        }
-
-
+//        @Override
+//        public boolean
+//        canRead(dat.Security.entities.Role role)
+//        {
+//
+//        }
+//
+//
+//
+//        @Override
+//        public boolean
+//        canWrite(dat.Security.entities.Role role)
+//        {
+//
+//        }
+//
+//
+//
+//        @Override
+//        public boolean
+//        canDelete(dat.Security.entities.Role role)
+//        {
+//
+//        }
+//
+//
+//
+//        @Override
+//        public boolean
+//        canUpdate(dat.Security.entities.Role role)
+//        {
+//
+//        }
         // ########################{DTO Methods}######################################
         /**
          * Creates a new DTO with both ID and name.
