@@ -25,10 +25,11 @@ public class Main
 
         app.start(7070);
 
-        System.out.println("Record Data = " + TestInformation.Methods.recordConstructor("Through hard work comes EXCELLENCE"));
-        System.out.println("Entity Data = " + TestInformation.Methods.entityConstructor( "Merovingian"));
-        System.out.println("globalEntity Name = {Merovingian} = " + TestInformation.Methods.getEntity());
-        System.out.println("globalRecord Name {Through hard work comes EXCELLENCE}, " + TestInformation.Methods.getRecord());
+
+        System.out.println("DTO Data = " + new TestInformation.Data().putDTO("Through hard work comes EXCELLENCE"));
+        System.out.println("Entity Data = " + new TestInformation.Data().putEntity( "Merovingian"));
+        System.out.println("globalEntity Name = {Merovingian} = " + new TestInformation.Data().getEntity());
+        System.out.println("globalDTO Name {Through hard work comes EXCELLENCE}, " + new TestInformation.Data().getDTO());
         System.out.println("=== MAIN IS COMPLETE ===");
     }
 }

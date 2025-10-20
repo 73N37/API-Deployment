@@ -41,7 +41,7 @@ public final class TestOperation
         {   // Factory [middle-class] begins
             protected static final jakarta.persistence.EntityManagerFactory                     emf = dat.Config.HibernateConfig.createEMF(false);  // I changed this to be created on instantiation of this class. So that I do not need to pass it around all the time.
             protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>  entityClass;
-            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Record>  dtoClass;
+            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>     dtoClass;
             protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
             protected static dat.TestPackage.TestOperation.DAO                                  dao;
             protected static dat.TestPackage.TestOperation.Service                              service;
@@ -62,8 +62,8 @@ public final class TestOperation
                 return result;                          // returns the Factory which now has an idClass & entityClass, as global Fields
             }   // Factory [constructor] ends
 
-            public Factory forRecord(
-                    java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass,
+            public Factory forDTO(
+                    java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>   dtoClass,
                     java.lang.Class<? extends java.io.Serializable>                     idClass)
             {   // Factory [constructor] begins
                 Factory result      = new Factory ();       // create a new instance of Factory
@@ -75,7 +75,7 @@ public final class TestOperation
             // All args constructor
             public Factory(
                     java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass,
-                    java.lang.Class<? extends dat.TestPackage.TestInformation.Record>   dtoClass,
+                    java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>   dtoClass,
                     java.lang.Class<? extends java.io.Serializable>                     idClass)
             {   // Factory [constructor] begins
                 this.entityClass    = entityClass;
@@ -164,43 +164,43 @@ public final class TestOperation
     }   // DAO [class] ends
 
     static class Service<   Entity  extends TestInformation.Entity,
-                            Record  extends TestInformation.Record,
+                            DTO     extends TestInformation.DTO,
                             Id      extends java.io.Serializable>
     {   // Service [middle-class] begins
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
         interface Interface<Entity  extends TestInformation.Entity,
-                            Record  extends TestInformation.Record,
+                            DTO     extends TestInformation.DTO,
                             Id      extends java.io.Serializable>
         {
-            Record create(Record dto);
-            Record read(Id id);
-            Record update(Id id, Record dto);
+            DTO create(DTO dto);
+            DTO read(Id id);
+            DTO update(Id id, DTO dto);
             void delete(Id id);
             void delete(Entity entity);
-            java.util.Set<Record> readAllDTOs();
+            java.util.Set<DTO> readAllDTOs();
             java.util.Set<Entity> readAllEntities();
-            Entity dtoToEntity(Record dto);
-            Record entityToDTO(Entity entity);
+            Entity dtoToEntity(DTO dto);
+            DTO entityToDTO(Entity entity);
         }
 
-        public TestInformation.Record entityToDTO(TestInformation.Entity entity)
+        public TestInformation.DTO entityToDTO(TestInformation.Entity entity)
         {
             if(entity != null)
             {
-                return TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
-                                                Methods.    // find a method within 'dat.TestPackage.TestData.Methods'.
-                                                        entityToRecord(entity); // Use 'entityToRecord' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Record' based on @param.
+                return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
+                                            Data().    // find a method within 'dat.TestPackage.TestData.Methods'.
+                                                    entityToDTO(entity); // Use 'entityToDTO' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.DTO' based on @param.
             }
                 else return null;   // return null if @param is null OR any of the steps above fail
         }
 
-        public TestInformation.Entity dtoToEntity(TestInformation.Record record)
+        public TestInformation.Entity dtoToEntity(TestInformation.DTO dto)
         {
-            if(record != null)
+            if(dto != null)
             {
-                return TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
-                                                Methods.   // find a method within 'dat.TestPackage.TestData.Methods'.
-                                                        recordToEntity(record); // Use 'recordToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
+                return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
+                                            Data().   // find a method within 'dat.TestPackage.TestData.Methods'.
+                                                    dtoToEntity(dto); // Use 'dtoToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
             }
             else return null; // return null if @param is null OR any of the steps above fail
         }
