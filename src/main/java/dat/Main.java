@@ -29,8 +29,8 @@ public class Main
 
         System.out.println("DTO Data = " + dto);
         System.out.println("Entity Data = " + entity);
-        System.out.println("globalEntity Name = {Merovingian} = " + new dat.TestPackage.TestInformation.Data().getName(entity));
-        System.out.println("globalDTO Name {Through hard work comes EXCELLENCE}, " + new dat.TestPackage.TestInformation.Data().getName(dto));
+        System.out.println("globalEntity Name = Merovingian == " + new dat.TestPackage.TestInformation.Data().getName(entity));
+        System.out.println("globalDTO Name Through hard work comes EXCELLENCE == " + new dat.TestPackage.TestInformation.Data().getName(dto));
         System.out.println("=== MAIN IS COMPLETE ===");
     }
 }
