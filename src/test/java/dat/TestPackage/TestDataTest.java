@@ -10,111 +10,95 @@ class TestDataTest {
     void setUp()
     {
         // Reset global state before each test to avoid test pollution
-        TestData.Methods.constructor(TestData.DataType.ENTITY, "ResetEntity");
-        TestData.Methods.constructor(TestData.DataType.RECORD, "ResetRecord");
+        new TestInformation.Data().putEntity("ResetEntity");
+        new TestInformation.Data().putDTO("ResetDTO");
     }
 
     @Test
-    void testGetInstanceReturnsSingleton()
+    void testGetInstanceInstanceReturnsSingleton()
     {
-        TestData instance1 = new TestData().getInstance();
-        TestData instance2 = new TestData().getInstance();
+        TestInformation instance1 = new TestInformation.Data().getInstance();
+        TestInformation instance2 = new TestInformation.Data().getInstance();
         assertSame(instance1, instance2);
     }
-
-
-    @Test
-    void testGetUnitClassForEntity()
-    {
-        Class<?> clazz = TestData.Methods.getUnitClass(TestData.DataType.ENTITY);
-        assertNotNull(clazz);
-        assertEquals("Entity", clazz.getSimpleName());
-    }
-
-
-    @Test
-    void testGetUnitClassForRecord()
-    {
-        Class<?> clazz = TestData.Methods.getUnitClass(TestData.DataType.RECORD);
-        assertNotNull(clazz);
-        assertEquals("Record", clazz.getSimpleName());
-    }
-
 
     @Test
     void testConstructorCreatesEntity()
     {
-        dat.TestPackage.TestData.DataUnit entity = TestData.Methods.constructor(TestData.DataType.ENTITY, "TestEntity");
+        TestInformation.Entity entity = new TestInformation.Data().putEntity("TestEntity");
+        assertNotNull(entity, "Constructor should return a non-null entity");
+        assertNotNull(new TestInformation.Data().getEntity(), "Global entity should be set");
+        assertEquals("TestEntity", new TestInformation.Data().getEntityName());
+    }
+
+    @Test
+    void testConstructorCreatesDTO()
+    {
+        TestInformation.DTO dto = new TestInformation.Data().putDTO("TestDTO");
+        assertNotNull(dto);
+        assertEquals("TestDTO", dto.getName());
+    }
+
+    @Test
+    void testGetInstanceEntityReturnsGlobalEntity()
+    {
+        new TestInformation.Data().putDTO("GlobalEntity");
+        TestInformation.DataUnit entity = new TestInformation.Data().getEntity();
         assertNotNull(entity);
-        assertEquals("TestEntity", TestData.Methods.getEntityName());
     }
 
     @Test
-    void testConstructorCreatesRecord()
+    void testGetInstanceGlobalRecordReturnsGlobalRecord()
     {
-        dat.TestPackage.TestData.DataUnit record = TestData.Methods.constructor(TestData.DataType.RECORD, "TestRecord");
-        assertNotNull(record);
-        assertEquals("TestRecord", TestData.Methods.getRecordName());
-    }
-
-    @Test
-    void testGetEntityReturnsGlobalEntity()
-    {
-        TestData.Methods.constructor(TestData.DataType.ENTITY, "GlobalEntity");
-        TestData.DataUnit entity = TestData.Methods.getEntity();
-        assertNotNull(entity);
-    }
-
-
-    @Test
-    void testGetGlobalRecordReturnsGlobalRecord()
-    {
-        TestData.Methods.constructor(TestData.DataType.RECORD, "GlobalRecord");
-        TestData.Record record = TestData.Methods.getGlobalRecord();
-        assertNotNull(record);
+        new TestInformation.Data().putDTO("GlobalRecord");
+        TestInformation.DTO dto = new TestInformation.Data().getDTO();
+        assertNotNull(dto);
     }
 
     @Test
     void testPutRecordWithNameOnly()
     {
-        TestData.DataUnit record = TestData.Methods.putRecord("NewRecord");
-        assertNotNull(record);
-        assertEquals("NewRecord", TestData.Methods.getRecordName());
+        TestInformation.DTO dto = new TestInformation.Data().putDTO("NewDTO");
+        assertNotNull(dto);
+        assertEquals("NewDTO", new TestInformation.Data().getDtoName());
     }
 
     @Test
     void testPutRecordWithIdAndName()
     {
-        TestData.DataUnit record = TestData.Methods.putRecord(42, "RecordWithId");
-        assertNotNull(record);
-        Integer id = TestData.Methods.getId((TestData.DataUnit) record);
-        assertEquals(42, id);
+        TestInformation.DTO dto = new TestInformation.Data().putDTO(42, "DTOWithId");
+        assertNotNull(dto);
+        assertEquals(42, dto.getId());
     }
 
     @Test
-    void testGetIdFromRecord()
+    void testGetInstanceIdFromRecord()
     {
-        TestData.DataUnit record = TestData.Methods.putRecord(100, "TestRecord");
-        Integer id = TestData.Methods.getId((TestData.DataUnit) record);
+        TestInformation.DTO dto = new TestInformation.Data().putDTO(100, "TestRecord");
+        Integer id = dto.getId();
         assertEquals(100, id);
     }
 
     @Test
-    void testEntityToRecord()
+    void testEntityToDTO()
     {
-        TestData.Methods.constructor(TestData.DataType.ENTITY, "EntityToConvert");
-        TestData.DataUnit entity = TestData.Methods.getEntity();
-        TestData.DataUnit record = TestData.Methods.entityToRecord((TestData.Entity) entity);
-        assertNotNull(record);
+        new TestInformation.Data().putEntity("EntityToConvert");
+        TestInformation.Entity entity = new TestInformation.Data().getEntity();
+        TestInformation.DTO dto = new TestInformation.Data().entityToDTO(entity);
+        assertEquals(dto.getName(), entity.getName());
     }
 
     @Test
     void TestPutGlobalEntity()
     {
-        TestData.DataUnit global = TestData.Methods.constructor(TestData.DataType.ENTITY, "GlobalEntity");
-        Class<? extends dat.TestPackage.TestData.DataUnit> globalEntity = TestData.Methods.dataUnitToEntity(global);
-        dat.TestPackage.TestData.Entity test =(dat.TestPackage.TestData.Entity)  dat.TestPackage.TestData.Methods.create(globalEntity);
-        TestData.Methods.putGlobalEntity(test);
+        TestInformation.Entity entity = new TestInformation.Data().putEntity("global");
+        assertEquals(entity, new TestInformation.Data().getEntity());
     }
 
+    @Test
+    void TestPutGlobalRecord()
+    {
+        TestInformation.DTO dto = new TestInformation.Data().putDTO("global");
+        assertEquals(dto, new TestInformation.Data().getDTO());
+    }
 }

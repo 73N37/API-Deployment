@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface TestOperation.DAO.Interface
+abstract class TestOperation.DAO.Methods
+
+interface TestOperation.Service.Interface
+abstract class TestOperation.Service.Methods
+
+interface TestOperation.Routes.Interface
+abstract class TestOperation.Routes.Methods
+
+interface TestOperation.Controller.Interface
+abstract class TestOperation.Controller.Methods
+
+interface TestOperation.Factory.Interface
+abstract class TestOperation.Factory.Functions
+
+
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+}
+
+@enduml

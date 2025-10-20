@@ -1,6 +1,5 @@
 package dat.Instance.Entity;
 
-import dat.Instance.Data.Data;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @MappedSuperclass // Hibernate retrieve the table name automatically from the class-name
-public class Entity<ID extends Serializable> extends Data
+public class Entity<ID extends Serializable>
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
