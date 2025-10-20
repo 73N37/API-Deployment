@@ -5,7 +5,7 @@ package dat.TestPackage;
             is through my Methods class
  */
 
-public final class TestOperation
+public final class TestOperation extends TestUtilization
 {   // TestOperation [super-class] begins
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -35,11 +35,11 @@ public final class TestOperation
 
 
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
-        public jakarta.persistence.EntityManagerFactory emf;
+        //public jakarta.persistence.EntityManagerFactory emf;
 
         public static class Factory
         {   // Factory [middle-class] begins
-            protected static final jakarta.persistence.EntityManagerFactory                     emf = dat.Config.HibernateConfig.createEMF(false);  // I changed this to be created on instantiation of this class. So that I do not need to pass it around all the time.
+
             protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>  entityClass;
             protected static java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>     dtoClass;
             protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
