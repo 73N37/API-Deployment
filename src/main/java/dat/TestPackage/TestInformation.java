@@ -327,9 +327,26 @@ public final class TestInformation
                 )
         public java.lang.Integer
         getEntityId()
-        {   // getEntityId() [method] begins
-            // Uses getEntity to retrieve the Entity which id we want returned
-            return getEntity().getId();
+        {
+            dat.TestPackage.TestInformation.Entity entity;
+            try
+            {   //try-block [conditional] begins
+                entity = getEntity();
+                try
+                {   // try-block [conditional] begins
+                    return entity.getId();
+                }   // try-block [conditional] ends
+                catch (Exception e)
+                {   // catch-block [conditional] begins
+                    log.error("Was unable to retrieve an id from entity={}", entity, e);
+                    return null;
+                }   // catch-block [conditional] ends
+            }   // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block [conditional] begins
+                log.error("Was unable to retrieve entity", e);
+                return null;
+            }   // catch-block [conditional] ends
         }   // getEntityId() [method] ends
 
 
@@ -342,13 +359,25 @@ public final class TestInformation
         public java.lang.String
         getEntityName()
         {
-            java.lang.String result = null;
-            try{
-                result = getEntity().getName();
-            } catch (Exception e){
-                log.error("Was unable to retrieve name from {} ", getEntity().getClass(), e);
-            }
-            return result;
+            dat.TestPackage.TestInformation.Entity entity;
+            try
+            {   // try-block [conditional] begins
+                entity = getEntity();
+                try
+                {   // try [conditional] begins
+                    return entity.getName();
+                }   // try-block [conditional] ends
+                catch  (Exception e)
+                {   //catch-block [conditional] begins
+                    log.error("Was unable to retrieve name from {} ", getEntity().getClass(), e);
+                    return null;
+                }   // catch-block [conditional] ends
+            }   // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block [conditional] begins
+                log.error("Was unable to retrieve an entity");
+                return null;
+            }   // catch-block [conditional] ends
         }
 
 
@@ -360,14 +389,19 @@ public final class TestInformation
                 )
         public dat.TestPackage.TestInformation.Entity
         putEntity(java.lang.String name)
-        {
-            try{
+            // TODO: Overwrites the globalEntity Field
+        {   // putEntity(String) [method] begins
+            try
+            {   // try-block [conditional] begins
                 globalEntity = new dat.TestPackage.TestInformation.Entity(name);
-            } catch (Exception e){
+                return globalEntity;
+            } // try-block [conditional] ends
+            catch (Exception e)
+            {   // catch-block  [conditional] begins
                 log.error("Was unable to set 'globalEntity' param=[ DataType= {} : {}]",String.class, name, e);
-            }
-            return globalEntity;
-        }
+                return null;
+            }   // catch-block [conditional] ends
+        }   // putEntity(String) [method]
 
 
 
