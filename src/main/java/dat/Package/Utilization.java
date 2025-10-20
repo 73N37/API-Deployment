@@ -1,4 +1,4 @@
-package dat.TestPackage;
+package dat.Package;
 
 // The name I have chosen is: UTILIZE the RELATION between INFORMATION and OPERATIONS = U-R-O-I
 
@@ -27,11 +27,11 @@ public class Utilization
         }
 
 
-        protected boolean
+        protected static boolean
         isAccessAllowed
                 (   // Arguments [method] begins
                         int                                 attemptedAccess,
-                        dat.TestPackage.Utilization.Role    role
+                        dat.Package.Utilization.Role        role
                 )   // Arguments [method] ends
         {   // isAccessAllowed(int, Role) [method] begins
 // TODO     If user has a 'roleCode' HIGHER or EQUAL to 'accessCode'. This method will return true.
@@ -40,11 +40,11 @@ public class Utilization
         }   // isAccessAllowed(int, role) [method] ends
 
 
-        protected boolean
+        protected static boolean
         isAccessAllowed
                 (   // Arguments [method] begins
-                        dat.TestPackage.Utilization.Role    attemptedAccess,
-                        dat.TestPackage.Utilization.Role    requiredAccess
+                        dat.Package.Utilization.Role    attemptedAccess,
+                        dat.Package.Utilization.Role    requiredAccess
                 )   // Arguments [method] ends
         {   // isAccessAllowed(Role, Role) [method] begins
 // TODO     If user has a 'roleCode' HIGHER or EQUAL to 'accessCode'. This method will return true.
@@ -52,7 +52,7 @@ public class Utilization
             return isAccessAllowed(attemptedAccess.get(), requiredAccess.get());
         }   // isAccessAllowed(Role, role) [method] ends
 
-        protected boolean
+        protected static boolean
         isAccessAllowed
                 (    // Arguments [method] begins
                      int attemptedAccess,

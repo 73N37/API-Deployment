@@ -1,4 +1,4 @@
-package dat.TestPackage;
+package dat.Package;
 
 
 // TODO:    This class is meant to handle relations between to entities.

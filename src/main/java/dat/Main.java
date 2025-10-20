@@ -1,7 +1,6 @@
 package dat;
 import dat.Config.ApplicationConfig;
 import dat.Config.HibernateConfig;
-import dat.TestPackage.TestInformation;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -24,13 +23,13 @@ public class Main
         }));
 
         app.start(7070);
-        var dto = new TestInformation.Data().putDTO("Through hard work comes EXCELLENCE");
-        var entity = new TestInformation.Data().putEntity( "Merovingian");
-
-        System.out.println("DTO Data = " + dto);
-        System.out.println("Entity Data = " + entity);
-        System.out.println("globalEntity Name = Merovingian == " + new dat.TestPackage.TestInformation.Data().getName(entity));
-        System.out.println("globalDTO Name Through hard work comes EXCELLENCE == " + new dat.TestPackage.TestInformation.Data().getName(dto));
-        System.out.println("=== MAIN IS COMPLETE ===");
+//        var dto = new Information.Data().putDTO("Through hard work comes EXCELLENCE");
+//        var entity = new Information.Data().putEntity( "Merovingian");
+//
+//        System.out.println("DTO Data = " + dto);
+//        System.out.println("Entity Data = " + entity);
+//        System.out.println("globalEntity Name = Merovingian == " + new Information.Data().getName(entity));
+//        System.out.println("globalDTO Name Through hard work comes EXCELLENCE == " + new Information.Data().getName(dto));
+//        System.out.println("=== MAIN IS COMPLETE ===");
     }
 }
