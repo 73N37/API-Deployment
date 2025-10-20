@@ -31,7 +31,7 @@ package dat.TestPackage {
 
     abstract class "TestInformation.Methods<E, R>" as Methods {
         - Methods()
-        + {abstract} R create(R record)
+        + {abstract} s.name = name;R create(R record)
         + {abstract} R read(Integer id)
         + {abstract} R update(Integer id, R record)
         + {abstract} void delete(Integer id)
