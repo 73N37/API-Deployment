@@ -51,6 +51,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Room.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
+        configuration.addAnnotatedClass(new dat.Package.Information.Data().getEntityClass());
     }
 
     // I have made createEMF public instead of private, so I can access it from my Utilization class
