@@ -27,12 +27,11 @@ package dat.Package;
  * @version 1.0
  * @since 2025-10-15
  */
-public final class Information extends Utilization
+public final class Information extends dat.Package.Utilization
 {   // Information [class] begins
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Information.class);
-    protected static jakarta.persistence.EntityManagerFactory emf = dat.Config.HibernateConfig.createEMF(false);
-    private static final java.util.concurrent.atomic.AtomicInteger idCounter = new java.util.concurrent.atomic.AtomicInteger(0);
 
+    private static final java.util.concurrent.atomic.AtomicInteger idCounter = new java.util.concurrent.atomic.AtomicInteger(0);
     private static dat.Package.Information.Entity   globalEntity;
     private static dat.Package.Information.DTO      globalDTO;
     private static dat.Package.Information          instance;
@@ -51,24 +50,46 @@ public final class Information extends Utilization
 
 
     public static class
-    Data
-    {   // Data [class] begins
+    Data {   // Data [class] begins
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Data.class);
 
         public java.lang.Class<dat.Package.Information.Entity>
-        getEntityClass()
-        {
+        getEntityClass() {
             return dat.Package.Information.Entity.class;
         }
 
         public java.lang.Integer
         getId
                 (
-                        dat.Package.Information.DataUnit dataUnit
+                        dat.Package.Information.DataUnit unit
                 )
         {
-            if (dataUnit instanceof dat.Package.Information.Entity) return dataUnit.getId();
-            if (dataUnit instanceof dat.Package.Information.DTO) return dataUnit.getId();
+            if (unit instanceof dat.Package.Information.Entity)
+            {
+                dat.Package.Information.Entity result;
+                try{
+                    log.debug("Attempting to ClassCast from DataUnit to Entity");
+                    result = (dat.Package.Information.Entity) unit;
+                    log.debug("Attempting to retrieve ID from Entity");
+                    return result.getId();
+                } catch (ClassCastException e){
+                    log.error("Was unable to was cast DataUnit to Entity");
+                    return null;
+                }
+            }
+            if (unit instanceof dat.Package.Information.DTO)
+            {
+                dat.Package.Information.DTO result;
+                try{
+                    log.debug("Attempting to ClassCast from DataUnit to DTO");
+                    result = (dat.Package.Information.DTO) unit;
+                    log.debug("Attempting to retrieve ID from DTO");
+                    return result.getId();
+                } catch (ClassCastException e){
+                    log.error("was unable to cast DataUnit to DTO");
+                    return null;
+                }
+            }
             return null;
         }
 
@@ -76,50 +97,42 @@ public final class Information extends Utilization
         getName
                 (
                         dat.Package.Information.DataUnit dataUnit
-                )
-        {
+                ) {
             if (dataUnit instanceof dat.Package.Information.Entity) return dataUnit.getName();
             if (dataUnit instanceof dat.Package.Information.DTO) return dataUnit.getName();
             return null;
         }
 
         public void
-        clearGlobalState()
-        {
-            globalEntity    = null;
-            globalDTO       = null;
+        clearGlobalState() {
+            globalEntity = null;
+            globalDTO = null;
         }
 
         public dat.Package.Information
-        getInstance(dat.Package.Utilization.Role role)
-        {   // getInstance(Role) [method] begins
+        getInstance(dat.Package.Utilization.Role role) {   // getInstance(Role) [method] begins
 //            return dat.Package.Information.get();
-            try
-            {   // try-block [conditional] begins
+            try {   // try-block [conditional] begins
                 log.debug("Checking user access");
                 boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.ANYONE.get());
                 log.debug("Access was GRANTED");
                 return (accept) ? dat.Package.Information.get() : null;
             }   // try-block [conditional] ends
-            catch (Exception e)
-            {   // catch-block [conditional] begins
+            catch (Exception e) {   // catch-block [conditional] begins
                 log.error("An error happen while either granting user access or returning the instance of {}", dat.Package.Information.class, e);
                 return null;
             }   // catch-block [conditional] ends
         }   // getInstance(Role) [method] begins
 
         public dat.Package.Information.DTO
-        getDTO(dat.Package.Utilization.Role role)
-        {   // getDTO(Role) [method] begins
-            try
-            {   // try-block [conditional] begins
+        getDTO(dat.Package.Utilization.Role role) {   // getDTO(Role) [method] begins
+            try {   // try-block [conditional] begins
                 log.debug("Checking user access");
                 boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.ANYONE.get());
                 log.debug("Access was GRANTED");
                 return (accept) ? dat.Package.Information.globalDTO : null;
             }   // try-block [conditional] ends
-            catch (Exception e)
-            {   // catch-block [conditional] begins
+            catch (Exception e) {   // catch-block [conditional] begins
                 log.error("An error happen while either granting user access or returning the instance of {}", dat.Package.Information.DTO.class, e);
                 return null;
             }   // catch [conditional] ends
@@ -129,10 +142,9 @@ public final class Information extends Utilization
         public dat.Package.Information.Entity
         get
                 (
-                        java.lang.Integer               id,
-                        dat.Package.Utilization.Role    role
-                )
-        {
+                        java.lang.Integer id,
+                        dat.Package.Utilization.Role role
+                ) {
             boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.USER.get());
             return (accept) ? DAO.get(id) : null;
         }
@@ -140,10 +152,9 @@ public final class Information extends Utilization
         public dat.Package.Information.Entity
         put
                 (
-                        java.lang.String                name,
-                        dat.Package.Utilization.Role    role
-                )
-        {
+                        java.lang.String name,
+                        dat.Package.Utilization.Role role
+                ) {
             boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.USER.get());
             return (accept) ? DAO.put(name) : null;
         }
@@ -151,42 +162,36 @@ public final class Information extends Utilization
         public void
         delete
                 (
-                        dat.Package.Information.Entity  entity,
-                        dat.Package.Utilization.Role    role
+                        dat.Package.Information.Entity entity,
+                        dat.Package.Utilization.Role role
 
-                )
-        {
+                ) {
             boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.MODERATOR.get());
-            if (accept)
-            {
+            if (accept) {
                 DAO.delete(entity);
             }
         }
 
 
-
         public void
         delete
                 (
-                        java.lang.Integer               id,
-                        dat.Package.Utilization.Role    role
-                )
-        {
+                        java.lang.Integer id,
+                        dat.Package.Utilization.Role role
+                ) {
             boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.MODERATOR.get());
-            if (accept)
-            {
+            if (accept) {
                 DAO.delete(id);
             }
         }
 
         public dat.Package.Information.Entity
-        patchEntity
+        patch
                 (
-                        dat.Package.Information.Entity  entity,
-                        dat.Package.Utilization.Role    role
+                        dat.Package.Information.Entity entity,
+                        dat.Package.Utilization.Role role
 
-                )
-        {
+                ) {
             boolean accept = dat.Package.Utilization.Role.isAccessAllowed(role.get(), dat.Package.Utilization.Role.MODERATOR.get());
             return (accept) ? DAO.patch(entity) : null;
         }
@@ -217,8 +222,7 @@ public final class Information extends Utilization
         dtoToEntity
                 (
                         dat.Package.Information.DTO dto
-                )
-        {
+                ) {
             return new dat.Package.Information.Entity(dto.getId(), dto.getName());
         }
 
@@ -226,33 +230,31 @@ public final class Information extends Utilization
         entityToDTO
                 (
                         dat.Package.Information.Entity entity
-                )
-        {
+                ) {
             return new dat.Package.Information.DTO(entity.getId(), entity.getName());
         }
-    }   // Data [class] ends
-
+        // Data [class] ends
+    }
     static abstract class
     DataUnit
     {
+        @lombok.Getter
         protected java.lang.Integer id;
-        protected java.lang.Integer
-        getId()
-        {
-                return this.id;
-        }
 
+        @lombok.Getter
         protected java.lang.String name;
-        protected java.lang.String
-        getName()
-        {
-            return this.name;
-        }
     }
 
+    @jakarta.persistence.Entity
     private static class
     Entity extends DataUnit
     {   // Entity [class] begins
+        @jakarta.persistence.Id
+        @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+        protected java.lang.Integer id;
+
+        protected Entity(){}
+
         private Entity
                 (
                         java.lang.Integer   id,
@@ -321,6 +323,7 @@ public final class Information extends Utilization
     DAO
     {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
+        protected static jakarta.persistence.EntityManagerFactory emf = dat.Config.HibernateConfig.createEMF(true);
         private static dat.Package.Information.Entity
         put
                 (
@@ -328,12 +331,11 @@ public final class Information extends Utilization
                 )
         {
             dat.Package.Information.Entity entity = null;
-            try (jakarta.persistence.EntityManager em = dat.Package.Information.emf.createEntityManager())
+            try (jakarta.persistence.EntityManager em = dat.Package.Information.DAO.emf.createEntityManager())
             {
-
                 log.debug("Attempting to persist and entity");
                 em.getTransaction().begin();
-                 entity = new dat.Package.Information.Entity(name);
+                entity = new dat.Package.Information.Entity(name);
                 em.persist(entity);
                 em.getTransaction().commit();
                 log.debug("Successfully persisted Entity={}", entity);
@@ -350,7 +352,7 @@ public final class Information extends Utilization
                         java.lang.Integer id
                 )
         {
-            try (jakarta.persistence.EntityManager em = dat.Package.Information.emf.createEntityManager()) {
+            try (jakarta.persistence.EntityManager em = dat.Package.Information.DAO.emf.createEntityManager()) {
                 log.debug("Attempting to find an entity by ID");
                 em.getTransaction().begin();
                 dat.Package.Information.Entity result = em.find(dat.Package.Information.Entity.class, id);
@@ -371,7 +373,7 @@ public final class Information extends Utilization
                 )
         {
 
-            try (jakarta.persistence.EntityManager em = dat.Package.Information.emf.createEntityManager()){
+            try (jakarta.persistence.EntityManager em = dat.Package.Information.DAO.emf.createEntityManager()){
                 log.debug("Attempting to delete this Entity={}", entity);
                 em.getTransaction().begin();
                 em.remove(entity);
@@ -404,7 +406,7 @@ public final class Information extends Utilization
                 )
         {
 
-            try (jakarta.persistence.EntityManager em = dat.Package.Information.emf.createEntityManager()){
+            try (jakarta.persistence.EntityManager em = dat.Package.Information.DAO.emf.createEntityManager()){
                 log.debug("Attempting to patch (merge) entity={}", entity);
                 em.getTransaction().begin();
                 dat.Package.Information.Entity result = em.merge(entity);
