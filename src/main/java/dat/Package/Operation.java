@@ -152,31 +152,58 @@ public class Operation extends dat.Package.Utilization
                     jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
                     log.debug("Found entity with id {}", id);
-
                     return query.getSingleResult();
                 } catch (Exception e)
                 {
-                    log.error("was unable to retrieve an entity with ID={}", id, e);
-                    throw new ApiException(TestErrorTypes.NOT_FOUND, "Was not able to find and entity with id="+id);
+                    log.error("(get(id)) Was unable to retrieve an entity with ID={}", id, e);
+                    throw new ApiException(ErrorTypes.NOT_FOUND, "(get(id)) Was not able to find and entity with id="+id);
                 }
             }
 
             java.util.Set<Entity> getAll()
             {
-                log.debug("Reading/finding entities");
+                log.debug("Attempting to read/find entities");
                 try (jakarta.persistence.EntityManager em = emf.createEntityManager())
                 {
-                    java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName();
+                    java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e";
                     jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     log.debug("Found all entities and created added them to a List");
-                    java.util.List<Entity> list = query.getResultList();
-                    return
+                    return new java.util.HashSet<>(query.getResultList());
                 } catch (Exception e)
                 {
-                    log.error("An erro happen while trying to retrieve {}", entityClass, e);
-                    throw new ApiException(TestErrorTypes.NOT_FOUND, "An error happen while trying to retrieve entities");
+                    log.error("(get(id)) An error happen while trying to retrieve {}", entityClass, e);
+                    throw new ApiException(ErrorTypes.NOT_FOUND, "(getAll) An error happen while trying to retrieve entities");
                 }
 
+            }
+
+            Entity put(Entity entity)
+            {
+                log.debug("Attempting to create a database entry with this entity={}", entity);
+                try(jakarta.persistence.EntityManager em = emf.createEntityManager()){
+                    java.lang.String jpql = "INSERT e " + entityClass.getSimpleName() + " e";
+                    jakarta.persistence.TypedQuery<Entity> query = em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    log.debug("Successfully added entity={} to database", entity);
+                    return entity;
+                } catch(Exception e){
+                    log.error("(put(entity)) An error happen while trying to create a database entry of this={}",entity, e );
+                    throw new ApiException(ErrorTypes.NOT_FOUND, "(put(entity)) An error happen");
+                }
+            }
+
+            Entity patch(Entity entity, Id id)
+            {
+                try(jakarta.persistence.EntityManager em = emf.createEntityManager()){
+                    log.debug("(patch(entity, id)) Attempting to update an entity by ID={}", entity.getId());
+                    java.lang.String jpql = "UPDATE e " + entityClass.getSimpleName() + " e WHERE e.id = :id";
+                    jakarta.persistence.TypedQuery<Entity> query = em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    query.setParameter("id", id);
+                    log.debug("(patch(entity,id)) Found and updated entity by id={}", entity.getId());
+                    return entity;
+                } catch(Exception e){
+                    log.error("(patch(entity, id)) An error happen while try to update en entity by this Id={}", entity.getId(),e);
+                    throw new ApiException(ErrorTypes.NOT_FOUND, "(patch(entity,id)) An error happen while trying to update en entity with id={}"+ entity.getId());
+                }
             }
         }
     }
@@ -244,18 +271,18 @@ public class Operation extends dat.Package.Utilization
     static class ApiException extends RuntimeException
     {   // ApiException [class] begins
         private final int code;
-        private final Operation.TestErrorTypes errorType;
+        private final ErrorTypes errorType;
         private static String errorMsg;
 
         public ApiException(int code, String msg)
         {   // ApiException(int, string) [constructor] begins
             super(msg); // relay msg to 'RuntimeException'
             this.code = code;
-            this.errorType = Operation.TestErrorTypes.getType(code);
+            this.errorType = ErrorTypes.getType(code);
             this.errorMsg = errorType.getErrorMessage() + "\n";
         }   // ApiException(int, string) [constructor]
 
-        public ApiException(Operation.TestErrorTypes errorType, String msg)
+        public ApiException(ErrorTypes errorType, String msg)
         {   // ApiException(TestErrorTypes, String) [constructor] begins
             super(msg); // relay msg to 'RuntimeException'
             this.errorType = errorType;
@@ -271,56 +298,56 @@ public class Operation extends dat.Package.Utilization
         //TODO: 400 bad request
         public static Operation.ApiException badRequest(String msg)
         {   // badRequest(String msg) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.BAD_REQUEST, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.BAD_REQUEST, msg + errorMsg);
         }   // badRequest(String msg) [method] ends
 
         //TODO: 401 Unauthorized
         public static Operation.ApiException unauthorized(String msg)
         {   // unauthorized(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.UNAUTHORIZED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.UNAUTHORIZED, msg + errorMsg);
         }   // unauthorized(String) [method] ends
 
         //TODO: 403 Forbidden Access
         public static Operation.ApiException forbidden(String msg)
         {   // forbidden(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.FORBIDDEN, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.FORBIDDEN, msg + errorMsg);
         }   // forbidden(String) [method] ends
 
         //TODO: 404 not found
         public static Operation.ApiException notFound(String msg)
         {   // notFound(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.NOT_FOUND, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.NOT_FOUND, msg + errorMsg);
         }   // notFound(String) [method] ends
 
         //TODO: 405 conflict
         public static Operation.ApiException conflict(String msg)
         {   // conflict(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.METHOD_NOT_ALLOWED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.METHOD_NOT_ALLOWED, msg + errorMsg);
         }   // conflict(String) [method] ends
 
         //TODO: 406 Not Acceptable
         public static Operation.ApiException notAcceptable (String msg)
         {   // notAcceptable (String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.NOT_ACCEPTABLE, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.NOT_ACCEPTABLE, msg + errorMsg);
         }   // notAcceptable (String) [method] ends
 
         //TODO: 409 already exists
         public static Operation.ApiException alreadyExists(String msg)
         {   // alreadyExists(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.ALREADY_EXISTS, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.ALREADY_EXISTS, msg + errorMsg);
 
         }   // alreadyExists(String) [method] ends
 
         //TODO: 413 Payload too large
         public static Operation.ApiException payloadTooLarge(String msg)
         {   // payloadTooLarge(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.PAYLOAD_TOO_LARGE, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.PAYLOAD_TOO_LARGE, msg + errorMsg);
         }   // payloadTooLarge(String) [method] ends
 
         //TODO: 429 Too many requests
         public static Operation.ApiException tooManyRequests(String msg)
         {   // tooManyRequests(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.TOO_MANY_REQUESTS, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.TOO_MANY_REQUESTS, msg + errorMsg);
         }   // tooManyRequests(String) [method] ends
 
 
@@ -332,67 +359,67 @@ public class Operation extends dat.Package.Utilization
         //TODO: 500 server error
         public static Operation.ApiException serverError (String msg)
         {   // serverError (String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.SERVER_ERROR, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.SERVER_ERROR, msg + errorMsg);
         }   // serverError (String) [method] ends
 
         //TODO: 501 Not implemented
         public static Operation.ApiException notImplemented(String msg)
         {   // notImplemented(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.NOT_IMPLEMENTED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.NOT_IMPLEMENTED, msg + errorMsg);
         }   // notImplemented(String) [method] ends
 
         //TODO: 502 Bad Gateway
         public static Operation.ApiException badGateway(String msg)
         {   // badGateway(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.BAD_GATEWAY, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.BAD_GATEWAY, msg + errorMsg);
         }   // badGateway(String) [method] ends
 
         //TODO: 503 Service Unavailable
         public static Operation.ApiException serviceUnavailable(String msg)
         {   // serviceUnavailable(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.SERVICE_UNAVAILABLE, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.SERVICE_UNAVAILABLE, msg + errorMsg);
         }   // serviceUnavailable(String) [method] ends
 
         //TODO: 504 Gateway Timeout
         public static Operation.ApiException gatewayTimeout(String msg)
         {   // gatewayTimeout(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.GATEWAY_TIMEOUT, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.GATEWAY_TIMEOUT, msg + errorMsg);
         }   // gatewayTimeout(String) [method] ends
 
         //TODO: 505 HTTP Version not supported
         public static Operation.ApiException versionNotSupported(String msg)
         {   // versionNotSupported(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.HTTP_VERSION_NOT_SUPPORTED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.HTTP_VERSION_NOT_SUPPORTED, msg + errorMsg);
         }   // versionNotSupported(String) [method] ends
 
         //TODO: 506 Variant also negotiates
         public static Operation.ApiException variantNegotiates(String msg)
         {   // variantNegotiates(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.VARIANT_ALSO_NEGOTIATES, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.VARIANT_ALSO_NEGOTIATES, msg + errorMsg);
         }   // variantNegotiates(String) [method] ends
 
         //TODO: 507 Insufficient storage
         public static Operation.ApiException insufficientStorage(String msg)
         {   // insufficientStorage(String= [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.INSUFFICIENT_STORAGE, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.INSUFFICIENT_STORAGE, msg + errorMsg);
         }   // insufficientStorage(String= [method] ends
 
         //TODO: 508 Loop detected
         public static Operation.ApiException loopDetected(String msg)
         {   // loopDetected(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.LOOP_DETECTED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.LOOP_DETECTED, msg + errorMsg);
         }   // loopDetected(String) [method] ends
 
         //TODO: 510 Not extended
         public static Operation.ApiException notExtended(String msg)
         {   // notExtended(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.NOT_EXTENDED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.NOT_EXTENDED, msg + errorMsg);
         }   // notExtended(String) [method] ends
 
         //TODO: 511 Network Authentication Required
         public static Operation.ApiException authenticationRequired(String msg)
         {   // authenticationRequired(String) [method] begins
-            return new Operation.ApiException(Operation.TestErrorTypes.NETWORK_AUTHENTICATION_REQUIRED, msg + errorMsg);
+            return new Operation.ApiException(ErrorTypes.NETWORK_AUTHENTICATION_REQUIRED, msg + errorMsg);
         }   // authenticationRequired(String) [method] ends
 
         public int getStatusCode()
@@ -401,7 +428,7 @@ public class Operation extends dat.Package.Utilization
         }   // getStatusCode() [method] ends
     }   // ApiException [class] ends
 
-    enum TestErrorTypes
+    enum ErrorTypes
     {   // TestErrorTypes [enum] begins
         BAD_REQUEST(400, "Bad request"),
         UNAUTHORIZED(401, "Unauthorized Access"),
@@ -427,7 +454,7 @@ public class Operation extends dat.Package.Utilization
         private final int errorCode;
         private final java.lang.String errorMessage;
 
-        TestErrorTypes(int errorCode, java.lang.String errorMsg)
+        ErrorTypes(int errorCode, java.lang.String errorMsg)
         {   // TestErrorTypes(int, String) [constructor] begins
             this.errorCode = errorCode;
             this.errorMessage = errorMsg;
@@ -439,9 +466,9 @@ public class Operation extends dat.Package.Utilization
         }   // getErrorCode() [method] ends
 
 
-        public static Operation.TestErrorTypes getType(int errorCode)
+        public static ErrorTypes getType(int errorCode)
         {   // getType(int) [method] begins
-            for (Operation.TestErrorTypes type : Operation.TestErrorTypes.values())
+            for (ErrorTypes type : ErrorTypes.values())
             {   // TestErrorType [for-each] begins
                 if (type.getErrorCode() == errorCode)
                 {   // getErrorCode [if] begins

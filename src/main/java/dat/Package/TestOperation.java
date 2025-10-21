@@ -1,4 +1,4 @@
 package dat.Package;
 
-public class TestOperation {
+public final class TestOperation extends dat.Package.Operation{
 }

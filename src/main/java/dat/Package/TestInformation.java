@@ -1,4 +1,4 @@
 package dat.Package;
 
-public class TestInformation {
+public final class TestInformation extends dat.Package.Information{
 }

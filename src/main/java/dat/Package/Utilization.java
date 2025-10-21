@@ -6,17 +6,22 @@ public class Utilization
 {   // TestUtilization [class] begins
 
     protected Utilization(){}
-    protected Utilization instance;
+    protected static Utilization instance;
 
-    protected dat.Package.Utilization       operationInstance   =   new dat.Package.TestOperation().getInstance();
-    protected Class<?>                      operationClass      =   new dat.Package.TestInformation().getClass();
+    protected static dat.Package.Utilization            operationInstance       =   new dat.Package.TestOperation().getInstance();
+    protected static Class<?>                           operationClass          =   new dat.Package.TestInformation().getClass();
+    protected static dat.Package.Operation.DAO          dao                     =   new dat.Package.Operation.Factory().getDAO();
+    protected static dat.Package.Operation.Service      service                 =   new dat.Package.Operation.Factory().getService();
+    protected static dat.Package.Operation.Controller   controller              =   new dat.Package.Operation.Factory().getController();
+    protected static dat.Package.Operation.Route        route                   =   new dat.Package.Operation.Factory().getRoute();
+
 
     // TODO Use TestInformation as the class
-    protected dat.Package.Utilization      informationInstance  =   new dat.Package.TestInformation().getInstance();
-    protected Class<?>                     informationClass     =   new dat.Package.TestInformation().getClass();
+    protected static dat.Package.Utilization        informationInstance     =   new dat.Package.TestInformation().getInstance();
+    protected static Class<?>                       informationClass        =   new dat.Package.TestInformation().getClass();
 
 
-    protected dat.Package.Utilization getInstance()
+    protected static dat.Package.Utilization getInstance()
     {
         if (instance == null){
             return new Utilization();

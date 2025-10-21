@@ -1,6 +1,5 @@
-# Start with Eclipse Temurin 25 Alpine base image
-FROM eclipse-temurin:21-jdk-alpine
-# FROM eclipse-temurin:25-jdk-alpine
+# Start with Amazon Correto 17 Alpine base image
+FROM amazoncorretto:17-alpine
 
 # Install curl on Alpine
 RUN apk update && apk add --no-cache curl
