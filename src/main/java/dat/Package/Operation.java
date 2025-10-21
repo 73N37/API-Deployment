@@ -1,11 +1,11 @@
-package dat.TestPackage;
+package dat.Package;
 
 /* TODO:    Notice that all my classes are private except for my 'Methods' class.
             This ensures that the ONLY way to manipulate private classes & fields,
             is through my Methods class
  */
 
-public final class Operation extends dat.Package.Utilization
+public class Operation extends dat.Package.Utilization
 {   // TestOperation [super-class] begins
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -35,138 +35,156 @@ public final class Operation extends dat.Package.Utilization
 
 
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Operation.class);
-        //public jakarta.persistence.EntityManagerFactory emf;
+        protected static jakarta.persistence.EntityManagerFactory emf = dat.Config.HibernateConfig.createEMF(true);
 
         public static class Factory
         {   // Factory [middle-class] begins
 
-             protected static java.lang.Class<? extends Information.Entity>  entityClass;
-             protected static java.lang.Class<? extends Information.DTO>     dtoClass;
-            protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
-            protected static Operation.DAO                                  dao;
-            protected static Operation.Service                              service;
-            protected static Operation.Controller                           controller;
-            protected static Operation.Route                                route;
+                protected static java.lang.Class<? extends Information.Entity>  entityClass;
+                protected static java.lang.Class<? extends Information.DTO>     dtoClass;
+                protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
+                protected static Operation.DAO                                  dao;
+                protected static Operation.Service                              service;
+                protected static Operation.Controller                           controller;
+                protected static Operation.Route                                route;
 
-            // Restricted args constructor
-            Factory() {}   // Factory [constructor] begins & ends
+            protected Factory() {}   // Factory [constructor] begins & ends
 
-            // Creates a restricted instance of Factory [constructor]
+
             public Factory forEntity(
                     java.lang.Class<? extends Information.Entity>   entityClass,
                     java.lang.Class<? extends java.io.Serializable>                     idClass)
-            {   // Factory [constructor] begins
+            {
                 Factory result      = new Factory();    // create a new instance of Factory
                 result.entityClass  = entityClass;      // assigns entityClass to the Factory instance
                 result.idClass      = idClass;          // assigns idClass to the Factory instance
                 return result;                          // returns the Factory which now has an idClass & entityClass, as global Fields
-            }   // Factory [constructor] ends
+            }
 
             public Factory forDTO(
                      java.lang.Class<? extends Information.DTO>   dtoClass,
                     java.lang.Class<? extends java.io.Serializable>                     idClass)
-            {   // Factory [constructor] begins
+            {
                 Factory result      = new Factory ();       // create a new instance of Factory
-                 result.dtoClass     = dtoClass;             // assigns dtoClass to the Factory instance
+                result.dtoClass     = dtoClass;             // assigns dtoClass to the Factory instance
                 result.idClass      = idClass;              // assigns idClass to the factory instance
                 return result;                              // returns the Factory which now has idClass & dtoClass, as global Fields
             }   // Factory [constructor] ends
 
-            // All args constructor
-            public Factory(
-                   java.lang.Class<? extends Information.Entity>   entityClass,
-                  java.lang.Class<? extends Information.DTO>   dtoClass,
-                    java.lang.Class<? extends java.io.Serializable>                     idClass)
-            {   // Factory [constructor] begins
+            public Factory
+                    (
+                    java.lang.Class<? extends Information.Entity>   entityClass,
+                    java.lang.Class<? extends Information.DTO>      dtoClass,
+                    java.lang.Class<? extends java.io.Serializable> idClass
+                    )
+            {
                 this.entityClass    = entityClass;
-               this.dtoClass       = dtoClass;
+                this.dtoClass       = dtoClass;
                 this.idClass        = idClass;
-            }   // Factory [constructor] ends
+            }
 
             public static jakarta.persistence.EntityManagerFactory
             getEMF()
-            {   // getEMF() [method] begins
+            {
                 return emf; // return EntityManagerFactory [object] that gets instantiated on initialization of Factory [class]
-            }   // getEMF() [method] ends
+            }
 
-            public static Operation.DAO
+            public Operation.DAO
             getDAO()
-            {   //getDAO() [method] begins
+            {
                 return dao; // return Test.Operation.DAO [class]
-            }   //getDAO() [method] ends
+            }
 
-            public static Operation.Service
+            public  Operation.Service
             getService()
-            {   // getServic() [method] begins
+            {
                 return service;
-            }   // getService() [method] ends
+            }
 
-            public static Operation.Controller
+            public  Operation.Controller
             getController()
-            {   // getController() [method] begins
+            {
                 return controller;
-            }   // getController() [method] ends
+            }
 
-            public static Operation.Route
+            public  Operation.Route
             getRoute()
-            {   // getRoute() [method] begins
+            {
                 return route;
-            }   // getRoute[] [method] ends
-
-        }   // Factory [class] ends
+            }
+        }
 
 
     static class DAO<   Entity  extends Information.Entity,
                         Id      extends java.io.Serializable>
         extends Operation.Factory
-    {   // DAO [middle-class] begins
+    {
 
-        public DAO( java.lang.Class<Entity>                     entityClass,
-                    java.lang.Class<Id>                         idClass)
-        {   // DAO [constructor] begins
+        public DAO( java.lang.Class<Entity> entityClass,
+                    java.lang.Class<Id>     idClass)
+        {
             super();
             super.dao = this;
             forEntity(entityClass, idClass);
-        }   // DAO [constructor] ends
+        }
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
-         interface Interface<  Entity  extends Information.Entity,
+         interface Interface<   Entity  extends Information.Entity,
                                 Id      extends java.io.Serializable>
-         {  // Interface [class] begins
-            Entity get(Id id);
-             //java.util.List<Entity> getAll();
-             //Entity create(Entity entity);
-             //Entity update(Entity entity, Id id);
-             //void delete(Id id);
-             //boolean validatePrimaryKey(Id id);
-        }   // Interface [class] ends
+         {
+             Entity get(Id id);
+             java.util.Set<Entity> getAll();
+             Entity put(Entity entity);
+             Entity patch(Entity entity, Id id);
+             void delete(Id id);
+             boolean validatePrimaryKey(Id id);
+        }
 
         public abstract static class
-        Methods < Entity  extends Information.Entity,
+        Methods <   Entity  extends Information.Entity,
                     Id      extends java.io.Serializable>
-               implements Operation.DAO.Interface<Entity, Id>
-        {   // Methods class begins
-            public Entity get(Id id)
+        {
+            Entity get(Id id)
             {
                 log.debug("Reading/finding entity with id {}", id);
                 try (jakarta.persistence.EntityManager em = emf.createEntityManager())
-                {   // try (EntityManager = .crateEntityManagers()) begins
+                {
                     java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id";
                     jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
                     log.debug("Found entity with id {}", id);
+
                     return query.getSingleResult();
                 } catch (Exception e)
-                {   // catch (EntityManager = .crateEntityManagers()) begins
+                {
+                    log.error("was unable to retrieve an entity with ID={}", id, e);
                     throw new ApiException(TestErrorTypes.NOT_FOUND, "Was not able to find and entity with id="+id);
-                }   // catch (EntityManager = .crateEntityManagers()) ends
-            }   // get(Serializable) [method] ends
-        }   // Method class begins
-    }   // DAO [class] ends
+                }
+            }
+
+            java.util.Set<Entity> getAll()
+            {
+                log.debug("Reading/finding entities");
+                try (jakarta.persistence.EntityManager em = emf.createEntityManager())
+                {
+                    java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName();
+                    jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    log.debug("Found all entities and created added them to a List");
+                    java.util.List<Entity> list = query.getResultList();
+                    return
+                } catch (Exception e)
+                {
+                    log.error("An erro happen while trying to retrieve {}", entityClass, e);
+                    throw new ApiException(TestErrorTypes.NOT_FOUND, "An error happen while trying to retrieve entities");
+                }
+
+            }
+        }
+    }
 
     static class Service<   Entity  extends Information.Entity,
                             DTO     extends Information.DTO,
                             Id      extends java.io.Serializable>
-    {   // Service [middle-class] begins
+    {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
         interface Interface<Entity  extends Information.Entity,
                             DTO     extends Information.DTO,
@@ -179,8 +197,6 @@ public final class Operation extends dat.Package.Utilization
             void delete(Entity entity);
             java.util.Set<DTO> readAllDTOs();
             java.util.Set<Entity> readAllEntities();
-            Entity dtoToEntity(DTO dto);
-            DTO entityToDTO(Entity entity);
         }
 
         public Information.DTO entityToDTO(Information.Entity entity)
@@ -196,13 +212,7 @@ public final class Operation extends dat.Package.Utilization
 
         public Information.Entity dtoToEntity(Information.DTO dto)
         {
-            if(dto != null)
-            {
-                return new Information.   // return something that lives in 'dat.TestPackage.TestData'.
-                                            Data().   // find a method within 'dat.TestPackage.TestData.Methods'.
-                                                    dtoToEntity(dto); // Use 'dtoToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
-            }
-            else return null; // return null if @param is null OR any of the steps above fail
+            return (dto != null) ? new Information.Data().dtoToEntity(dto) : null;
         }
     }
 
