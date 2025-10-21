@@ -152,7 +152,6 @@ public class Operation extends dat.Package.Utilization
                     jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
                     log.debug("Found entity with id {}", id);
-
                     return query.getSingleResult();
                 } catch (Exception e)
                 {
@@ -178,19 +177,31 @@ public class Operation extends dat.Package.Utilization
 
             }
 
-            Entity put
-                    (
-                            Entity entity
-                    )
+            Entity put(Entity entity)
             {
                 log.debug("Attempting to create a database entry with this entity={}", entity);
-                try{
-
+                try(jakarta.persistence.EntityManager em = emf.createEntityManager()){
+                    java.lang.String jpql = "INSERT e " + entityClass.getSimpleName() + " e";
+                    jakarta.persistence.TypedQuery<Entity> query = em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    log.debug("Successfully added entity={} to database", entity);
+                    return entity;
                 } catch(Exception e){
                     log.error("(put(entity)) An error happen while trying to create a database entry of this={}",entity, e );
                     throw new ApiException(ErrorTypes.NOT_FOUND, "(put(entity)) An error happen");
                 }
+            }
 
+            Entity patch(Entity entity, Id id)
+            {
+                try(jakarta.persistence.EntityManager em = emf.createEntityManager()){
+                    log.debug("Attempting to update an entity by ID={}", entity.getId());
+                    java.lang.String jpql = "UPDATE e " + entityClass.getSimpleName() + " e WHERE e.id = :id";
+                    jakarta.persistence.TypedQuery<Entity> query = em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    query.setParameter("id", id);
+                    log.debug("(patch(entity,id)) Found and updated entity by id={}", entity.getId());
+                } catch(Exception e){
+                    log.error("(patch(entity, id)) An error happen while try to update en entity by this Id={}", entity.getId(),e);
+                }
             }
         }
     }
