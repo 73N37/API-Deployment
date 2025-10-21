@@ -2,7 +2,7 @@ name: Mirror
 on:
   push:
     paths:
-      - src/main/java/dat/TestPackage/TestData.java
+      - src/main/java/dat/Package/TestData.java
 jobs:
   update-gist:
     runs-on: ubuntu-latest

@@ -51,6 +51,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Room.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
+        configuration.addAnnotatedClass(new dat.Package.Information.Data().getEntityClass());
     }
 
     // I have made createEMF public instead of private, so I can access it from my Utilization class
@@ -118,7 +119,7 @@ public class HibernateConfig {
         props.put("hibernate.connection.password", "postgres");
         props.put("hibernate.archive.autodetection", "class");
         props.put("hibernate.show_sql", "true");
-        props.put("hibernate.hbm2ddl.auto", "update"); // "update" == production || "create-drop" == test
+        props.put("hibernate.hbm2ddl.auto", "create-drop"); // "update" == production || "create-drop" == test
         return props;
     }
 }

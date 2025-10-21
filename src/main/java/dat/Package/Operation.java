@@ -1,11 +1,11 @@
-package dat.TestPackage;
+package dat.Package;
 
 /* TODO:    Notice that all my classes are private except for my 'Methods' class.
             This ensures that the ONLY way to manipulate private classes & fields,
             is through my Methods class
  */
 
-public final class TestOperation extends TestUtilization
+public class Operation extends dat.Package.Utilization
 {   // TestOperation [super-class] begins
     /*      TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             TODO:   HVIS DU VIL HAVE 12, SÅ SKAL DU LAVE TESTS AF ALLE DINE KLASSER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -34,142 +34,160 @@ public final class TestOperation extends TestUtilization
  */
 
 
-        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TestOperation.class);
-        //public jakarta.persistence.EntityManagerFactory emf;
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Operation.class);
+        protected static jakarta.persistence.EntityManagerFactory emf = dat.Config.HibernateConfig.createEMF(true);
 
         public static class Factory
         {   // Factory [middle-class] begins
 
-            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>  entityClass;
-            protected static java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>     dtoClass;
-            protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
-            protected static dat.TestPackage.TestOperation.DAO                                  dao;
-            protected static dat.TestPackage.TestOperation.Service                              service;
-            protected static dat.TestPackage.TestOperation.Controller                           controller;
-            protected static dat.TestPackage.TestOperation.Route                                route;
+                protected static java.lang.Class<? extends Information.Entity>  entityClass;
+                protected static java.lang.Class<? extends Information.DTO>     dtoClass;
+                protected static java.lang.Class<? extends java.io.Serializable>                    idClass;
+                protected static Operation.DAO                                  dao;
+                protected static Operation.Service                              service;
+                protected static Operation.Controller                           controller;
+                protected static Operation.Route                                route;
 
-            // Restricted args constructor
-            Factory() {}   // Factory [constructor] begins & ends
+            protected Factory() {}   // Factory [constructor] begins & ends
 
-            // Creates a restricted instance of Factory [constructor]
+
             public Factory forEntity(
-                    java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass,
+                    java.lang.Class<? extends Information.Entity>   entityClass,
                     java.lang.Class<? extends java.io.Serializable>                     idClass)
-            {   // Factory [constructor] begins
+            {
                 Factory result      = new Factory();    // create a new instance of Factory
                 result.entityClass  = entityClass;      // assigns entityClass to the Factory instance
                 result.idClass      = idClass;          // assigns idClass to the Factory instance
                 return result;                          // returns the Factory which now has an idClass & entityClass, as global Fields
-            }   // Factory [constructor] ends
+            }
 
             public Factory forDTO(
-                    java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>   dtoClass,
+                     java.lang.Class<? extends Information.DTO>   dtoClass,
                     java.lang.Class<? extends java.io.Serializable>                     idClass)
-            {   // Factory [constructor] begins
+            {
                 Factory result      = new Factory ();       // create a new instance of Factory
                 result.dtoClass     = dtoClass;             // assigns dtoClass to the Factory instance
                 result.idClass      = idClass;              // assigns idClass to the factory instance
                 return result;                              // returns the Factory which now has idClass & dtoClass, as global Fields
             }   // Factory [constructor] ends
 
-            // All args constructor
-            public Factory(
-                    java.lang.Class<? extends dat.TestPackage.TestInformation.Entity>   entityClass,
-                    java.lang.Class<? extends dat.TestPackage.TestInformation.DTO>   dtoClass,
-                    java.lang.Class<? extends java.io.Serializable>                     idClass)
-            {   // Factory [constructor] begins
+            public Factory
+                    (
+                    java.lang.Class<? extends Information.Entity>   entityClass,
+                    java.lang.Class<? extends Information.DTO>      dtoClass,
+                    java.lang.Class<? extends java.io.Serializable> idClass
+                    )
+            {
                 this.entityClass    = entityClass;
                 this.dtoClass       = dtoClass;
                 this.idClass        = idClass;
-            }   // Factory [constructor] ends
+            }
 
             public static jakarta.persistence.EntityManagerFactory
             getEMF()
-            {   // getEMF() [method] begins
+            {
                 return emf; // return EntityManagerFactory [object] that gets instantiated on initialization of Factory [class]
-            }   // getEMF() [method] ends
+            }
 
-            public static dat.TestPackage.TestOperation.DAO
+            public Operation.DAO
             getDAO()
-            {   //getDAO() [method] begins
+            {
                 return dao; // return Test.Operation.DAO [class]
-            }   //getDAO() [method] ends
+            }
 
-            public static dat.TestPackage.TestOperation.Service
+            public  Operation.Service
             getService()
-            {   // getServic() [method] begins
+            {
                 return service;
-            }   // getService() [method] ends
+            }
 
-            public static dat.TestPackage.TestOperation.Controller
+            public  Operation.Controller
             getController()
-            {   // getController() [method] begins
+            {
                 return controller;
-            }   // getController() [method] ends
+            }
 
-            public static dat.TestPackage.TestOperation.Route
+            public  Operation.Route
             getRoute()
-            {   // getRoute() [method] begins
+            {
                 return route;
-            }   // getRoute[] [method] ends
+            }
+        }
 
-        }   // Factory [class] ends
 
-
-    static class DAO<   Entity  extends TestInformation.Entity,
+    static class DAO<   Entity  extends Information.Entity,
                         Id      extends java.io.Serializable>
-        extends dat.TestPackage.TestOperation.Factory
-    {   // DAO [middle-class] begins
+        extends Operation.Factory
+    {
 
-        public DAO( java.lang.Class<Entity>                     entityClass,
-                    java.lang.Class<Id>                         idClass)
-        {   // DAO [constructor] begins
+        public DAO( java.lang.Class<Entity> entityClass,
+                    java.lang.Class<Id>     idClass)
+        {
             super();
             super.dao = this;
             forEntity(entityClass, idClass);
-        }   // DAO [constructor] ends
+        }
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DAO.class);
-         interface Interface<   Entity  extends TestInformation.Entity,
+         interface Interface<   Entity  extends Information.Entity,
                                 Id      extends java.io.Serializable>
-         {  // Interface [class] begins
+         {
              Entity get(Id id);
-             //java.util.List<Entity> getAll();
-             //Entity create(Entity entity);
-             //Entity update(Entity entity, Id id);
-             //void delete(Id id);
-             //boolean validatePrimaryKey(Id id);
-        }   // Interface [class] ends
+             java.util.Set<Entity> getAll();
+             Entity put(Entity entity);
+             Entity patch(Entity entity, Id id);
+             void delete(Id id);
+             boolean validatePrimaryKey(Id id);
+        }
 
         public abstract static class
-        Methods <   Entity  extends dat.TestPackage.TestInformation.Entity,
+        Methods <   Entity  extends Information.Entity,
                     Id      extends java.io.Serializable>
-                implements dat.TestPackage.TestOperation.DAO.Interface<Entity, Id>
-        {   // Methods class begins
-            public Entity get(Id id)
+        {
+            Entity get(Id id)
             {
                 log.debug("Reading/finding entity with id {}", id);
                 try (jakarta.persistence.EntityManager em = emf.createEntityManager())
-                {   // try (EntityManager = .crateEntityManagers()) begins
+                {
                     java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id";
                     jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
                     log.debug("Found entity with id {}", id);
+
                     return query.getSingleResult();
                 } catch (Exception e)
-                {   // catch (EntityManager = .crateEntityManagers()) begins
+                {
+                    log.error("was unable to retrieve an entity with ID={}", id, e);
                     throw new ApiException(TestErrorTypes.NOT_FOUND, "Was not able to find and entity with id="+id);
-                }   // catch (EntityManager = .crateEntityManagers()) ends
-            }   // get(Serializable) [method] ends
-        }   // Method class begins
-    }   // DAO [class] ends
+                }
+            }
 
-    static class Service<   Entity  extends TestInformation.Entity,
-                            DTO     extends TestInformation.DTO,
+            java.util.Set<Entity> getAll()
+            {
+                log.debug("Reading/finding entities");
+                try (jakarta.persistence.EntityManager em = emf.createEntityManager())
+                {
+                    java.lang.String jpql = "SELECT e FROM " + entityClass.getSimpleName();
+                    jakarta.persistence.TypedQuery<Entity> query =  em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
+                    log.debug("Found all entities and created added them to a List");
+                    java.util.List<Entity> list = query.getResultList();
+                    return
+                } catch (Exception e)
+                {
+                    log.error("An erro happen while trying to retrieve {}", entityClass, e);
+                    throw new ApiException(TestErrorTypes.NOT_FOUND, "An error happen while trying to retrieve entities");
+                }
+
+            }
+        }
+    }
+
+    static class Service<   Entity  extends Information.Entity,
+                            DTO     extends Information.DTO,
                             Id      extends java.io.Serializable>
-    {   // Service [middle-class] begins
+    {
         private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Service.class);
-        interface Interface<Entity  extends TestInformation.Entity,
-                            DTO     extends TestInformation.DTO,
+        interface Interface<Entity  extends Information.Entity,
+                            DTO     extends Information.DTO,
                             Id      extends java.io.Serializable>
         {
             DTO create(DTO dto);
@@ -179,30 +197,22 @@ public final class TestOperation extends TestUtilization
             void delete(Entity entity);
             java.util.Set<DTO> readAllDTOs();
             java.util.Set<Entity> readAllEntities();
-            Entity dtoToEntity(DTO dto);
-            DTO entityToDTO(Entity entity);
         }
 
-        public TestInformation.DTO entityToDTO(TestInformation.Entity entity)
+        public Information.DTO entityToDTO(Information.Entity entity)
         {
             if(entity != null)
             {
-                return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
+                return new Information.   // return something that lives in 'dat.TestPackage.TestData'.
                                             Data().    // find a method within 'dat.TestPackage.TestData.Methods'.
                                                     entityToDTO(entity); // Use 'entityToDTO' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.DTO' based on @param.
             }
                 else return null;   // return null if @param is null OR any of the steps above fail
         }
 
-        public TestInformation.Entity dtoToEntity(TestInformation.DTO dto)
+        public Information.Entity dtoToEntity(Information.DTO dto)
         {
-            if(dto != null)
-            {
-                return new TestInformation.   // return something that lives in 'dat.TestPackage.TestData'.
-                                            Data().   // find a method within 'dat.TestPackage.TestData.Methods'.
-                                                    dtoToEntity(dto); // Use 'dtoToEntity' method which lives in 'dat.TestPackage.TestData.Methods' to @return a new instance of 'dat.TestPackage.TestData.Entity' based on @param.
-            }
-            else return null; // return null if @param is null OR any of the steps above fail
+            return (dto != null) ? new Information.Data().dtoToEntity(dto) : null;
         }
     }
 
@@ -217,7 +227,7 @@ public final class TestOperation extends TestUtilization
             void update(io.javalin.http.Context ctx);
             void delete(io.javalin.http.Context ctx);
             boolean validatePrimaryKey(java.lang.Integer id);
-            TestInformation.Entity validateEntity(io.javalin.http.Context ctx);
+            Information.Entity validateEntity(io.javalin.http.Context ctx);
         }   // Interface [sub-class] ends
     }   // Controller [middle-class] ends
 
@@ -234,18 +244,18 @@ public final class TestOperation extends TestUtilization
     static class ApiException extends RuntimeException
     {   // ApiException [class] begins
         private final int code;
-        private final TestOperation.TestErrorTypes errorType;
+        private final Operation.TestErrorTypes errorType;
         private static String errorMsg;
 
         public ApiException(int code, String msg)
         {   // ApiException(int, string) [constructor] begins
             super(msg); // relay msg to 'RuntimeException'
             this.code = code;
-            this.errorType = TestOperation.TestErrorTypes.getType(code);
+            this.errorType = Operation.TestErrorTypes.getType(code);
             this.errorMsg = errorType.getErrorMessage() + "\n";
         }   // ApiException(int, string) [constructor]
 
-        public ApiException(TestOperation.TestErrorTypes errorType, String msg)
+        public ApiException(Operation.TestErrorTypes errorType, String msg)
         {   // ApiException(TestErrorTypes, String) [constructor] begins
             super(msg); // relay msg to 'RuntimeException'
             this.errorType = errorType;
@@ -259,58 +269,58 @@ public final class TestOperation extends TestUtilization
     */
 
         //TODO: 400 bad request
-        public static TestOperation.ApiException badRequest(String msg)
+        public static Operation.ApiException badRequest(String msg)
         {   // badRequest(String msg) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.BAD_REQUEST, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.BAD_REQUEST, msg + errorMsg);
         }   // badRequest(String msg) [method] ends
 
         //TODO: 401 Unauthorized
-        public static TestOperation.ApiException unauthorized(String msg)
+        public static Operation.ApiException unauthorized(String msg)
         {   // unauthorized(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.UNAUTHORIZED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.UNAUTHORIZED, msg + errorMsg);
         }   // unauthorized(String) [method] ends
 
         //TODO: 403 Forbidden Access
-        public static TestOperation.ApiException forbidden(String msg)
+        public static Operation.ApiException forbidden(String msg)
         {   // forbidden(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.FORBIDDEN, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.FORBIDDEN, msg + errorMsg);
         }   // forbidden(String) [method] ends
 
         //TODO: 404 not found
-        public static TestOperation.ApiException notFound(String msg)
+        public static Operation.ApiException notFound(String msg)
         {   // notFound(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_FOUND, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.NOT_FOUND, msg + errorMsg);
         }   // notFound(String) [method] ends
 
         //TODO: 405 conflict
-        public static TestOperation.ApiException conflict(String msg)
+        public static Operation.ApiException conflict(String msg)
         {   // conflict(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.METHOD_NOT_ALLOWED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.METHOD_NOT_ALLOWED, msg + errorMsg);
         }   // conflict(String) [method] ends
 
         //TODO: 406 Not Acceptable
-        public static TestOperation.ApiException notAcceptable (String msg)
+        public static Operation.ApiException notAcceptable (String msg)
         {   // notAcceptable (String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_ACCEPTABLE, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.NOT_ACCEPTABLE, msg + errorMsg);
         }   // notAcceptable (String) [method] ends
 
         //TODO: 409 already exists
-        public static TestOperation.ApiException alreadyExists(String msg)
+        public static Operation.ApiException alreadyExists(String msg)
         {   // alreadyExists(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.ALREADY_EXISTS, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.ALREADY_EXISTS, msg + errorMsg);
 
         }   // alreadyExists(String) [method] ends
 
         //TODO: 413 Payload too large
-        public static TestOperation.ApiException payloadTooLarge(String msg)
+        public static Operation.ApiException payloadTooLarge(String msg)
         {   // payloadTooLarge(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.PAYLOAD_TOO_LARGE, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.PAYLOAD_TOO_LARGE, msg + errorMsg);
         }   // payloadTooLarge(String) [method] ends
 
         //TODO: 429 Too many requests
-        public static TestOperation.ApiException tooManyRequests(String msg)
+        public static Operation.ApiException tooManyRequests(String msg)
         {   // tooManyRequests(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.TOO_MANY_REQUESTS, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.TOO_MANY_REQUESTS, msg + errorMsg);
         }   // tooManyRequests(String) [method] ends
 
 
@@ -320,69 +330,69 @@ public final class TestOperation extends TestUtilization
        |----------------------|
     */
         //TODO: 500 server error
-        public static TestOperation.ApiException serverError (String msg)
+        public static Operation.ApiException serverError (String msg)
         {   // serverError (String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.SERVER_ERROR, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.SERVER_ERROR, msg + errorMsg);
         }   // serverError (String) [method] ends
 
         //TODO: 501 Not implemented
-        public static TestOperation.ApiException notImplemented(String msg)
+        public static Operation.ApiException notImplemented(String msg)
         {   // notImplemented(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_IMPLEMENTED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.NOT_IMPLEMENTED, msg + errorMsg);
         }   // notImplemented(String) [method] ends
 
         //TODO: 502 Bad Gateway
-        public static TestOperation.ApiException badGateway(String msg)
+        public static Operation.ApiException badGateway(String msg)
         {   // badGateway(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.BAD_GATEWAY, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.BAD_GATEWAY, msg + errorMsg);
         }   // badGateway(String) [method] ends
 
         //TODO: 503 Service Unavailable
-        public static TestOperation.ApiException serviceUnavailable(String msg)
+        public static Operation.ApiException serviceUnavailable(String msg)
         {   // serviceUnavailable(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.SERVICE_UNAVAILABLE, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.SERVICE_UNAVAILABLE, msg + errorMsg);
         }   // serviceUnavailable(String) [method] ends
 
         //TODO: 504 Gateway Timeout
-        public static TestOperation.ApiException gatewayTimeout(String msg)
+        public static Operation.ApiException gatewayTimeout(String msg)
         {   // gatewayTimeout(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.GATEWAY_TIMEOUT, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.GATEWAY_TIMEOUT, msg + errorMsg);
         }   // gatewayTimeout(String) [method] ends
 
         //TODO: 505 HTTP Version not supported
-        public static TestOperation.ApiException versionNotSupported(String msg)
+        public static Operation.ApiException versionNotSupported(String msg)
         {   // versionNotSupported(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.HTTP_VERSION_NOT_SUPPORTED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.HTTP_VERSION_NOT_SUPPORTED, msg + errorMsg);
         }   // versionNotSupported(String) [method] ends
 
         //TODO: 506 Variant also negotiates
-        public static TestOperation.ApiException variantNegotiates(String msg)
+        public static Operation.ApiException variantNegotiates(String msg)
         {   // variantNegotiates(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.VARIANT_ALSO_NEGOTIATES, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.VARIANT_ALSO_NEGOTIATES, msg + errorMsg);
         }   // variantNegotiates(String) [method] ends
 
         //TODO: 507 Insufficient storage
-        public static TestOperation.ApiException insufficientStorage(String msg)
+        public static Operation.ApiException insufficientStorage(String msg)
         {   // insufficientStorage(String= [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.INSUFFICIENT_STORAGE, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.INSUFFICIENT_STORAGE, msg + errorMsg);
         }   // insufficientStorage(String= [method] ends
 
         //TODO: 508 Loop detected
-        public static TestOperation.ApiException loopDetected(String msg)
+        public static Operation.ApiException loopDetected(String msg)
         {   // loopDetected(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.LOOP_DETECTED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.LOOP_DETECTED, msg + errorMsg);
         }   // loopDetected(String) [method] ends
 
         //TODO: 510 Not extended
-        public static TestOperation.ApiException notExtended(String msg)
+        public static Operation.ApiException notExtended(String msg)
         {   // notExtended(String) [method] begins
-            return new TestOperation.ApiException(TestOperation.TestErrorTypes.NOT_EXTENDED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.NOT_EXTENDED, msg + errorMsg);
         }   // notExtended(String) [method] ends
 
         //TODO: 511 Network Authentication Required
-        public static TestOperation.ApiException authenticationRequired(String msg)
+        public static Operation.ApiException authenticationRequired(String msg)
         {   // authenticationRequired(String) [method] begins
-            return new dat.TestPackage.TestOperation.ApiException(TestOperation.TestErrorTypes.NETWORK_AUTHENTICATION_REQUIRED, msg + errorMsg);
+            return new Operation.ApiException(Operation.TestErrorTypes.NETWORK_AUTHENTICATION_REQUIRED, msg + errorMsg);
         }   // authenticationRequired(String) [method] ends
 
         public int getStatusCode()
@@ -429,9 +439,9 @@ public final class TestOperation extends TestUtilization
         }   // getErrorCode() [method] ends
 
 
-        public static dat.TestPackage.TestOperation.TestErrorTypes getType(int errorCode)
+        public static Operation.TestErrorTypes getType(int errorCode)
         {   // getType(int) [method] begins
-            for (dat.TestPackage.TestOperation.TestErrorTypes type : dat.TestPackage.TestOperation.TestErrorTypes.values())
+            for (Operation.TestErrorTypes type : Operation.TestErrorTypes.values())
             {   // TestErrorType [for-each] begins
                 if (type.getErrorCode() == errorCode)
                 {   // getErrorCode [if] begins
