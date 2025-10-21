@@ -194,7 +194,7 @@ public class Operation extends dat.Package.Utilization
             Entity patch(Entity entity, Id id)
             {
                 try(jakarta.persistence.EntityManager em = emf.createEntityManager()){
-                    log.debug("Attempting to update an entity by ID={}", entity.getId());
+                    log.debug("(patch(entity, id)) Attempting to update an entity by ID={}", entity.getId());
                     java.lang.String jpql = "UPDATE e " + entityClass.getSimpleName() + " e WHERE e.id = :id";
                     jakarta.persistence.TypedQuery<Entity> query = em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
