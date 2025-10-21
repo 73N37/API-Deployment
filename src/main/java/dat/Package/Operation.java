@@ -199,8 +199,10 @@ public class Operation extends dat.Package.Utilization
                     jakarta.persistence.TypedQuery<Entity> query = em.createQuery(jpql, (java.lang.Class<Entity>) entityClass);
                     query.setParameter("id", id);
                     log.debug("(patch(entity,id)) Found and updated entity by id={}", entity.getId());
+                    return entity;
                 } catch(Exception e){
                     log.error("(patch(entity, id)) An error happen while try to update en entity by this Id={}", entity.getId(),e);
+                    throw new ApiException(ErrorTypes.NOT_FOUND, "(patch(entity,id)) An error happen while trying to update en entity with id={}"+ entity.getId());
                 }
             }
         }
