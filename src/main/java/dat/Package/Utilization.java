@@ -2,9 +2,11 @@ package dat.Package;
 
 // The name I have chosen is: UTILIZE the RELATION between INFORMATION and OPERATIONS = U-R-O-I
 
-public class Utilization
+public abstract class Utilization
 {   // TestUtilization [class] begins
 
+    protected static final java.lang.Class operation = dat.Package.Operation.class;
+    protected static final java.lang.Class information = dat.Package.Information.class;
 
     protected enum
     Role implements io.javalin.security.RouteRole
@@ -36,11 +38,7 @@ public class Utilization
         {   // isAccessAllowed(int, int) [method] ends
 // TODO     If user has a 'roleCode' HIGHER or EQUAL to 'accessCode'. This method will return true.
 // TODO     Id user has a 'roleCode' LOWER than 'accessCode'. This method will return false.
-            if(attemptedAccess > requiredAccess || attemptedAccess == requiredAccess)
-            {
-                return true;
-            }
-            return false;
+            return (attemptedAccess >= requiredAccess) ? true : false;
         }   // isAccessAllowed(int, int) [method] ends
     }   // Role [enum] ends
 }   // TestUtilization [class] ends
