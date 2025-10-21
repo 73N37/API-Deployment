@@ -2,11 +2,29 @@ package dat.Package;
 
 // The name I have chosen is: UTILIZE the RELATION between INFORMATION and OPERATIONS = U-R-O-I
 
-public abstract class Utilization
+public class Utilization
 {   // TestUtilization [class] begins
 
-    protected static final java.lang.Class operation = dat.Package.Operation.class;
-    protected static final java.lang.Class information = dat.Package.Information.class;
+    protected Utilization(){}
+    protected Utilization instance;
+
+    protected dat.Package.Utilization       operationInstance   =   new dat.Package.TestOperation().getInstance();
+    protected Class<?>                      operationClass      =   new dat.Package.TestInformation().getClass();
+
+    // TODO Use TestInformation as the class
+    protected dat.Package.Utilization      informationInstance  =   new dat.Package.TestInformation().getInstance();
+    protected Class<?>                     informationClass     =   new dat.Package.TestInformation().getClass();
+
+
+    protected dat.Package.Utilization getInstance()
+    {
+        if (instance == null){
+            return new Utilization();
+        }
+        return instance;
+    }
+
+
 
     protected enum
     Role implements io.javalin.security.RouteRole

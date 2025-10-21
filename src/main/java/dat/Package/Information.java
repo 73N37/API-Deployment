@@ -110,7 +110,11 @@ public final class Information extends dat.Package.Utilization
         }
 
         public dat.Package.Information
-        getInstance(dat.Package.Utilization.Role role) {   // getInstance(Role) [method] begins
+        getInstance
+                (
+                        dat.Package.Utilization.Role role
+                )
+        {   // getInstance(Role) [method] begins
 //            return dat.Package.Information.get();
             try {   // try-block [conditional] begins
                 log.debug("Checking user access");
