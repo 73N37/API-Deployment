@@ -10,10 +10,11 @@ package dat.Blueprint.Unit;
 import dat.Blueprint.Data.AbstractData;
 import dat.Blueprint.Factory.AbstractFactory;
 import dat.Instance.Entity.Entity;
+//import dat.Instance.Factory.Factory;
 import dat.Instance.Unit.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import dat.Instance.Data.Data;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 // Available to BOTH AbstractData & AbstractFactory (this is the top-class for the entire project)
-public abstract class AbstractUnit<ID extends Serializable> implements InterfaceUnit
+public abstract class AbstractUnit<ID extends Serializable> extends Data implements InterfaceUnit
 {
     // Unified logger for every class within this project.
     // Since every class inherits from this one, 'log.error(""), log.debug(""), log.info(""), can be called fron any class.
