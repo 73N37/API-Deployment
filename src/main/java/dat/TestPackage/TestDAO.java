@@ -41,7 +41,7 @@ public final class TestDAO {
  */
 
 
-        private static final Logger log = LoggerFactory.getLogger(dat.TestPackage.TestDAO);
+        //private static final Logger log = LoggerFactory.getLogger(dat.TestPackage.TestDAO);
         public EntityManagerFactory emf;
         Object entityClass = dat.TestPackage.TestData.Methods.getEntity();
 
