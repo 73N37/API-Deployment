@@ -99,10 +99,15 @@ public class Information extends dat.Package.Utilization
             globalDTO = null;
         }
 
-        public dat.Package.Utilization
+        private static Data instance;
+
+        public dat.Package.Information.Data
         getInstance()
         {
-            return dat.Package.Utilization.getInstance();
+            if (instance == null){
+                return new Data();
+            }
+            return instance;
         }
 
 //        public dat.Package.Information
