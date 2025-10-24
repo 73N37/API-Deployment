@@ -241,6 +241,15 @@ public class Information extends dat.Package.Utilization
                 ) {
             return new dat.Package.Information.DTO(entity.getId(), entity.getName());
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            // Compare relevant fields here
+            return true; // or your field comparison
+        }
+
         // Data [class] ends
     }
     static abstract class
