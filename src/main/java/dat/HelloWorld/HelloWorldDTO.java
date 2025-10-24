@@ -1,5 +1,6 @@
 package dat.HelloWorld;
 
+@lombok.Getter
 public class HelloWorldDTO
 {
     String message;
