@@ -2,6 +2,8 @@ package dat.Config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dat.Blueprint.Route.InterfaceRoute;
+import dat.HelloWorld.Routes.HelloWorldRoute;
+import dat.HelloWorld.Routes.Route;
 import dat.Security.controllers.AccessController;
 import dat.Security.controllers.SecurityController;
 import dat.Security.enums.Role;
@@ -9,6 +11,7 @@ import dat.Security.exceptions.ApiException;
 import dat.Security.routes.SecurityRoutes;
 import dat.Utils.Utils;
 import io.javalin.Javalin;
+import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.Context;
 import org.slf4j.Logger;
@@ -33,6 +36,8 @@ public class ApplicationConfig {
         config.router.contextPath = "/api"; // base path for all endpoints
         config.router.apiBuilder(SecurityRoutes.getSecuredRoutes());
         config.router.apiBuilder(SecurityRoutes.getSecurityRoutes());
+        // put custom route in here
+        config.router.apiBuilder(new HelloWorldRoute().getRoutes());
     }
 
 //    public static void registerRoutes(Javalin app, Factory<?,?,?> factory){
@@ -53,6 +58,8 @@ public class ApplicationConfig {
         for (InterfaceRoute route : routesList) {
             route.generateRoutes(app);
         }
+
+
 
         app.beforeMatched(accessController::accessHandler);
         app.after(ApplicationConfig::afterRequest);

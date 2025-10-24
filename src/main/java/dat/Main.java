@@ -1,6 +1,7 @@
 package dat;
 import dat.Config.ApplicationConfig;
 import dat.Config.HibernateConfig;
+import dat.HelloWorld.Routes.Route;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -22,7 +23,10 @@ public class Main
             emf.close();
         }));
 
+
+
         app.start(7070);
+
 //        var dto = new Information.Data().putDTO("Through hard work comes EXCELLENCE");
 //        var entity = new Information.Data().putEntity( "Merovingian");
 //
